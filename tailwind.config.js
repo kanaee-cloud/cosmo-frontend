@@ -17,7 +17,8 @@ export default {
         secondary: "#1a0b2e",
         tertiary: "#140724",
         light: "#8a6dfc",
-        accent: "#ff0055"
+        accent: "#ff0055",
+        'dark-overlay': 'rgba(0, 0, 0, 0.1)',
       }
     },
   },
