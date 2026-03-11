@@ -1,9 +1,16 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const Call = () => {
     return (
         <section className="py-20 px-6 relative overflow-hidden">
-            <div className="max-w-[1200px] mx-auto relative z-10 bg-primary/30 backdrop-blur-sm border-2 border-secondary pixel-corners shadow-[0_0_20px_rgba(138,109,252,0.1)]">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="max-w-[1200px] mx-auto relative z-10 bg-primary/30 backdrop-blur-sm border-2 border-secondary pixel-corners shadow-[0_0_20px_rgba(138,109,252,0.1)]"
+            >
                 {/* Radial glow over the glassmorphism */}
                 <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(138,109,252,0.15) 0%, transparent 80%)' }}></div>
                 {/* Decorative grid lines */}
@@ -23,7 +30,7 @@ const Call = () => {
                         </span>
                     </button>
                 </div>
-            </div>
+            </motion.div>
         </section>
     )
 }

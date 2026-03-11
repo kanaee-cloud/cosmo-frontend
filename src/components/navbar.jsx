@@ -1,11 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const Navbar = () => {
     // Clip-path untuk membuat sudut tombol menjadi pixelated/terpotong (dipertahankan)
     const buttonClip = "polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px)";
 
     return (
-        <div className="w-full flex justify-center py-6 px-4 sm:px-6 relative">
+        <motion.div 
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-full flex justify-center py-6 px-4 sm:px-6 relative"
+        >
             <div className="w-full  max-w-6xl px-4 mx-auto relative z-10">
                 <nav className="w-full flex px-16 items-center mx-auto justify-between py-2 bg-[#150B24]/90 backdrop-blur-md rounded-full border border-[#7A40F2] shadow-[0_0_20px_rgba(122,64,242,0.6)] relative z-10">
                     <div className="flex items-center  gap-3 cursor-pointer z-10 group">
@@ -32,23 +39,24 @@ const Navbar = () => {
                             <a href="#logs" className="hover:text-gray-300 transition-colors duration-300 relative group">
                                 LOGS
                             </a>
-                            <a href="#login" className="hover:text-gray-300 transition-colors duration-300 relative group">
+                            <Link to="/login" className="hover:text-gray-300 transition-colors duration-300 relative group">
                                 LOGIN
-                            </a>
+                            </Link>
                         </div>
 
                         {/* Pixelated Button */}
-                        <button
+                        <Link
+                            to="/register"
                             className="bg-[#FF0055] text-white font-bold text-[12px] tracking-wider py-2.5 px-6 hover:bg-[#D40046] transition-all duration-300 outline-none active:scale-95"
                             style={{ clipPath: buttonClip }}
                         >
                             START MISSION
-                        </button>
+                        </Link>
                     </div>
 
                 </nav>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

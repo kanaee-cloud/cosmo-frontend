@@ -1,8 +1,14 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const Footer = () => {
     return (
-        <footer className="relative overflow-hidden border-t-2 border-secondary pt-12 pb-8 px-6 font-tertiary text-sm" style={{ background: 'linear-gradient(180deg, #0d0514 0%, #0a0312 50%, #07020d 100%)' }}>
+        <motion.footer 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative overflow-hidden border-t-2 border-secondary pt-12 pb-8 px-6 font-tertiary text-sm" style={{ background: 'linear-gradient(180deg, #0d0514 0%, #0a0312 50%, #07020d 100%)' }}>
             {/* CRT Scanlines for footer specifically */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] opacity-20 pointer-events-none"></div>
             {/* Subtle glow at top */}
@@ -55,7 +61,7 @@ const Footer = () => {
                 <span className="text-white/60 text-[10px] font-press tracking-widest">© 2026 COSMO. ALL RIGHTS RESERVED.</span>
                 <span className="text-accent/40 text-[10px] font-press tracking-widest ml-2 drop-shadow-[0_0_4px_rgba(255,0,85,0.3)]">TRANSMISSION END.</span>
             </div>
-        </footer>
+        </motion.footer>
 
     )
 }

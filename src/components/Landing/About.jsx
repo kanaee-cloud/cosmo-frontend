@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const About = () => {
     return (
@@ -13,7 +14,13 @@ const About = () => {
             {/* Decorative Borders */}
             <div className="absolute left-10 top-20 bottom-20 w-1 border-l-2 border-dashed border-[#1a0b2e] hidden lg:block z-0"></div>
 
-            <div className="relative z-10 bg-tertiary/90 backdrop-blur-sm border-2 border-secondary p-1 lg:p-2 pixel-corners max-w-4xl mx-auto shadow-[0_0_20px_rgba(138,109,252,0.1)]">
+            <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative z-10 bg-tertiary/90 backdrop-blur-sm border-2 border-secondary p-1 lg:p-2 pixel-corners max-w-4xl mx-auto shadow-[0_0_20px_rgba(138,109,252,0.1)]"
+            >
                 {/* HUD Header */}
                 <div className="flex justify-between items-center bg-light/10 px-4 py-3 mb-6 border-b border-light/50">
                     <span className="font-press text-[10px] text-light tracking-widest">&gt;&gt; MISSION BRIEFING</span>
@@ -55,7 +62,7 @@ const About = () => {
                     <span>DATA_PACKET_ID: 99402X</span>
                     <span>ENCRYPTION: NONE</span>
                 </div>
-            </div>
+            </motion.div>
         </section>
     )
 }

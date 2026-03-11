@@ -1,11 +1,17 @@
-
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const Hero = () => {
     return (
         <section
            
-            className="px-6 py-12 lg:px-20 relative min-h-screen flex flex-col items-center justify-center">
-            <div className="w-full max-w-[1200px] mx-auto relative z-10 bg-secondary/20 backdrop-blur-sm border-2 border-secondary pixel-corners shadow-[0_0_20px_rgba(138,109,252,0.1)]">
+            className="px-6 py-12 relative min-h-screen flex flex-col items-center justify-center">
+            <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="w-full relative z-10 bg-secondary/20 backdrop-blur-sm border-2 border-secondary pixel-corners shadow-[0_0_20px_rgba(138,109,252,0.1)]"
+            >
                 <div className="p-6 lg:p-12 flex flex-col lg:flex-row gap-12 items-center justify-center relative z-20 w-full">
                     {/* Soft gradient overlay to keep text readable on left, letting image shine on right */}
                     <div className="absolute inset-0 pointer-events-none z-0"></div>
@@ -82,7 +88,7 @@ const Hero = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </section>
     )
 }
