@@ -1,8 +1,41 @@
-import { RouterProvider } from 'react-router-dom'
-import { router } from './routes'
+import { useEffect } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { router } from './routes';
+import { useAuthStore } from './store/authStore';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, 
+    },
+  },
+});
 
 function App() {
-  return <RouterProvider router={router} />
+  const { initialize, isInitializing } = useAuthStore();
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen bg-[#0a0a1a] flex flex-col items-center justify-center font-primary tracking-[0.3em]">
+        <div className="animate-pulse mb-4 text-xl text-accent border border-accent p-4 bg-accent/10 shadow-[0_0_20px_rgba(138,109,252,0.3)]">
+          [ SYSTEM BOOTING ]
+        </div>
+        <p className="text-[10px] text-gray-500 animate-pulse">ESTABLISHING SECURE CONNECTION...</p>
+      </div>
+    );
+  }
+
+ 
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;

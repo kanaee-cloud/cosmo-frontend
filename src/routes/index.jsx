@@ -4,6 +4,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import { LandingLayout } from "../layouts/LandingLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
+import { ProtectedRoute } from "../components/common/ProtectedRoute";
+import Dashboard from "../pages/Dashboard";
 
 export const router = createBrowserRouter([
     {
@@ -28,5 +30,12 @@ export const router = createBrowserRouter([
                 element: <Register />
             }
         ]
+    },
+    {
+        path: "/dashboard",
+        element:
+            <ProtectedRoute>
+                <Dashboard />
+            </ProtectedRoute>
     }
 ])
