@@ -1,13 +1,16 @@
 // src/pages/Dashboard.jsx
-import React from 'react';
-import { BatteryCharging, Zap, Shield, User, LogOut, CheckCircle, CircleDashed, Image as ImageIcon, PlusSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bell, BatteryCharging, Zap, Shield, User, LogOut, CheckCircle, CircleDashed, Image as ImageIcon, PlusSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';
 import { CommandConsoleModal } from '../components/missions/CommandConsoleModal';
 import { DirectiveDetailModal } from '../components/missions/DirectiveDetailModal';
+import { CommsRelayModal } from '../components/social/CommsRelayModal';
+import { FleetRoster } from '../components/social/FleetRoster';
 
 
 const Dashboard = () => {
+  const [isCommsOpen, setIsCommsOpen] = useState(false);
   const {
     profile, profileLoading, profileError,
     directives, directivesLoading,
@@ -15,6 +18,8 @@ const Dashboard = () => {
     isConsoleOpen, openConsole, closeConsole,
     selectedDirective, isDetailOpen, openDetail, closeDetail
   } = useDashboardLogic();
+
+
 
   if (profileLoading) {
     return (
@@ -34,14 +39,30 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a1a] p-4 md:p-8 space-y-8">
+      <div className="flex justify-end items-center gap-4">
+        <motion.button
+          whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+          onClick={handleEmergencyExit}
+          className="flex items-center gap-2 px-4 py-3 border border-red-900/50 bg-red-900/20 hover:bg-red-900/40 hover:border-red-500 text-red-400 transition-colors duration-300"
+        >
+          <LogOut size={16} />
+          <span className="font-primary text-[10px] tracking-widest">EMERGENCY EXIT</span>
+        </motion.button>
+        <button
+          onClick={() => setIsCommsOpen(true)}
+          className="relative flex items-center justify-center p-3 border border-[#3d2278]/80 bg-[#0a0a1a]/50 hover:border-accent hover:bg-[#3d2278]/20 text-accent transition-all duration-300"
+        >
+          <Bell size={18} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+        </button>
+      </div>
 
-      {/* 1. HEADER & CAPTAIN PROFILE */}
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
         <div className="flex-1 w-full p-6 border border-[#3d2278]/90 bg-secondary/95 shadow-[0_0_30px_rgba(61,34,120,0.3)]">
           <div className="flex items-center gap-6">
             <div className="relative">
               <div className="w-16 h-16 rounded-full border-2 border-accent bg-dark flex items-center justify-center overflow-hidden">
-                {profile?.avatar_url ? <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" /> : <User className="text-accent" size={32} />}
+                {profile?.avatar_url ? <img src={profile.avatar_url} className="w-full h-full object-cover" /> : <User className="text-accent" size={32} />}
               </div>
               <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-[#1a1a2e] rounded-full animate-pulse"></div>
             </div>
@@ -66,15 +87,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-          onClick={handleEmergencyExit}
-          className="flex items-center gap-2 px-4 py-3 border border-red-900/50 bg-red-900/20 hover:bg-red-900/40 hover:border-red-500 text-red-400 transition-colors duration-300"
-        >
-          <LogOut size={16} />
-          <span className="font-primary text-[10px] tracking-widest">EMERGENCY EXIT</span>
-        </motion.button>
       </motion.div>
+
+
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="p-6 border border-[#3d2278]/90 bg-secondary/95 shadow-[0_0_30px_rgba(61,34,120,0.3)] min-h-[300px]">
         <h3 className="font-primary text-light tracking-[0.25em] text-sm mb-6 flex justify-between items-center">
@@ -142,12 +157,12 @@ const Dashboard = () => {
                 </div>
               </div>
 
-            <motion.button 
+              <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={(e) => {
-                  e.stopPropagation(); 
+                  e.stopPropagation();
                   console.log("Engage clicked for:", task.id);
-                
+
                 }}
                 className="opacity-100 md:opacity-0 group-hover:opacity-100 px-4 py-2 border border-orange-500/50 bg-orange-500/10 hover:bg-orange-500/30 text-orange-400 font-primary text-[9px] tracking-[0.2em] transition-colors duration-300 whitespace-nowrap flex-shrink-0"
               >
@@ -155,19 +170,27 @@ const Dashboard = () => {
               </motion.button>
             </motion.div>
           ))}
+
+
+
         </div>
       </motion.div>
+      <div className="lg:col-span-1">
+        <FleetRoster />
+      </div>
 
       <CommandConsoleModal
         isOpen={isConsoleOpen}
         onClose={closeConsole}
       />
 
-      <DirectiveDetailModal 
-        isOpen={isDetailOpen} 
-        onClose={closeDetail} 
-        directive={selectedDirective} 
+      <DirectiveDetailModal
+        isOpen={isDetailOpen}
+        onClose={closeDetail}
+        directive={selectedDirective}
       />
+
+      <CommsRelayModal isOpen={isCommsOpen} onClose={() => setIsCommsOpen(false)} />
 
     </div>
   );
