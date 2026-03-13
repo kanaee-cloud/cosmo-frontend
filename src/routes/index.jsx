@@ -6,6 +6,7 @@ import { LandingLayout } from "../layouts/LandingLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { ProtectedRoute } from "../components/common/ProtectedRoute";
 import Dashboard from "../pages/Dashboard";
+import { PublicRoute } from "../components/common/PublicRoute";
 
 export const router = createBrowserRouter([
     {
@@ -23,11 +24,21 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/login",
-                element: <Login />
+                element: 
+                (
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                )
             },
             {
                 path: "/register",
-                element: <Register />
+                element: 
+                (
+                  <PublicRoute>
+                    <Register />
+                  </PublicRoute>
+                )
             }
         ]
     },
