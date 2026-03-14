@@ -100,11 +100,35 @@ export const useSocial = () => {
     enabled: !!myId,
   });
 
+  const acceptAction = useMutation({
+    mutationFn: async ({ type, relatedId, notificationId }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (type === 'FRIEND_REQUEST') {
+        await supabase.from('friendships').update({ status: 'ACCEPTED' }).eq('id', relatedId);
+      } else if (type === 'WORKSPACE_INVITE') {
+        await supabase.from('workspace_members').insert([{
+          workspace_id: relatedId,
+          user_id: user.id,
+          role: 'MEMBER'
+        }]);
+      }
+
+      await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications', myId] });
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
+      queryClient.invalidateQueries({ queryKey: ['workspaceRaid'] });
+    }
+  });
+
   return {
     useInbox,
     searchCaptains,
     sendFriendRequest,
     acceptRequest,
-    useFriendsList
+    useFriendsList,
+    acceptAction
   };
 };
