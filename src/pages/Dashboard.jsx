@@ -1,5 +1,4 @@
-// src/pages/Dashboard.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Bell, BatteryCharging, Zap, Shield, User, LogOut, CheckCircle, CircleDashed, Image as ImageIcon, PlusSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';

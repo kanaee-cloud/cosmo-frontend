@@ -1,11 +1,9 @@
-// src/components/missions/DirectiveDetailModal.jsx
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
-  // Fitur UX: Tutup modal saat tombol Escape ditekan
   useEffect(() => {
     const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleEsc);

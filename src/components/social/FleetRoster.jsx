@@ -1,5 +1,3 @@
-// src/components/social/FleetRoster.jsx
-import React from 'react';
 import { Users, Swords, Shield, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSocial } from '../../hooks/useSocial';

@@ -1,8 +1,7 @@
-// src/components/social/CommsRelayModal.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Search, UserPlus, Bell, Check, Users } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useSocial } from '../../hooks/useSocial';
 
 export const CommsRelayModal = ({ isOpen, onClose }) => {

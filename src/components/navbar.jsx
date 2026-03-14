@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
-    // Clip-path untuk membuat sudut tombol menjadi pixelated/terpotong (dipertahankan)
     const buttonClip = "polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px)";
 
     return (

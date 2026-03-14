@@ -1,7 +1,4 @@
-import React from 'react'
 import { Outlet } from "react-router-dom"
-import Navbar from '../components/Navbar'
-import bgImage from '../assets/dashboard/bg-image.jpg'
 import { MapPin } from 'lucide-react'
 
 export const AuthLayout = () => {

@@ -1,5 +1,3 @@
-// src/pages/Login.jsx
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { LockKeyhole, Zap, Fingerprint } from 'lucide-react';
 import { motion } from 'framer-motion';

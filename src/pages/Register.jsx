@@ -1,5 +1,3 @@
-// src/pages/Register.jsx
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Formik, Form, Field, ErrorMessage } from 'formik';

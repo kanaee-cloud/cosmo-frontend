@@ -1,5 +1,4 @@
-// src/components/missions/CommandConsoleModal.jsx
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Send, Image as ImageIcon, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
