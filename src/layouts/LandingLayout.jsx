@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import Navbar from '../components/Navbar'
+import Navbar from "../components/Navbar"
 import bgImage from '../assets/dashboard/bg-image.jpg'
 import Footer from '../components/Footer'
 
