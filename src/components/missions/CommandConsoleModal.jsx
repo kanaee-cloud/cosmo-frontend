@@ -29,12 +29,12 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-[#05000a]/90 backdrop-blur-sm" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-primary/90 backdrop-blur-sm" />
 
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-xl p-6 border-2 border-[#8a6dfc] bg-[#0a0a1a] shadow-[0_0_50px_rgba(138,109,252,0.2)] z-10"
+            className="relative w-full max-w-xl p-6 border-2 border-light bg-primary shadow-[0_0_50px_rgba(138,109,252,0.2)] z-10"
           >
             {/* Sudut Frame Futuristik */}
             <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400" />
@@ -48,7 +48,7 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
             </button>
 
             {/* HEADER */}
-            <div className="bg-[#8a6dfc] text-[#0a0a1a] p-2 mb-6 mt-4 md:mt-0 flex items-center gap-2 font-primary font-bold tracking-[0.2em] text-xs md:text-sm">
+            <div className="bg-light text-primary p-2 mb-6 mt-4 md:mt-0 flex items-center gap-2 font-primary font-bold tracking-[0.2em] text-xs md:text-sm">
               <UserCircle size={18} /> [ MISSION PARAMETER CONFIGURATION ]
             </div>
 
@@ -77,7 +77,7 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
                   <div className="flex flex-col gap-2">
                     <label className="font-primary text-cyan-400 text-[10px] tracking-widest">ASSIGNMENT SECTOR (CATEGORY)</label>
                     <div className="flex flex-col md:flex-row gap-3">
-                      <Field as="select" name="category" className="w-full md:w-1/3 bg-[#0a0a1a] border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400 cursor-pointer">
+                      <Field as="select" name="category" className="w-full md:w-1/3 bg-primary border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400 cursor-pointer">
                         <option value="GENERAL">[ GENERAL OPS ]</option>
                         <option value="LEARNING">[ KNOWLEDGE BASE ]</option>
                         <option value="WORK">[ FIELD WORK ]</option>
@@ -99,7 +99,7 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
 
                   {/* GARIS PEMISAH */}
                   <div className="border-t border-dashed border-gray-700 my-2 relative">
-                     <span className="absolute -top-3 left-4 bg-[#0a0a1a] px-2 font-primary text-cyan-500 text-[10px] tracking-widest">ESTIMATED REWARD</span>
+                     <span className="absolute -top-3 left-4 bg-primary px-2 font-primary text-cyan-500 text-[10px] tracking-widest">ESTIMATED REWARD</span>
                   </div>
 
                   {/* FOOTER: REWARD & SUBMIT */}

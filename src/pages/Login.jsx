@@ -14,7 +14,7 @@ const Login = () => {
         >
             <motion.div
                 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}
-                className="w-full max-w-[370px] bg-secondary/95 border border-[#3d2278]/90 shadow-[0_0_40px_rgba(61,34,120,0.5),inset_0_0_30px_rgba(0,0,0,0.3)] p-8"
+                className="w-full max-w-[370px] bg-secondary/95 border border-light/90 shadow-[0_0_40px_rgba(61,34,120,0.5),inset_0_0_30px_rgba(0,0,0,0.3)] p-8"
             >
                 <div className="flex justify-center mb-5 bg-light w-12 h-12 mx-auto items-center">
                     <LockKeyhole className="text-primary" size={30} />
@@ -42,19 +42,19 @@ const Login = () => {
                     {() => (
                         <Form className="space-y-5">
                             <div>
-                                <label className="block font-primary text-white text-[9px] tracking-[0.25em] mb-2 flex justify-between">
+                                <label className="block font-primary text-text text-[9px] tracking-[0.25em] mb-2 flex justify-between">
                                     <span>[ COMMS_FREQUENCY / EMAIL ]</span>
                                     <ErrorMessage name="email" component="span" className="text-red-400" />
                                 </label>
-                                <Field type="email" name="email" placeholder="pilot@orbitask.nexus" className="w-full bg-transparent border border-[#3d2278]/80 text-white font-secondary text-[10px] tracking-wider px-4 py-3 outline-none focus:border-light/70 focus:shadow-[0_0_12px_rgba(138,109,252,0.25)] placeholder:text-gray-700 transition-all duration-200" />
+                                <Field type="email" name="email" placeholder="pilot@orbitask.nexus" className="w-full bg-transparent border border-light/80 text-text font-secondary text-[10px] tracking-wider px-4 py-3 outline-none focus:border-light/70 focus:shadow-[0_0_12px_rgba(138,109,252,0.25)] placeholder:text-gray-700 transition-all duration-200" />
                             </div>
 
                             <div>
-                                <label className="block font-primary text-white text-[9px] tracking-[0.25em] mb-2 flex justify-between">
+                                <label className="block font-primary text-text text-[9px] tracking-[0.25em] mb-2 flex justify-between">
                                     <span>[ ACCESS_CODE ]</span>
                                     <ErrorMessage name="password" component="span" className="text-red-400" />
                                 </label>
-                                <Field type="password" name="password" placeholder="••••••••" className="w-full bg-transparent border border-[#3d2278]/80 text-white font-secondary text-[10px] tracking-wider px-4 py-3 outline-none focus:border-light/70 focus:shadow-[0_0_12px_rgba(138,109,252,0.25)] placeholder:text-gray-700 transition-all duration-200" />
+                                <Field type="password" name="password" placeholder="••••••••" className="w-full bg-transparent border border-light/80 text-text font-secondary text-[10px] tracking-wider px-4 py-3 outline-none focus:border-light/70 focus:shadow-[0_0_12px_rgba(138,109,252,0.25)] placeholder:text-gray-700 transition-all duration-200" />
                             </div>
 
                             <button
@@ -70,9 +70,9 @@ const Login = () => {
                 </Formik>
 
                 <div className="mt-5 flex items-center justify-center gap-2">
-                    <div className="h-px bg-[#3d2278]/40 flex-1"></div>
-                    <span className="font-primary text-[8px] text-[#3d2278] tracking-widest">OR BYPASS VIA</span>
-                    <div className="h-px bg-[#3d2278]/40 flex-1"></div>
+                    <div className="h-px bg-light/40 flex-1"></div>
+                    <span className="font-primary text-[8px] text-light tracking-widest">OR BYPASS VIA</span>
+                    <div className="h-px bg-light/40 flex-1"></div>
                 </div>
 
                 <button

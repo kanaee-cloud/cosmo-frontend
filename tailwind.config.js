@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
+   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
@@ -18,6 +18,7 @@ export default {
         tertiary: "rgb(var(--color-tertiary) / <alpha-value>)",
         light: "rgb(var(--color-light) / <alpha-value>)",
         accent: "rgb(var(--color-accent) / <alpha-value>)",
+        text: "rgb(var(--color-text) / <alpha-value>)", /* Wajib ada untuk mode terang/gelap */
         'dark-overlay': 'rgba(0, 0, 0, 0.1)',
       }
     },

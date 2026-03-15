@@ -11,9 +11,9 @@ export const FleetRoster = () => {
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="p-6 border border-[#3d2278]/90 bg-secondary/95 shadow-[0_0_30px_rgba(61,34,120,0.3)] min-h-[400px] flex flex-col"
+      className="p-6 border border-light/90 bg-secondary/95 shadow-[0_0_30px_rgba(61,34,120,0.3)] min-h-[400px] flex flex-col"
     >
-      <div className="flex justify-between items-center mb-6 border-b border-[#3d2278]/50 pb-4">
+      <div className="flex justify-between items-center mb-6 border-b border-light/50 pb-4">
         <div>
           <h3 className="font-primary text-light tracking-[0.25em] text-sm flex items-center gap-2">
             <Users size={16} className="text-accent" /> [ FLEET ROSTER ]
@@ -37,7 +37,7 @@ export const FleetRoster = () => {
       )}
 
       {!isLoading && !isError && friends?.length === 0 && (
-        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-[#3d2278]/50 p-8 text-center bg-[#0a0a1a]/30">
+        <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-light/50 p-8 text-center bg-primary/30">
           <Shield size={32} className="text-gray-600 mb-3" />
           <p className="font-secondary text-[10px] text-gray-500 tracking-widest">YOUR FLEET IS EMPTY.</p>
           <p className="font-primary text-[8px] text-accent tracking-widest mt-2">OPEN COMMS RELAY TO RECRUIT CAPTAINS.</p>
@@ -49,7 +49,7 @@ export const FleetRoster = () => {
           <motion.div 
             key={friend.friendship_id}
             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }}
-            className="group flex items-center justify-between p-3 border border-[#3d2278]/40 bg-[#0a0a1a]/50 hover:border-cyan-500/50 transition-colors duration-300"
+            className="group flex items-center justify-between p-3 border border-light/40 bg-primary/50 hover:border-cyan-500/50 transition-colors duration-300"
           >
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="w-10 h-10 rounded-full bg-dark border border-cyan-800 overflow-hidden flex-shrink-0 flex items-center justify-center relative">

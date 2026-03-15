@@ -26,7 +26,7 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#0a0a1a]/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-primary/80 backdrop-blur-sm"
           />
 
           {/* Kotak Modal Detail */}
@@ -74,7 +74,7 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
               <h4 className="font-primary text-cyan-400 text-[10px] tracking-[0.2em] mb-2 flex items-center gap-2">
                 <FileText size={14} /> [ MISSION LOG DETAILS ]
               </h4>
-              <div className="bg-[#0a0a1a]/50 border border-[#3d2278]/40 p-4 text-gray-300 font-secondary text-sm leading-relaxed whitespace-pre-wrap">
+              <div className="bg-primary/50 border border-light/40 p-4 text-gray-300 font-secondary text-sm leading-relaxed whitespace-pre-wrap">
                 {directive.mission_log}
               </div>
             </div>
@@ -84,7 +84,7 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
                 <h4 className="font-primary text-cyan-400 text-[10px] tracking-[0.2em] mb-2 flex items-center gap-2">
                   <ImageIcon size={14} /> [ VISUAL EVIDENCE ATTACHED ]
                 </h4>
-                <div className="relative group rounded-sm overflow-hidden border border-[#3d2278]/40 bg-[#0a0a1a]">
+                <div className="relative group rounded-sm overflow-hidden border border-light/40 bg-primary">
                   <img 
                     src={directive.evidence_link} 
                     alt="Mission Evidence" 
@@ -95,7 +95,7 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
               </div>
             )}
 
-            <div className="mt-8 pt-4 border-t border-[#3d2278]/40 flex justify-between items-center text-gray-500 font-secondary text-[9px] tracking-widest">
+            <div className="mt-8 pt-4 border-t border-light/40 flex justify-between items-center text-gray-500 font-secondary text-[9px] tracking-widest">
               <span className="flex items-center gap-1"><Activity size={12} /> RECORDED: {new Date(directive.created_at).toLocaleString()}</span>
               <span>ID: {directive.id.split('-')[0]}</span>
             </div>

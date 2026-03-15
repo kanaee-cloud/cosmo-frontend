@@ -35,7 +35,7 @@ const Home = () => {
         </motion.button>
         <button 
           onClick={() => setIsCommsOpen(true)} 
-          className="relative flex items-center justify-center p-2 border border-[#3d2278]/80 bg-[#0a0a1a]/50 hover:border-accent hover:bg-[#3d2278]/20 text-accent transition-all duration-300"
+          className="relative flex items-center justify-center p-2 border border-light/80 bg-primary/50 hover:border-accent hover:bg-light/20 text-accent transition-all duration-300"
         >
           <Bell size={16} />
 
@@ -44,7 +44,7 @@ const Home = () => {
       </div>
 
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-[#3d2278]/50 pb-4 gap-4 mt-2">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-light/50 pb-4 gap-4 mt-2">
         <div className="font-primary text-yellow-500 tracking-[0.25em] text-[10px] md:text-xs">
           INPUT NEW COSMIC DIRECTIVE...
         </div>

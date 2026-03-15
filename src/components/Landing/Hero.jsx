@@ -22,12 +22,12 @@ const Hero = () => {
                             <span className="text-accent text-[9px] tracking-widest uppercase font-press">System Online</span>
                         </div>
 
-                        <h1 className="text-white text-3xl lg:text-6xl font-primary font-bold leading-[1.5] tracking-tight drop-shadow-[0_0_10px_rgba(138,109,252,0.8)]">
+                        <h1 className="text-text text-3xl lg:text-6xl font-primary font-bold leading-[1.5] tracking-tight drop-shadow-[0_0_10px_rgba(138,109,252,0.8)]">
                             Level Up Your Reality.<br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-light to-accent">Conquer the Cosmos.</span>
                         </h1>
 
-                        <p className="text-white text-xl font-primary leading-loose max-w-xl border-l-4 border-light pl-4 bg-gradient-to-r from-light/10 to-transparent py-2">
+                        <p className="text-text text-xl font-primary leading-loose max-w-xl border-l-4 border-light pl-4 bg-gradient-to-r from-light/10 to-transparent py-2">
                             Gamify your tasks. Earn XP for productivity. Become the pilot of your own destiny in a universe built for high-performance.
                         </p>
 
@@ -42,7 +42,7 @@ const Hero = () => {
                             </button>
                         </div>
 
-                        <div className="flex items-center gap-6 text-sm text-white font-primary">
+                        <div className="flex items-center gap-6 text-sm text-text font-primary">
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-yellow-400 text-base drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]">star</span>
                                 <span>4.9/5 Pilot Rating</span>

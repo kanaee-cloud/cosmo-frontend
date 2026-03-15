@@ -23,10 +23,10 @@ const ArmoryCard = ({ title, description, topIcon, mainIcon, styles, children })
             </div>
             
             {/* Text Content */}
-            <h3 className={`text-white text-xl font-bold font-primary tracking-widest transition-colors ${styles.titleTextHover}`}>
+            <h3 className={`text-text text-xl font-bold font-primary tracking-widest transition-colors ${styles.titleTextHover}`}>
                 {title}
             </h3>
-            <p className="text-white text-sm leading-relaxed font-primary">
+            <p className="text-text text-sm leading-relaxed font-primary">
                 {description}
             </p>
             

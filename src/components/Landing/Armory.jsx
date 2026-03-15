@@ -106,7 +106,7 @@ const Armory = () => {
                     {/* Header */}
                     <div className="flex items-center gap-4 mb-12">
                         <span className="material-symbols-outlined text-accent text-3xl drop-shadow-[0_0_8px_rgba(255,0,85,0.6)]">shield</span>
-                        <h2 className="text-white text-2xl lg:text-3xl font-bold font-press tracking-wide text-shadow-neon">THE ARMORY</h2>
+                        <h2 className="text-text text-2xl lg:text-3xl font-bold font-press tracking-wide text-shadow-neon">THE ARMORY</h2>
                         <div className="h-[2px] bg-gradient-to-r from-light/30 to-transparent flex-1"></div>
                     </div>
 

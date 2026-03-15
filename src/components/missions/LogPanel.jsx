@@ -7,34 +7,34 @@ export const LogPanel = ({ activeDirective, completeDirective }) => {
       
       {/* STATS GRID */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">FLEET READINESS</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">92%</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">COMBAT PROFICIENCY</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">S-RANK</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">TACTICAL EXPERIENCE</div>
           <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">MAX</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">ENERGY RADIUS</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">420.5 LY</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">QUANTUM SYNC</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">ACTIVE</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">FLEET MORALE</div>
           <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">EUPHORIC</div>
         </div>
       </div>
 
       {/* OPERATIONAL LOG */}
-      <div className="flex-1 border border-yellow-600/50 bg-[#0a0a1a] flex flex-col relative overflow-hidden min-h-[300px]">
+      <div className="flex-1 border border-yellow-600/50 bg-primary flex flex-col relative overflow-hidden min-h-[300px]">
         <div className="bg-yellow-600/10 border-b border-yellow-600/30 p-3">
           <span className="font-primary text-yellow-500 text-[10px] tracking-widest">OPERATIONAL LOG</span>
         </div>
@@ -52,7 +52,7 @@ export const LogPanel = ({ activeDirective, completeDirective }) => {
                     <span className={`px-2 py-1 font-primary text-[8px] tracking-widest border ${activeDirective.priority === 'CRITICAL' ? 'border-red-500 text-red-500' : activeDirective.priority === 'ELEVATED' ? 'border-yellow-500 text-yellow-500' : 'border-cyan-500 text-cyan-500'}`}>
                       {activeDirective.priority || 'ELEVATED'}
                     </span>
-                    <span className="px-2 py-1 font-primary text-[8px] tracking-widest border border-[#3d2278] text-gray-400">
+                    <span className="px-2 py-1 font-primary text-[8px] tracking-widest border border-light text-gray-400">
                       {activeDirective.category}
                     </span>
                   </div>

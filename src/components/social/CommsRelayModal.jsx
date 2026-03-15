@@ -53,15 +53,15 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-[#0a0a1a]/80 backdrop-blur-sm" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-primary/80 backdrop-blur-sm" />
 
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-lg bg-secondary/95 border border-[#3d2278] shadow-[0_0_50px_rgba(61,34,120,0.3)] overflow-hidden flex flex-col h-[500px]"
+            className="relative w-full max-w-lg bg-secondary/95 border border-light shadow-[0_0_50px_rgba(61,34,120,0.3)] overflow-hidden flex flex-col h-[500px]"
           >
             {/* Header & Tabs */}
-            <div className="p-6 pb-0 border-b border-[#3d2278]/50">
+            <div className="p-6 pb-0 border-b border-light/50">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-primary text-light tracking-[0.25em] text-sm flex items-center gap-2">
                   <Bell size={16} className="text-accent" /> COMMS RELAY
@@ -88,12 +88,12 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                   {inboxLoading ? (
                     <p className="text-center font-primary text-[10px] text-accent animate-pulse mt-10">SYNCING FEED...</p>
                   ) : notifications?.length === 0 ? (
-                    <div className="text-center border border-dashed border-[#3d2278]/50 p-8 text-gray-500 font-secondary text-[10px] tracking-widest mt-4">
+                    <div className="text-center border border-dashed border-light/50 p-8 text-gray-500 font-secondary text-[10px] tracking-widest mt-4">
                       NO NEW TRANSMISSIONS.
                     </div>
                   ) : (
                     notifications?.map(notif => (
-                      <div key={notif.id} className={`p-4 border ${notif.is_read ? 'border-gray-800 bg-[#0a0a1a]/30' : 'border-[#3d2278]/80 bg-[#3d2278]/10'} flex items-center justify-between gap-4`}>
+                      <div key={notif.id} className={`p-4 border ${notif.is_read ? 'border-gray-800 bg-primary/30' : 'border-light/80 bg-light/10'} flex items-center justify-between gap-4`}>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-dark border border-accent overflow-hidden flex items-center justify-center">
                             {notif.sender?.avatar_url ? <img src={notif.sender.avatar_url} alt="sender" /> : <Users size={20} className="text-accent" />}
@@ -146,7 +146,7 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="ENTER CAPTAIN'S USERNAME..." 
-                      className="w-full bg-[#0a0a1a] border border-[#3d2278]/80 text-white font-secondary text-[10px] tracking-wider pl-10 pr-4 py-3 outline-none focus:border-cyan-500"
+                      className="w-full bg-primary border border-light/80 text-text font-secondary text-[10px] tracking-wider pl-10 pr-4 py-3 outline-none focus:border-cyan-500"
                     />
                   </div>
 
@@ -155,7 +155,7 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                   ) : searchResults.length > 0 ? (
                     <div className="space-y-3">
                       {searchResults.map(user => (
-                        <div key={user.id} className="p-3 border border-[#3d2278]/40 bg-[#0a0a1a]/50 flex items-center justify-between">
+                        <div key={user.id} className="p-3 border border-light/40 bg-primary/50 flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-dark border border-cyan-800 overflow-hidden">
                               {user.avatar_url ? <img src={user.avatar_url} alt="avatar" /> : <Users size={16} className="text-gray-500 m-auto h-full" />}

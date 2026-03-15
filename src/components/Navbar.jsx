@@ -29,7 +29,7 @@ const Navbar = () => {
                         <div className="text-accent flex items-center justify-center transform transition-transform group-hover:-translate-y-1">
                             <Rocket />
                         </div>
-                        <span className="text-white font-extrabold font-primary text-2xl tracking-wide flex items-center">
+                        <span className="text-text font-extrabold font-primary text-2xl tracking-wide flex items-center">
                             Cosmo
                         </span>
                     </Link>
@@ -51,14 +51,14 @@ const Navbar = () => {
                                     <Link 
                                         to="/login" 
                                         style={{ clipPath: buttonClip }}
-                                        className="bg-accent text-white font-bold text-[12px] tracking-wider py-2.5 px-6 hover:bg-[#D40046] transition-all duration-300 outline-none active:scale-95">
+                                        className="bg-accent text-white font-bold text-[12px] tracking-wider py-2.5 px-6 hover:bg-accent/80 transition-all duration-300 outline-none active:scale-95">
                                         LOGIN
                                     </Link>
                                 </div>
 
                                 <Link
                                     to="/register"
-                                    className="bg-accent text-white font-bold text-[12px] tracking-wider py-2.5 px-6 hover:bg-[#D40046] transition-all duration-300 outline-none active:scale-95"
+                                    className="bg-accent text-white font-bold text-[12px] tracking-wider py-2.5 px-6 hover:bg-accent/80 transition-all duration-300 outline-none active:scale-95"
                                     style={{ clipPath: buttonClip }}
                                 >
                                     START MISSION
@@ -77,7 +77,7 @@ const Navbar = () => {
                                             <User size={16} className="text-accent" />
                                         )}
                                     </div>
-                                    <span className="text-white text-sm font-bold tracking-wide">
+                                    <span className="text-text text-sm font-bold tracking-wide">
                                         {profile?.user_name || session?.user?.user_metadata?.user_name || session?.user?.email?.split('@')[0] || 'Agent'}
                                     </span>
                                 </button>
@@ -92,7 +92,7 @@ const Navbar = () => {
                                         >
                                             <Link 
                                                 to="/dashboard" 
-                                                className="px-4 py-3 text-white text-sm hover:bg-secondary transition-colors font-semibold"
+                                                className="px-4 py-3 text-text text-sm hover:bg-secondary transition-colors font-semibold"
                                                 onClick={() => setIsMenuOpen(false)}
                                             >
                                                 Dashboard

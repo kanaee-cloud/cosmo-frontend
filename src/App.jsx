@@ -24,7 +24,7 @@ function App() {
   // EFFECT UNTUK MENGGANTI TEMA DI BODY
   useEffect(() => {
     // Hapus semua class tema tambahan terlebih dahulu
-    document.body.classList.remove('theme-null', 'theme-zenith');
+    document.body.classList.remove('theme-zenith');
     
     // Jika bukan tema default (nexus), tambahkan class-nya
     if (activeTheme !== 'nexus') {
@@ -34,7 +34,7 @@ function App() {
 
   if (isInitializing) {
     return (
-      <div className="min-h-screen bg-[#0a0a1a] flex flex-col items-center justify-center font-primary tracking-[0.3em]">
+      <div className="min-h-screen bg-primary flex flex-col items-center justify-center font-primary tracking-[0.3em]">
         <div className="animate-pulse mb-4 text-xl text-accent border border-accent p-4 bg-accent/10 shadow-[0_0_20px_rgba(138,109,252,0.3)]">
           [ SYSTEM BOOTING ]
         </div>

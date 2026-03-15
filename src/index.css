@@ -42,13 +42,8 @@
 }
 
 @keyframes stars {
-    from {
-        background-position: 0 0;
-    }
-
-    to {
-        background-position: 0 100%;
-    }
+    from { transform: translateY(0px); }
+    to { transform: translateY(-100px); }
 }
 
 /* Pixel perfect corners fix for retro feel */
@@ -75,34 +70,37 @@
 }
 
 @layer base {
-  /* Tema Default (Nexus) */
+  /* =========================================
+     DEFAULT: SECTOR NEXUS (Tetap original) 
+     ========================================= */
   :root {
-    --color-primary: 13 5 20;     /* #0d0514 */
-    --color-secondary: 26 11 46;  /* #1a0b2e */
-    --color-tertiary: 20 7 36;    /* #140724 */
-    --color-light: 138 109 252;   /* #8a6dfc */
-    --color-accent: 255 0 85;     /* #ff0055 */
+    --color-primary: 13 5 20;     
+    --color-secondary: 26 11 46;  
+    --color-tertiary: 20 7 36;    
+    --color-light: 138 109 252;   
+    --color-accent: 255 0 85;     
+    --color-text: 255 255 255;    /* Teks Putih */
   }
 
-  /* Tema Null (Dark Matter Zone) */
-  .theme-null {
-    --color-primary: 10 10 10;
-    --color-secondary: 25 25 25;
-    --color-tertiary: 15 15 15;
-    --color-light: 150 150 150;
-    --color-accent: 200 200 200;  
-  }
 
-  /* Tema Zenith (Solar Flux Zone) - FIXED TYPO HERE */
+  /* =========================================
+     LIGHT MODE: SECTOR ZENITH (Standar Putih/Abu)
+     ========================================= */
   .theme-zenith {
-    --color-primary: 15 25 45;
-    --color-secondary: 30 45 75;
-    --color-tertiary: 20 35 60;
-    --color-light: 100 200 255;
-    --color-accent: 0 255 170;    
+    --color-primary: 249 250 251;  /* Background Abu-abu Pucat */
+    --color-secondary: 255 255 255;/* Putih Murni (Card/Navbar) */
+    --color-tertiary: 229 231 235; /* Abu-abu Terang (Border/Hover) */
+    --color-light: 107 114 128;    /* Abu-abu Medium (Teks Sekunder/Icon) */
+    --color-accent: 17 24 39;      /* Hitam Pekat (Tombol/Highlight) */
+    --color-text: 17 24 39;        /* Teks Utama (Hitam Pekat) */
   }
   
+  /* =========================================
+     PENYELESAIAN ERROR POSTCSS (CARA AMAN)
+     ========================================= */
   body {
-    @apply bg-primary text-white transition-colors duration-500;
+    background-color: rgb(var(--color-primary));
+    color: rgb(var(--color-text));
+    @apply transition-colors duration-500;
   }
 }

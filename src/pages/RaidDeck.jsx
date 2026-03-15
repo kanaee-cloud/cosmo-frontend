@@ -15,7 +15,7 @@ const RaidDeck = () => {
   const { data: myWorkspaces, isLoading: workspacesLoading } = useMyWorkspaces();
 
   return (
-    <div className="min-h-screen bg-[#05000a] p-4 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-primary p-4 md:p-8 relative overflow-hidden">
       {/* Background efek Red Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,85,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,85,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
@@ -47,7 +47,7 @@ const RaidDeck = () => {
             SCANNING SECTORS FOR LEVIATHAN SIGNATURES...
           </div>
         ) : myWorkspaces?.length === 0 ? (
-          <div className="border border-dashed border-red-900/30 p-12 text-center bg-[#0a0a1a]/50">
+          <div className="border border-dashed border-red-900/30 p-12 text-center bg-primary/50">
             <Skull size={32} className="text-red-900 mx-auto mb-4" />
             <p className="font-secondary text-xs text-gray-500 tracking-widest">NO ACTIVE BATTLEFIELDS.</p>
             <p className="font-primary text-[10px] text-red-500/50 mt-2 tracking-widest">INITIATE A SCAN TO SUMMON A BOSS.</p>

@@ -6,14 +6,6 @@ import { useThemeStore } from '../store/themeStore';
 
 const sectors = [
   {
-    id: 'null',
-    name: 'SECTOR NULL',
-    desc1: 'DARK MATTER ZONE',
-    desc2: 'VOID INTENSITY: 98%',
-    // CSS untuk membuat planet gelap dengan inner shadow
-    planetStyle: 'bg-gradient-to-br from-[#4a4a4a] to-[#0a0a0a] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.8),_0_0_20px_rgba(255,255,255,0.05)]'
-  },
-  {
     id: 'nexus',
     name: 'SECTOR NEXUS',
     desc1: 'SYSTEM SYNC: OPTIMAL',
@@ -49,7 +41,7 @@ const Theme = () => {
 
       {/* Header */}
       <div className="text-center mb-16 z-10">
-        <h1 className="text-3xl md:text-5xl font-press text-white mb-4 uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+        <h1 className="text-3xl md:text-5xl font-press text-text mb-4 uppercase tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
           CHOOSE YOUR HOME SECTOR
         </h1>
         <div className="w-full h-[2px] bg-light mb-4 shadow-[0_0_8px_rgba(138,109,252,0.8)]" />

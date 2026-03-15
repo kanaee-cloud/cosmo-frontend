@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export const RadarPanel = ({ directives, directivesLoading, activeDirective, setActiveDirective }) => {
   return (
-    <div className="xl:col-span-7 border border-[#3d2278]/50 bg-[#05000a] relative overflow-hidden flex items-center justify-center min-h-[400px] md:min-h-[600px] shadow-[inset_0_0_100px_rgba(61,34,120,0.1)]">
+    <div className="xl:col-span-7 border border-light/50 bg-primary relative overflow-hidden flex items-center justify-center min-h-[400px] md:min-h-[600px] shadow-[inset_0_0_100px_rgba(61,34,120,0.1)]">
       
       {/* Label Sector */}
       <div className="absolute bottom-4 left-4 font-primary text-cyan-500 text-[8px] tracking-widest z-20 opacity-70">
