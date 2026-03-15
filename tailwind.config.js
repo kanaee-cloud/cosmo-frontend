@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-   content: [
+  content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
@@ -13,15 +13,14 @@ export default {
         press: ['"Press Start 2P"', "cursive"]
       },
       colors: {
-        primary: "#0d0514",
-        secondary: "#1a0b2e",
-        tertiary: "#140724",
-        light: "#8a6dfc",
-        accent: "#ff0055",
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
+        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+        tertiary: "rgb(var(--color-tertiary) / <alpha-value>)",
+        light: "rgb(var(--color-light) / <alpha-value>)",
+        accent: "rgb(var(--color-accent) / <alpha-value>)",
         'dark-overlay': 'rgba(0, 0, 0, 0.1)',
       }
     },
   },
   plugins: [],
 }
-

@@ -66,27 +66,43 @@
 }
 
 @keyframes glitch-anim {
-    0% {
-        transform: translate(0)
-    }
+    0% { transform: translate(0) }
+    20% { transform: translate(-2px, 2px) }
+    40% { transform: translate(-2px, -2px) }
+    60% { transform: translate(2px, 2px) }
+    80% { transform: translate(2px, -2px) }
+    100% { transform: translate(0) }
+}
 
-    20% {
-        transform: translate(-2px, 2px)
-    }
+@layer base {
+  /* Tema Default (Nexus) */
+  :root {
+    --color-primary: 13 5 20;     /* #0d0514 */
+    --color-secondary: 26 11 46;  /* #1a0b2e */
+    --color-tertiary: 20 7 36;    /* #140724 */
+    --color-light: 138 109 252;   /* #8a6dfc */
+    --color-accent: 255 0 85;     /* #ff0055 */
+  }
 
-    40% {
-        transform: translate(-2px, -2px)
-    }
+  /* Tema Null (Dark Matter Zone) */
+  .theme-null {
+    --color-primary: 10 10 10;
+    --color-secondary: 25 25 25;
+    --color-tertiary: 15 15 15;
+    --color-light: 150 150 150;
+    --color-accent: 200 200 200;  
+  }
 
-    60% {
-        transform: translate(2px, 2px)
-    }
-
-    80% {
-        transform: translate(2px, -2px)
-    }
-
-    100% {
-        transform: translate(0)
-    }
+  /* Tema Zenith (Solar Flux Zone) - FIXED TYPO HERE */
+  .theme-zenith {
+    --color-primary: 15 25 45;
+    --color-secondary: 30 45 75;
+    --color-tertiary: 20 35 60;
+    --color-light: 100 200 255;
+    --color-accent: 0 255 170;    
+  }
+  
+  body {
+    @apply bg-primary text-white transition-colors duration-500;
+  }
 }

@@ -10,6 +10,8 @@ import RaidDeck from "../pages/RaidDeck";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 
+// 1. IMPORT KOMPONEN THEME
+import Theme from "../pages/Theme"; 
 
 export const router = createBrowserRouter([
     {
@@ -22,6 +24,14 @@ export const router = createBrowserRouter([
             }
         ]
     },
+    
+    // 2. TAMBAHKAN ROUTE THEME DI SINI
+    // Diletakkan di luar AuthLayout/DashboardLayout agar bisa diakses siapa saja
+    {
+        path: "/theme",
+        element: <Theme />
+    },
+
     {
         element: <AuthLayout />,
         children: [
@@ -58,4 +68,4 @@ export const router = createBrowserRouter([
             { path: "raid-deck", element: <RaidDeck /> }
         ]
     }
-])
+]);
