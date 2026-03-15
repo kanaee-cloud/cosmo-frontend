@@ -7,6 +7,7 @@ import { AuthLayout } from "../layouts/AuthLayout";
 import { ProtectedRoute } from "../components/common/ProtectedRoute";
 import Dashboard from "../pages/Dashboard";
 import { PublicRoute } from "../components/common/PublicRoute";
+import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
     {
@@ -47,6 +48,8 @@ export const router = createBrowserRouter([
         element:
             <ProtectedRoute>
                 <Dashboard />
-            </ProtectedRoute>
-    }
+            </ProtectedRoute>    },
+    {
+        path: "*",
+        element: <NotFound />    }
 ])
