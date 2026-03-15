@@ -44,8 +44,8 @@ export const DashboardLayout = () => {
         
 
         <div className="flex-1 min-w-[300px] border-b-2 border-cyan-400 pb-2 flex gap-4 items-center relative">
-          <div className="w-12 h-12 border-accent border-2 flex-shrink-0 flex items-center justify-center font-primary text-[#0a0a1a] text-2xl font-bold bg-[#8a6dfc] shadow-[0_0_15px_rgba(138,109,252,0.4)] overflow-hidden">
-            {profile?.avatar_url ? <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" /> : profile?.username?.charAt(0).toUpperCase()}
+          <div className="w-12 h-12 border-accent border-2 flex-shrink-0 flex items-center justify-center font-primary text-[#0a0a1a] text-2xl font-bold  shadow-[0_0_15px_rgba(138,109,252,0.4)] overflow-hidden">
+            {profile?.avatar_url ? <img src={profile.avatar_url}  className="w-full h-full object-cover" /> : profile?.username?.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 flex flex-col justify-center gap-1.5 mt-1">
             <div className="flex justify-between items-end">
