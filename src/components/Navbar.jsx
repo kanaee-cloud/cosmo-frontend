@@ -81,6 +81,14 @@ const Navbar = () => {
                                             className="absolute right-0 mt-3 w-48 bg-[#150B24] border border-[#7A40F2] rounded-xl overflow-hidden shadow-[0_5px_20px_rgba(122,64,242,0.4)] flex flex-col"
                                         >
                                             <Link 
+                                                to="/profile" 
+                                                className="px-4 py-3 text-white text-sm hover:bg-[#23153c] transition-colors font-semibold flex items-center gap-2"
+                                                onClick={() => setIsMenuOpen(false)}
+                                            >
+                                                <User size={14} />
+                                                Profile
+                                            </Link>
+                                            <Link 
                                                 to="/dashboard" 
                                                 className="px-4 py-3 text-white text-sm hover:bg-[#23153c] transition-colors font-semibold"
                                                 onClick={() => setIsMenuOpen(false)}

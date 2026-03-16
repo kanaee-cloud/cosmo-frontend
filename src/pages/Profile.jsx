@@ -20,17 +20,21 @@ export default function Profile() {
   const queryClient = useQueryClient();
   const { profile, session, setProfile } = useAuthStore();
   const [isEditingName, setIsEditingName] = useState(false);
-  const [displayName, setDisplayName] = useState(profile?.user_name || 'UNKNOWN OPERATOR');
+  const [displayName, setDisplayName] = useState(
+    profile?.user_name || session?.user?.user_metadata?.user_name || 'UNKNOWN OPERATOR'
+  );
   const [tempName, setTempName] = useState(displayName);
   const [selectedColor, setSelectedColor] = useState(THEME_COLORS[0]);
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Sync displayName dengan profile dari authStore
+  // Sync displayName dengan profile dari authStore atau session metadata
   useEffect(() => {
-    if (profile?.user_name) {
-      setDisplayName(profile.user_name);
-      setTempName(profile.user_name);
+    const name = profile?.user_name || session?.user?.user_metadata?.user_name;
+    if (name) {
+      setDisplayName(name);
+      setTempName(name);
     }
-  }, [profile?.user_name]);
+  }, [profile?.user_name, session?.user?.user_metadata?.user_name]);
 
   const handleEditName = () => {
     setTempName(displayName);
@@ -38,27 +42,47 @@ export default function Profile() {
   };
 
   const handleSaveName = async () => {
-    if (tempName.trim()) {
-      const newName = tempName.trim().toUpperCase();
-      try {
-        // Update di Supabase database
-        const { error } = await supabase
-          .from('users')
-          .update({ user_name: newName })
-          .eq('id', session?.user?.id);
-        
-        if (error) throw error;
-        
-        // Update di authStore
-        setDisplayName(newName);
-        setProfile({ ...profile, user_name: newName });
-        setIsEditingName(false);
-        
-        // Invalidate query untuk refresh data di dashboard
-        queryClient.invalidateQueries({ queryKey: ['captainProfile', session?.user?.id] });
-      } catch (err) {
-        console.error('Error saving name:', err);
+    if (!tempName.trim()) return;
+    
+    const newName = tempName.trim().toUpperCase();
+    if (newName === displayName) {
+      setIsEditingName(false);
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      console.log('Saving name to Supabase Auth metadata...', { userId: session?.user?.id, newName });
+      
+      // Update user metadata di Supabase Auth
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { user_name: newName }
+      });
+      
+      if (updateError) {
+        console.error('Supabase auth error:', updateError);
+        throw updateError;
       }
+      
+      console.log('Supabase auth update success');
+      
+      // Update di local state
+      setDisplayName(newName);
+      setProfile({ 
+        ...profile, 
+        user_name: newName,
+        user_metadata: { user_name: newName }
+      });
+      setIsEditingName(false);
+      
+      // Invalidate query untuk refresh data di dashboard
+      await queryClient.invalidateQueries({ queryKey: ['captainProfile', session?.user?.id] });
+      console.log('Query invalidated and dashboard will refresh');
+    } catch (err) {
+      console.error('Error saving name:', err);
+      alert(`Error: ${err.message}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -97,6 +121,19 @@ export default function Profile() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
+        {/* Page Title */}
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="font-primary text-4xl md:text-5xl font-black tracking-[0.2em] uppercase mb-2" style={{ color: selectedColor.hex }}>
+            PROFILE
+          </h1>
+          <p className="text-xs md:text-sm text-gray-400 tracking-widest">[ CAPTAIN STATUS OVERVIEW ]</p>
+        </motion.div>
+
         {/* Header dengan Nama Dinamis */}
         <motion.div 
           className="relative w-full mb-8 border-b-2 pb-4 transition-all duration-500"
@@ -283,17 +320,18 @@ export default function Profile() {
                     <div className="flex gap-2">
                       <motion.button
                         onClick={handleSaveName}
-                        className="flex-1 flex items-center justify-center gap-2 py-2 border-2 transition-all"
+                        disabled={isSaving}
+                        className="flex-1 flex items-center justify-center gap-2 py-2 border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{
                           borderColor: '#06FFA5',
-                          backgroundColor: '#06FFA580',
+                          backgroundColor: isSaving ? '#06FFA530' : '#06FFA580',
                           color: '#06FFA5',
                         }}
-                        whileHover={{ backgroundColor: '#06FFA5C0' }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={!isSaving ? { backgroundColor: '#06FFA5C0' } : {}}
+                        whileTap={!isSaving ? { scale: 0.95 } : {}}
                       >
                         <Check size={14} />
-                        <span className="font-mono text-[10px]">CONFIRM</span>
+                        <span className="font-mono text-[10px]">{isSaving ? 'SAVING...' : 'CONFIRM'}</span>
                       </motion.button>
                       <motion.button
                         onClick={handleCancelEdit}
