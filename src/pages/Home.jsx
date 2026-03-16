@@ -7,23 +7,31 @@ import { CommandConsoleModal } from '../components/missions/CommandConsoleModal'
 import { CommsRelayModal } from '../components/social/CommsRelayModal';
 import { RadarPanel } from '../components/missions/RadarPanel';
 import { LogPanel } from '../components/missions/LogPanel';
+import { DirectiveDetailModal } from '../components/missions/DirectiveDetailModal'; // Import Modal
 
 const Home = () => {
+  const [isConsoleOpen, setIsConsoleOpen] = useState(false); 
   const [isCommsOpen, setIsCommsOpen] = useState(false);
   const [activeDirective, setActiveDirective] = useState(null);
+  const [consoleInput, setConsoleInput] = useState('');
 
   const { 
     directives, directivesLoading, 
-    isConsoleOpen, openConsole, closeConsole, 
+    isConsoleOpen: logicConsoleOpen, openConsole, closeConsole, 
     handleEmergencyExit 
   } = useDashboardLogic();
+
+  const handleCloseConsole = () => {
+    closeConsole();
+    setConsoleInput('');
+  };
 
   const { completeDirective } = useMissionOperations(setActiveDirective);
 
   return (
     <div className="w-full h-full flex flex-col relative space-y-6">
 
-
+      {/* HEADER ACTIONS */}
       <div className="flex justify-end items-center gap-4 relative z-20 -mt-2">
         <motion.button 
           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} 
@@ -38,25 +46,33 @@ const Home = () => {
           className="relative flex items-center justify-center p-2 border border-[#3d2278]/80 bg-[#0a0a1a]/50 hover:border-accent hover:bg-[#3d2278]/20 text-accent transition-all duration-300"
         >
           <Bell size={16} />
-
+          {/* Notification Dot */}
           <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]"></span>
         </button>
       </div>
 
-
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-[#3d2278]/50 pb-4 gap-4 mt-2">
-        <div className="font-primary text-yellow-500 tracking-[0.25em] text-[10px] md:text-xs">
-          INPUT NEW COSMIC DIRECTIVE...
+      {/* COMMAND CENTER HEADER */}
+      <div className="flex flex-col md:flex-row justify-between items-end md:items-center border-b border-[#3d2278]/50 pb-4 gap-4 mt-2">
+        <div className="flex-1 w-full md:w-auto relative group">
+          <input 
+            type="text" 
+            value={consoleInput}
+            onChange={(e) => setConsoleInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter' && consoleInput.trim()) openConsole(); }}
+            placeholder="INPUT NEW COSMIC DIRECTIVE..." 
+            className="w-full bg-transparent border-none text-yellow-500 font-primary tracking-[0.25em] text-[10px] md:text-sm py-2 outline-none placeholder-yellow-500/30 focus:placeholder-yellow-500/10 transition-all"
+          />
+          <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-yellow-500 transition-all duration-500 group-hover:w-full group-focus-within:w-full"></div>
         </div>
         <button onClick={openConsole} className="w-full md:w-auto px-8 py-3 bg-yellow-500 text-[#0a0a1a] hover:bg-yellow-400 font-primary font-bold text-[10px] tracking-[0.2em] transition-colors rounded-sm shadow-[0_0_15px_rgba(234,179,8,0.3)]">
           INITIATE
         </button>
       </div>
 
-
+      {/* MAIN DASHBOARD GRID */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 flex-1 min-h-[600px]">
         
-
+        {/* RADAR PANEL (7 Cols) */}
         <RadarPanel 
           directives={directives} 
           directivesLoading={directivesLoading} 
@@ -64,17 +80,27 @@ const Home = () => {
           setActiveDirective={setActiveDirective} 
         />
 
-
+        {/* LOG PANEL (5 Cols) - Now serving as general stats/log */}
         <LogPanel 
-          activeDirective={activeDirective} 
+          directives={directives} 
+          activeDirective={activeDirective}
+          setActiveDirective={setActiveDirective}
           completeDirective={completeDirective} 
         />
 
       </div>
 
-
-      <CommandConsoleModal isOpen={isConsoleOpen} onClose={closeConsole} />
+      {/* MODALS */}
+      <CommandConsoleModal isOpen={logicConsoleOpen} onClose={handleCloseConsole} initialTitle={consoleInput} />
       <CommsRelayModal isOpen={isCommsOpen} onClose={() => setIsCommsOpen(false)} />
+      
+      {/* DIRECTIVE DETAIL MODAL (Triggered by Radar Click) */}
+      <DirectiveDetailModal 
+        isOpen={!!activeDirective} 
+        onClose={() => setActiveDirective(null)} 
+        directive={activeDirective}
+        setActiveDirective={setActiveDirective}
+      />
     </div>
   );
 };

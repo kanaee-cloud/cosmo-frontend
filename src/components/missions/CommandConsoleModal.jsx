@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Image as ImageIcon, UserCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FormikProvider, Form, Field, ErrorMessage } from 'formik';
 import { useCommandConsole } from '../../hooks/useCommandConsole';
 
-export const CommandConsoleModal = ({ isOpen, onClose }) => {
-  const { formikConfig, isAdding } = useCommandConsole(onClose);
+export const CommandConsoleModal = ({ isOpen, onClose, initialTitle = '' }) => {
+  const { formikConfig, isAdding } = useCommandConsole(onClose, initialTitle);
 
   // Pastikan formik initialValues untuk priority diatur ke 'ELEVATED' jika kosong
   if (!formikConfig.initialValues.priority) {
@@ -52,24 +52,28 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
               <UserCircle size={18} /> [ MISSION PARAMETER CONFIGURATION ]
             </div>
 
-            <Formik {...formikConfig}>
-              {({ setFieldValue, values }) => (
+            <FormikProvider value={formikConfig}>
                 <Form className="flex flex-col gap-6 relative z-10">
                   
                   {/* IDENTIFIKASI DIREKTIF */}
                   <div className="flex flex-col gap-2">
-                    <label className="font-primary text-cyan-400 text-[10px] tracking-widest">DIRECTIVE IDENTIFICATION</label>
-                    <Field type="text" name="title" placeholder="Enter Operation Target..." className="w-full bg-transparent border border-cyan-900 text-cyan-300 font-secondary text-sm px-4 py-3 outline-none focus:border-cyan-400 transition-colors" />
-                    <ErrorMessage name="title" component="span" className="text-red-500 font-primary text-[8px] tracking-widest" />
+                    <label className="font-primary text-cyan-400 text-[10px] tracking-widest">DIRECTIVE IDENTIFICATION *</label>
+                    <Field 
+                      type="text" 
+                      name="title" 
+                      placeholder="Enter Operation Target..." 
+                      className={`w-full bg-transparent border text-cyan-300 font-secondary text-sm px-4 py-3 outline-none transition-colors ${formikConfig.errors.title && formikConfig.touched.title ? 'border-red-500' : 'border-cyan-900 focus:border-cyan-400'}`} 
+                    />
+                    <ErrorMessage name="title" component="span" className="text-red-500 font-primary text-[8px] tracking-widest flex items-center gap-1"><span className="inline-block w-1 h-1 bg-red-500 rounded-full"></span> REQUIRED FIELD</ErrorMessage>
                   </div>
 
                   {/* THREAT LEVEL (PRIORITY) */}
                   <div className="flex flex-col gap-2">
                     <label className="font-primary text-cyan-400 text-[10px] tracking-widest">THREAT LEVEL (PRIORITY)</label>
                     <div className="grid grid-cols-3 gap-3">
-                      <button type="button" onClick={() => setFieldValue('priority', 'STANDARD')} className={`py-2 font-primary text-[10px] tracking-widest border transition-all ${values.priority === 'STANDARD' ? 'border-[#3b82f6] bg-[#3b82f6]/20 text-[#3b82f6] shadow-[0_0_15px_rgba(59,130,246,0.5)]' : 'border-gray-800 text-gray-500 hover:border-[#3b82f6]/50'}`}>STANDARD</button>
-                      <button type="button" onClick={() => setFieldValue('priority', 'ELEVATED')} className={`py-2 font-primary text-[10px] tracking-widest border transition-all ${values.priority === 'ELEVATED' || !values.priority ? 'border-orange-500 bg-orange-500/20 text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.5)]' : 'border-gray-800 text-gray-500 hover:border-orange-500/50'}`}>ELEVATED</button>
-                      <button type="button" onClick={() => setFieldValue('priority', 'CRITICAL')} className={`py-2 font-primary text-[10px] tracking-widest border transition-all ${values.priority === 'CRITICAL' ? 'border-red-600 bg-red-600/20 text-red-500 shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'border-gray-800 text-gray-500 hover:border-red-600/50'}`}>CRITICAL</button>
+                      <button type="button" onClick={() => formikConfig.setFieldValue('priority', 'STANDARD')} className={`py-2 font-primary text-[10px] tracking-widest border transition-all ${formikConfig.values.priority === 'STANDARD' ? 'border-[#3b82f6] bg-[#3b82f6]/20 text-[#3b82f6] shadow-[0_0_15px_rgba(59,130,246,0.5)]' : 'border-gray-800 text-gray-500 hover:border-[#3b82f6]/50'}`}>STANDARD</button>
+                      <button type="button" onClick={() => formikConfig.setFieldValue('priority', 'ELEVATED')} className={`py-2 font-primary text-[10px] tracking-widest border transition-all ${formikConfig.values.priority === 'ELEVATED' || !formikConfig.values.priority ? 'border-orange-500 bg-orange-500/20 text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.5)]' : 'border-gray-800 text-gray-500 hover:border-orange-500/50'}`}>ELEVATED</button>
+                      <button type="button" onClick={() => formikConfig.setFieldValue('priority', 'CRITICAL')} className={`py-2 font-primary text-[10px] tracking-widest border transition-all ${formikConfig.values.priority === 'CRITICAL' ? 'border-red-600 bg-red-600/20 text-red-500 shadow-[0_0_15px_rgba(220,38,38,0.5)]' : 'border-gray-800 text-gray-500 hover:border-red-600/50'}`}>CRITICAL</button>
                     </div>
                   </div>
 
@@ -84,17 +88,6 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
                       </Field>
                       <Field type="text" name="mission_log" placeholder="Mission Log / Details (Optional)..." className="flex-1 bg-transparent border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400" />
                     </div>
-                  </div>
-
-                  {/* UPLOAD EVIDENCE */}
-                  <div className="flex flex-col gap-2">
-                    <input type="file" id="evidence_upload" accept="image/*" onChange={(e) => { if(e.currentTarget.files.length > 0) setFieldValue("imageFile", e.currentTarget.files[0]); }} className="hidden" />
-                    <label htmlFor="evidence_upload" className={`w-full flex items-center justify-between px-4 py-3 border border-dashed cursor-pointer transition-colors ${values.imageFile ? 'bg-cyan-900/20 border-cyan-500' : 'bg-transparent border-gray-800 hover:border-cyan-900'}`}>
-                      <span className="font-secondary flex items-center gap-3 text-[10px] tracking-wider text-gray-400">
-                        <ImageIcon size={16} className={values.imageFile ? "text-cyan-400" : "text-gray-600"} />
-                        {values.imageFile ? <span className="text-cyan-400">[ DATA SECURED: {values.imageFile.name} ]</span> : 'ATTACH VISUAL EVIDENCE (OPTIONAL)'}
-                      </span>
-                    </label>
                   </div>
 
                   {/* GARIS PEMISAH */}
@@ -120,8 +113,7 @@ export const CommandConsoleModal = ({ isOpen, onClose }) => {
                   </div>
 
                 </Form>
-              )}
-            </Formik>
+            </FormikProvider>
           </motion.div>
         </div>
       )}

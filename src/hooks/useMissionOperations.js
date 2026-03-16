@@ -4,16 +4,47 @@ import { supabase } from '../services/supabase';
 export const useMissionOperations = (setActiveDirective) => {
   const queryClient = useQueryClient();
 
-  const completeDirective = useMutation({
+  const engageDirective = useMutation({
     mutationFn: async (id) => {
-      const { error } = await supabase.from('directives').update({ status: 'DONE' }).eq('id', id);
+      const { error } = await supabase.from('directives').update({ status: 'IN_PROGRESS' }).eq('id', id);
       if (error) throw new Error(error.message);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['directives'] });
+    }
+    // Error handling can optionally be added here if needed, or handled in the component
+  });
+
+  const completeDirective = useMutation({
+    mutationFn: async ({ id, xp, mission_log, evidence_link, ai_feedback, validation_score }) => {
+      // 1. Mark as DONE/ARCHIVED and save log/evidence if provided
+      const updateData = { status: 'DONE' };
+      
+      let finalLog = mission_log || "";
+      if (ai_feedback) {
+          finalLog += `\n\n[ AI MISSION ANALYSIS ]\nSCORE: ${validation_score}/100\nFEEDBACK: ${ai_feedback}`;
+      }
+      
+      if (finalLog) updateData.mission_log = finalLog;
+      if (evidence_link) updateData.evidence_link = evidence_link;
+
+      const { error: directiveError } = await supabase.from('directives').update(updateData).eq('id', id);
+      if (directiveError) throw new Error(directiveError.message);
+
+      // 2. Award XP to User
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+          const { data: profile } = await supabase.from('profiles').select('fuel_cells').eq('id', user.id).single();
+          const currentXP = profile?.fuel_cells || 0;
+          await supabase.from('profiles').update({ fuel_cells: currentXP + xp }).eq('id', user.id);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['directives'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] }); 
       setActiveDirective(null); 
     }
   });
 
-  return { completeDirective };
+  return { engageDirective, completeDirective };
 };
