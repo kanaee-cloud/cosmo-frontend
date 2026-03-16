@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { LayoutDashboard, Skull } from 'lucide-react';
+import { LayoutDashboard, Skull, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';
 
@@ -49,7 +49,7 @@ export const DashboardLayout = () => {
           </div>
           <div className="flex-1 flex flex-col justify-center gap-1.5 mt-1">
             <div className="flex justify-between items-end">
-              <span className="font-primary text-cyan-400 text-sm md:text-base tracking-[0.15em] uppercase truncate max-w-[200px]">{profile?.username || 'UNKNOWN CAPTAIN'}</span>
+              <span className="font-primary text-cyan-400 text-sm md:text-base tracking-[0.15em] uppercase truncate max-w-[200px]">{profile?.user_name || 'UNKNOWN CAPTAIN'}</span>
               <span className="font-primary text-yellow-400 text-[10px] md:text-xs tracking-widest">LVL {currentLevel}</span>
             </div>
             <div className="w-full h-2.5 bg-[#0a0a1a] border border-cyan-900/50 relative overflow-hidden">
@@ -91,6 +91,13 @@ export const DashboardLayout = () => {
             <div className={`flex items-center gap-3 p-4 border transition-all duration-300 ${location.pathname === '/dashboard/raid-deck' ? 'border-red-500 bg-red-900/20 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : 'border-[#3d2278]/50 bg-[#0a0a1a]/50 text-gray-500 hover:border-red-500/50 hover:text-red-500/80'}`}>
               <Skull size={18} />
               <span className="font-primary text-[10px] tracking-widest mt-0.5">RAID ARENA</span>
+            </div>
+          </Link>
+
+          <Link to="/dashboard/profile">
+            <div className={`flex items-center gap-3 p-4 border transition-all duration-300 ${location.pathname === '/dashboard/profile' ? 'border-[#8a6dfc] bg-[#8a6dfc]/20 text-[#8a6dfc] shadow-[0_0_15px_rgba(138,109,252,0.2)]' : 'border-[#3d2278]/50 bg-[#0a0a1a]/50 text-gray-500 hover:border-[#8a6dfc]/50 hover:text-[#8a6dfc]/80'}`}>
+              <User size={18} />
+              <span className="font-primary text-[10px] tracking-widest mt-0.5">PROFILE</span>
             </div>
           </Link>
         </aside>
