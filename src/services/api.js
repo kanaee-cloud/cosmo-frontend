@@ -5,10 +5,18 @@ const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'http://localhost:3000/api
 export const api = {
   // Helper to get auth header
   getHeaders: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data } = await supabase.auth.getSession();
+    const token = data?.session?.access_token;
+    
+    if (!token) {
+        console.warn("[API] No active session found. Request will likely fail.");
+    } else {
+        console.log(`[API] Attaching auth token: ${token.substring(0, 10)}...`);
+    }
+
     return {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${session?.access_token || ''}`
+      'Authorization': `Bearer ${token || ''}`
     };
   },
 
