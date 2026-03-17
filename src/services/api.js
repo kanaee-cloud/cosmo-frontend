@@ -30,12 +30,12 @@ export const api = {
   },
 
   // Validate Mission (General/Physical)
-  validateMission: async (title, description, imageUrl) => {
+  validateMission: async (title, description, imageUrl, directiveId) => {
     const headers = await api.getHeaders();
     const response = await fetch(`${WORKER_URL}/validate`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ title, description, imageUrl })
+      body: JSON.stringify({ title, description, imageUrl, directive_id: directiveId })
     });
 
     if (!response.ok) {
