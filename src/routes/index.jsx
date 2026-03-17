@@ -10,6 +10,7 @@ import NotFound from "../pages/NotFound";
 import RaidDeck from "../pages/RaidDeck";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
+import Theme from "../pages/Theme"; // Import Theme Page
 import Profile from "../pages/Profile";
 
 export const router = createBrowserRouter([
@@ -64,16 +65,9 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to="home" replace /> },
             { path: "home", element: <Home /> },
-            { path: "raid-deck", element: <RaidDeck /> }
+            { path: "raid-deck", element: <RaidDeck /> },
+            { path: "profile", element: <Profile /> },
         ]
-    },
-    {
-        path: "/profile",
-        element: (
-            <ProtectedRoute>
-                <Profile />
-            </ProtectedRoute>
-        )
     },
     {
         path: "*",

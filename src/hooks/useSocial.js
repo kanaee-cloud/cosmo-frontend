@@ -69,6 +69,16 @@ export const useSocial = () => {
     }
   });
 
+  const declineRequest = useMutation({
+    mutationFn: async ({ friendshipId, notificationId }) => {
+      await supabase.from('friendships').update({ status: 'DECLINED' }).eq('id', friendshipId);
+      await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications', myId] });
+    }
+  });
+
   const useFriendsList = () => useQuery({
     queryKey: ['friends', myId],
     queryFn: async () => {
@@ -123,12 +133,30 @@ export const useSocial = () => {
     }
   });
 
+  const declineAction = useMutation({
+    mutationFn: async ({ type, relatedId, notificationId }) => {
+      if (type === 'FRIEND_REQUEST') {
+        await supabase.from('friendships').update({ status: 'DECLINED' }).eq('id', relatedId);
+      } else if (type === 'WORKSPACE_INVITE') {
+        await supabase.from('workspace_invites').update({ status: 'DECLINED' }).eq('id', relatedId);
+      }
+      await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications', myId] });
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
+      queryClient.invalidateQueries({ queryKey: ['workspaceRaid'] });
+    }
+  });
+
   return {
     useInbox,
     searchCaptains,
     sendFriendRequest,
     acceptRequest,
+    declineRequest,
     useFriendsList,
-    acceptAction
+    acceptAction,
+    declineAction
   };
 };

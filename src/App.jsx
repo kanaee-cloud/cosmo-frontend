@@ -15,11 +15,23 @@ const queryClient = new QueryClient({
 
 function App() {
   const { initialize, isInitializing } = useAuthStore();
-  const { activeTheme } = useThemeStore(); // AMBIL STATE TEMA
+  
+  // Use separate selectors for better performance and to avoid re-render loops
+  const activeTheme = useThemeStore((state) => state.activeTheme);
+  const matrixColor = useThemeStore((state) => state.matrixColor);
 
   useEffect(() => {
     initialize();
   }, [initialize]);
+
+  // APPLY MATRIX COLOR GLOBALLY (ONLY --color-matrix)
+  useEffect(() => {
+    if (matrixColor?.rgb) {
+      document.documentElement.style.setProperty('--color-matrix', matrixColor.rgb);
+      // Explicitly remove the primary override to fix any lingering pink background
+      document.documentElement.style.removeProperty('--color-primary');
+    }
+  }, [matrixColor]);
 
   // EFFECT UNTUK MENGGANTI TEMA DI BODY
   useEffect(() => {

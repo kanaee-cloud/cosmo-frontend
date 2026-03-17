@@ -15,7 +15,7 @@ const RaidDeck = () => {
   const { data: myWorkspaces, isLoading: workspacesLoading } = useMyWorkspaces();
 
   return (
-    <div className="min-h-screen bg-primary p-4 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen p-4 md:p-8 relative overflow-hidden">
       {/* Background efek Red Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,85,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,85,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
