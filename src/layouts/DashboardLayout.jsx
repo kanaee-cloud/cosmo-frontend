@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { LayoutDashboard, Skull } from 'lucide-react';
+import { LayoutDashboard, Skull, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';
 
@@ -44,12 +44,12 @@ export const DashboardLayout = () => {
         
 
         <div className="flex-1 min-w-[300px] border-b-2 border-cyan-400 pb-2 flex gap-4 items-center relative">
-          <div className="w-12 h-12 border-accent border-2 flex-shrink-0 flex items-center justify-center font-primary text-primary text-2xl font-bold bg-light shadow-[0_0_15px_rgba(138,109,252,0.4)] overflow-hidden">
-            {profile?.avatar_url ? <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" /> : profile?.username?.charAt(0).toUpperCase()}
+          <div className="w-12 h-12 border-accent border-2 flex-shrink-0 flex items-center justify-center font-primary text-[#0a0a1a] text-2xl font-bold bg-[#8a6dfc] shadow-[0_0_15px_rgba(138,109,252,0.4)] overflow-hidden">
+            {profile?.avatar_url ? <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" /> : (profile?.user_name || profile?.username)?.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 flex flex-col justify-center gap-1.5 mt-1">
             <div className="flex justify-between items-end">
-              <span className="font-primary text-cyan-400 text-sm md:text-base tracking-[0.15em] uppercase truncate max-w-[200px]">{profile?.username || 'UNKNOWN CAPTAIN'}</span>
+              <span className="font-primary text-cyan-400 text-sm md:text-base tracking-[0.15em] uppercase truncate max-w-[200px]">{profile?.user_name || profile?.username || 'UNKNOWN CAPTAIN'}</span>
               <span className="font-primary text-yellow-400 text-[10px] md:text-xs tracking-widest">LVL {currentLevel}</span>
             </div>
             <div className="w-full h-2.5 bg-primary border border-cyan-900/50 relative overflow-hidden">

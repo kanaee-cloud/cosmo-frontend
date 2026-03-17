@@ -1,9 +1,24 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity } from 'lucide-react';
+import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity, Radio, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useMissionOperations } from '../../hooks/useMissionOperations';
+import { MissionLogModal } from './MissionLogModal';
+import { QuizModal } from './QuizModal';
+import { EvidenceUploadModal } from './EvidenceUploadModal';
 
-export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
+export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDirective }) => {
+  const { engageDirective, completeDirective } = useMissionOperations(setActiveDirective);
+  
+  const [showLogModal, setShowLogModal] = useState(false);
+  const [showQuizModal, setShowQuizModal] = useState(false);
+  const [showEvidenceModal, setShowEvidenceModal] = useState(false);
+  const [generatedQuiz, setGeneratedQuiz] = useState([]);
+  const [missionLogText, setMissionLogText] = useState('');
+
+  const [generateError, setGenerateError] = useState(null);
+  const [engageStatus, setEngageStatus] = useState(null); // 'success' | 'error' | null
+
   useEffect(() => {
     const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleEsc);
@@ -17,8 +32,74 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
     return () => { document.body.style.overflow = 'unset'; };
   }, [isOpen]);
 
-  return createPortal(
-    <AnimatePresence>
+  // Reset status when modal opens/directive changes
+  useEffect(() => {
+      setEngageStatus(null);
+  }, [directive]);
+
+  const handleEngage = () => {
+    if (directive) {
+        engageDirective.mutate(directive.id, {
+            onSuccess: () => {
+                setEngageStatus('success');
+                // Optimistic update so UI reflects change instantly without re-select
+                setActiveDirective({ ...directive, status: 'IN_PROGRESS' });
+                setTimeout(() => setEngageStatus(null), 3000);
+            },
+            onError: () => {
+                setEngageStatus('error');
+                setTimeout(() => setEngageStatus(null), 3000);
+            }
+        });
+    }
+  };
+
+  const handleTransmit = () => {
+    if (directive.category === 'LEARNING' || directive.category === 'WORK') {
+      setShowLogModal(true);
+    } else {
+      setShowEvidenceModal(true);
+    }
+  };
+
+  const handleQuizGenerated = (quizData, logText) => {
+    setGeneratedQuiz(quizData);
+    setMissionLogText(logText);
+    setShowQuizModal(true);
+  };
+
+  const handleQuizComplete = (score, total) => {
+    const xpEarned = score * 20 + 50; 
+    const percentage = Math.round((score / total) * 100);
+    const feedback = `[ SIMULATION REPORT ]\nACCURACY: ${percentage}%\nCORRECT: ${score}/${total}\nProficiency assessed as ${percentage >= 80 ? 'EXCEPTIONAL' : percentage >= 50 ? 'STANDARD' : 'SUB-OPTIMAL'}.`;
+
+    completeDirective.mutate({ 
+      id: directive.id, 
+      xp: xpEarned, 
+      mission_log: missionLogText,
+      ai_feedback: feedback,
+      validation_score: percentage
+    });
+    setShowQuizModal(false);
+    onClose();
+  };
+
+  const handleValidationComplete = (xpAwarded, evidenceUrl, aiFeedback, validationScore) => {
+    completeDirective.mutate({ 
+      id: directive.id, 
+      xp: xpAwarded, 
+      evidence_link: evidenceUrl,
+      ai_feedback: aiFeedback,
+      validation_score: validationScore 
+    });
+    setShowEvidenceModal(false);
+    onClose();
+  };
+
+  return (
+    <>
+      {createPortal(
+        <AnimatePresence>
       {isOpen && directive && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           
@@ -95,7 +176,60 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
               </div>
             )}
 
-            <div className="mt-8 pt-4 border-t border-light/40 flex justify-between items-center text-gray-500 font-secondary text-[9px] tracking-widest">
+            {/* ACTION BUTTONS */}
+            <AnimatePresence>
+                {engageStatus && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: -10 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        exit={{ opacity: 0 }}
+                        className={`mb-4 p-3 border ${engageStatus === 'success' ? 'border-green-500 bg-green-500/10 text-green-400' : 'border-red-500 bg-red-500/10 text-red-500'} font-primary text-[10px] tracking-widest text-center`}
+                    >
+                        {engageStatus === 'success' ? '[ PROTOCOL ENGAGED SUCCESSFULLY ]' : '[ ERROR: ENGAGEMENT FAILED ]'}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <div className="grid grid-cols-2 gap-4 mt-8 mb-6">
+               <button
+                 onClick={handleEngage}
+                 disabled={directive.status !== 'PENDING' || engageDirective.isPending}
+                 className={`py-4 border flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
+                   directive.status !== 'PENDING'
+                     ? 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-not-allowed' 
+                     : 'border-orange-500/50 bg-orange-900/10 text-orange-400 hover:bg-orange-900/30 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]'
+                 }`}
+               >
+                 {engageDirective.isPending ? (
+                     <>
+                        <CircleDashed className="animate-spin text-orange-400" size={24} />
+                        <span className="font-primary text-xs tracking-[0.2em]">ENGAGING...</span>
+                     </>
+                 ) : (
+                     <>
+                        <Radio size={24} className={directive.status === 'IN_PROGRESS' ? 'text-orange-500' : 'animate-pulse'} />
+                        <span className="font-primary text-xs tracking-[0.2em]">
+                        {directive.status === 'IN_PROGRESS' || directive.status === 'DONE' ? 'PROTOCOLS ENGAGED' : 'ENGAGE PROTOCOLS'}
+                        </span>
+                     </>
+                 )}
+               </button>
+
+               <button
+                 onClick={handleTransmit}
+                 disabled={directive.status !== 'IN_PROGRESS'}
+                 className={`py-4 border flex flex-col items-center justify-center gap-2 transition-all ${
+                   directive.status !== 'IN_PROGRESS'
+                     ? 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-not-allowed'
+                     : 'border-cyan-500/50 bg-cyan-900/10 text-cyan-400 hover:bg-cyan-900/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]'
+                 }`}
+               >
+                 <Send size={24} />
+                 <span className="font-primary text-xs tracking-[0.2em]">TRANSMIT DATA</span>
+               </button>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-[#3d2278]/40 flex justify-between items-center text-gray-500 font-secondary text-[9px] tracking-widest">
               <span className="flex items-center gap-1"><Activity size={12} /> RECORDED: {new Date(directive.created_at).toLocaleString()}</span>
               <span>ID: {directive.id.split('-')[0]}</span>
             </div>
@@ -105,5 +239,28 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive }) => {
       )}
     </AnimatePresence>,
     document.body
+  )}
+
+      <MissionLogModal 
+        isOpen={showLogModal} 
+        onClose={() => setShowLogModal(false)} 
+        directive={directive}
+        onQuizGenerated={handleQuizGenerated}
+      />
+
+      <QuizModal 
+        isOpen={showQuizModal} 
+        onClose={() => setShowQuizModal(false)}
+        quizQuestions={generatedQuiz}
+        onQuizComplete={handleQuizComplete}
+      />
+
+      <EvidenceUploadModal
+        isOpen={showEvidenceModal}
+        onClose={() => setShowEvidenceModal(false)}
+        directive={directive}
+        onValidationComplete={handleValidationComplete}
+      />
+    </>
   );
 };

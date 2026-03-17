@@ -33,8 +33,7 @@ export const useDashboardLogic = () => {
   const { data: broadcasts, isLoading: broadcastsLoading } = useBroadcasts();
 
   const handleEmergencyExit = async () => {
-    await logout();
-    navigate('/login');
+    navigate('/');
   };
 
   

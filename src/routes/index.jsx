@@ -6,12 +6,11 @@ import { LandingLayout } from "../layouts/LandingLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { ProtectedRoute } from "../components/common/ProtectedRoute";
 import { PublicRoute } from "../components/common/PublicRoute";
+import NotFound from "../pages/NotFound";
 import RaidDeck from "../pages/RaidDeck";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
-
-// 1. IMPORT KOMPONEN THEME
-import Theme from "../pages/Theme"; 
+import Profile from "../pages/Profile";
 
 export const router = createBrowserRouter([
     {
@@ -67,5 +66,17 @@ export const router = createBrowserRouter([
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> }
         ]
+    },
+    {
+        path: "/profile",
+        element: (
+            <ProtectedRoute>
+                <Profile />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "*",
+        element: <NotFound />
     }
 ]);

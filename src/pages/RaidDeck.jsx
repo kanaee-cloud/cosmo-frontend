@@ -21,13 +21,27 @@ const RaidDeck = () => {
 
       {/* HEADER NAVIGASI */}
       <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 border-b border-red-900/50 pb-6">
-        <div>
-          <h1 className="font-primary text-red-500 text-2xl tracking-[0.3em] uppercase flex items-center gap-3">
-            <Skull size={24} /> FLEET RAID DECK
-          </h1>
-          <p className="font-secondary text-gray-400 text-xs tracking-widest mt-1">
-            CO-OP MONSTER ELIMINATION ZONE
-          </p>
+        <div className="flex items-center gap-4">
+          <motion.button
+            onClick={() => navigate('/dashboard/home')}
+            className="flex items-center gap-2 px-4 py-2 border-2 border-red-500/60 bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-all duration-300"
+            whileHover={{ 
+              borderColor: '#ff0555',
+              boxShadow: '0 0 15px rgba(255, 5, 85, 0.4)'
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowLeft size={16} />
+            <span className="font-mono text-[10px] tracking-widest">BACK</span>
+          </motion.button>
+          <div>
+            <h1 className="font-primary text-red-500 text-2xl tracking-[0.3em] uppercase flex items-center gap-3">
+              <Skull size={24} /> FLEET RAID DECK
+            </h1>
+            <p className="font-secondary text-gray-400 text-xs tracking-widest mt-1">
+              CO-OP MONSTER ELIMINATION ZONE
+            </p>
+          </div>
         </div>
 
         <motion.button
