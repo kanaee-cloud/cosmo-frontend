@@ -8,6 +8,7 @@ import { ProtectedRoute } from "../components/common/ProtectedRoute";
 import { PublicRoute } from "../components/common/PublicRoute";
 import NotFound from "../pages/NotFound";
 import RaidDeck from "../pages/RaidDeck";
+import Leaderboard from "../pages/Leaderboard";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 import Theme from "../pages/Theme"; // Import Theme Page
@@ -67,6 +68,7 @@ export const router = createBrowserRouter([
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> },
             { path: "profile", element: <Profile /> },
+            { path: "leaderboard", element: <Leaderboard /> },
         ]
     },
     {

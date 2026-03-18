@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Skull, User } from 'lucide-react';
+import { LayoutDashboard, Skull, User, Crown } from 'lucide-react';
 import { useThemeStore } from '../store/themeStore';
 
 const Sidebar = () => {
@@ -53,6 +53,16 @@ const Sidebar = () => {
         >
           <User size={18} />
           <span className="font-primary text-[10px] tracking-widest mt-0.5">PROFILE</span>
+        </div>
+      </Link>
+
+      <Link to="/dashboard/leaderboard">
+        <div 
+          className="flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125"
+          style={getNavLinkStyle('/dashboard/leaderboard')}
+        >
+          <Crown size={18} />
+          <span className="font-primary text-[10px] tracking-widest mt-0.5">LEADERBOARD</span>
         </div>
       </Link>
     </aside>
