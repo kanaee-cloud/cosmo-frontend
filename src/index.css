@@ -104,3 +104,29 @@
     @apply transition-colors duration-500;
   }
 }
+
+/* GLOBAL SCROLLBAR - DARK THEME */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050510; 
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(138, 109, 252, 0.2); 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(138, 109, 252, 0.5); 
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(138, 109, 252, 0.2) #050510;
+}

@@ -13,13 +13,27 @@ export const useSocial = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('notifications')
-        .select(`*, sender:users!sender_id(username, avatar_url)`)
+        .select(`*, sender:sender_id(username, avatar_url)`)
         .eq('user_id', myId)
         .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
       return data;
     },
     enabled: !!myId,
+  });
+
+  const markAllAsRead = useMutation({
+    mutationFn: async () => {
+        const { error } = await supabase
+            .from('notifications')
+            .update({ is_read: true })
+            .eq('user_id', myId)
+            .eq('is_read', false);
+        if (error) throw new Error(error.message);
+    },
+    onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['notifications', myId] });
+    }
   });
 
 
@@ -151,6 +165,7 @@ export const useSocial = () => {
 
   return {
     useInbox,
+    markAllAsRead,
     searchCaptains,
     sendFriendRequest,
     acceptRequest,

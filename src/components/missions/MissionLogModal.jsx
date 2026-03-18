@@ -1,31 +1,34 @@
+import { useGenerateQuiz } from '../../hooks/useGenerateQuiz';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Send, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api } from '../../services/api';
 
-export const MissionLogModal = ({ isOpen, onClose, directive, onQuizGenerated }) => {
+export const MissionLogModal = ({ isOpen, onClose, directive, onQuizGenerated, onSkip }) => {
   const [log, setLog] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const { mutate: generateQuiz, isPending: loading } = useGenerateQuiz();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!log.trim()) return;
 
-    setLoading(true);
     setError('');
 
-    try {
-      const result = await api.generateQuiz(log, 'medium'); // Default difficulty
-      onQuizGenerated(result.quiz, log);
-      onClose();
-    } catch (err) {
-      console.error(err);
-      setError('Failed to transmit log. Connection to Worker AI unstable.');
-    } finally {
-      setLoading(false);
-    }
+    generateQuiz(
+      { missionLog: log, difficulty: 'medium' },
+      {
+        onSuccess: (result) => {
+          onQuizGenerated(result.quiz, log);
+          onClose();
+        },
+        onError: (err) => {
+          console.error(err);
+          setError('Failed to transmit log. Connection to Worker AI unstable.');
+        }
+      }
+    );
   };
 
   if (!isOpen) return null;
@@ -61,13 +64,24 @@ export const MissionLogModal = ({ isOpen, onClose, directive, onQuizGenerated })
             
             {error && <p className="text-red-500 text-xs font-primary tracking-widest">{error}</p>}
 
-            <button 
-              type="submit" 
-              disabled={loading || !log.trim()} 
-              className="mt-2 w-full py-3 bg-cyan-900/20 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-[#0a0a1a] font-primary text-xs tracking-[0.2em] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? 'TRANSMITTING TO CORE...' : <>TRANSMIT LOG <Send size={14} /></>}
-            </button>
+            <div className="flex gap-3 mt-2">
+              <button 
+                type="button"
+                onClick={onSkip}
+                disabled={loading}
+                className="flex-1 py-3 bg-gray-900/50 border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 font-primary text-xs tracking-[0.1em] transition-all disabled:opacity-50"
+              >
+                SKIP TRANSMISSION
+              </button>
+              
+              <button 
+                type="submit" 
+                disabled={loading || !log.trim()} 
+                className="flex-[2] py-3 bg-cyan-900/20 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-[#0a0a1a] font-primary text-xs tracking-[0.2em] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {loading ? 'TRANSMITTING TO CORE...' : <>TRANSMIT LOG <Send size={14} /></>}
+              </button>
+            </div>
           </form>
         </motion.div>
       </div>

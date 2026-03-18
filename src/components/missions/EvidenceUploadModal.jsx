@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Upload, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../../services/supabase';
-import { api } from '../../services/api';
+import { useValidateMission } from '../../hooks/useValidateMission';
+import { useEvidenceUpload } from '../../hooks/useEvidenceUpload';
 
 export const EvidenceUploadModal = ({ isOpen, onClose, directive, onValidationComplete }) => {
   const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
   const [validating, setValidating] = useState(false);
   const [error, setError] = useState(null);
   const [validationResult, setValidationResult] = useState(null);
   const [uploadedUrl, setUploadedUrl] = useState(null);
+
+  const { mutate: validateMission } = useValidateMission();
+  const { mutate: uploadEvidence, isPending: uploading } = useEvidenceUpload();
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -23,54 +25,42 @@ export const EvidenceUploadModal = ({ isOpen, onClose, directive, onValidationCo
   const handleUploadAndValidate = async () => {
     if (!file) return;
 
-    setUploading(true);
     setError(null);
 
-    try {
-      // 1. Upload to Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${directive.id}_${Math.random()}.${fileExt}`;
-      const filePath = `proofs/${fileName}`;
+    uploadEvidence(
+        { file, directory: `proofs/${directive.id}` },
+        {
+            onSuccess: (publicUrl) => {
+                setUploadedUrl(publicUrl);
+                setValidating(true);
 
-      const { error: uploadError } = await supabase.storage
-        .from('mission_proofs')
-        .upload(filePath, file);
+                // 3. Send to Worker for Validation
+                validateMission({
+                    title: directive.title,
+                    description: directive.mission_log || directive.description || "Physical Task",
+                    imageUrl: publicUrl,
+                    directiveId: directive.id
+                }, {
+                    onError: (err) => console.error("AI Analysis Node Error:", err)
+                });
 
-      if (uploadError) throw uploadError;
-
-      // 2. Get Public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('mission_proofs')
-        .getPublicUrl(filePath);
-      
-      setUploadedUrl(publicUrl);
-      setUploading(false);
-      setValidating(true);
-
-      // 3. Send to Worker for Validation
-      // FIRE AND FORGET: Kita tidak perlu meng-await jika ingin UX "Immediate Feedback"
-      api.validateMission(
-        directive.title,
-        directive.mission_log || directive.description || "Physical Task",
-        publicUrl,
-        directive.id
-      ).catch(err => console.error("AI Analysis Node Error:", err));
-
-      // 4. Immediate Feedback to User (Optimistic UI)
-      setValidating(false);
-      setValidationResult({
-        isValid: true, 
-        reasoning: "Transmission received. Analysis node active. You may close this channel.",
-        processing: true
-      });
-
-    } catch (err) {
-      console.error(err);
-      setError("Transmission failed. Check connection or file type.");
-      setUploading(false);
-      setValidating(false);
-    }
+                // 4. Immediate Feedback to User (Optimistic UI)
+                setValidating(false);
+                setValidationResult({
+                    isValid: true, 
+                    reasoning: "Transmission received. Analysis node active. You may close this channel.",
+                    processing: true
+                });
+            },
+            onError: (err) => {
+                console.error(err);
+                setError("Transmission failed. Check connection or file type.");
+                setValidating(false);
+            }
+        }
+    );
   };
+
 
   const handleFinish = () => {
     onClose();

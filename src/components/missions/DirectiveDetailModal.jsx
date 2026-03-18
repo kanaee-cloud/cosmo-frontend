@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity, Radio, Send, Award, ShieldCheck } from 'lucide-react';
+import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity, Radio, Send, Award, ShieldCheck, Edit, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMissionOperations } from '../../hooks/useMissionOperations';
 import { MissionLogModal } from './MissionLogModal';
@@ -8,13 +8,17 @@ import { QuizModal } from './QuizModal';
 import { EvidenceUploadModal } from './EvidenceUploadModal';
 
 export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDirective }) => {
-  const { engageDirective, completeDirective } = useMissionOperations(setActiveDirective);
+  const { engageDirective, completeDirective, updateDirective, deleteDirective } = useMissionOperations(setActiveDirective);
   
   const [showLogModal, setShowLogModal] = useState(false);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [showEvidenceModal, setShowEvidenceModal] = useState(false);
   const [generatedQuiz, setGeneratedQuiz] = useState([]);
   const [missionLogText, setMissionLogText] = useState('');
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editLog, setEditLog] = useState('');
 
   const [engageStatus, setEngageStatus] = useState(null); // 'success' | 'error' | null
 
@@ -34,7 +38,32 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
   // Reset status when modal opens/directive changes
   useEffect(() => {
       setEngageStatus(null);
+      setIsEditing(false);
+      if (directive) {
+        setEditTitle(directive.title || '');
+        setEditLog(directive.mission_log || directive.description || '');
+      }
   }, [directive]);
+
+  const handleUpdate = () => {
+    if (!directive) return;
+    updateDirective.mutate({
+      id: directive.id,
+      title: editTitle,
+      mission_log: editLog,
+      priority: directive.priority // Keep existing priority for now
+    }, {
+      onSuccess: () => setIsEditing(false)
+    });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this directive? This action cannot be undone.')) {
+      deleteDirective.mutate(directive.id, {
+        onSuccess: () => onClose()
+      });
+    }
+  };
 
   const handleEngage = () => {
     if (directive) {
@@ -94,6 +123,19 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
     onClose();
   };
 
+  const handleSkipLog = () => {
+    // Opsi B: User skip transmit log -> Reward kecil (20 fuel_cells) & langsung complete
+    completeDirective.mutate({
+      id: directive.id,
+      xp: 20,
+      mission_log: "Mission log transmission skipped by operator.",
+      ai_feedback: "Standard completion protocol. No AI analysis performed.",
+      validation_score: 0
+    });
+    setShowLogModal(false);
+    onClose();
+  };
+
   // --- EKSTRAKSI DATA PASCA-MISI ---
   // Kita tarik data evaluasi (Bisa dari properti langsung atau dari array relasi mission_journals)
   const isCompleted = directive?.status === 'DONE' || directive?.status === 'COMPLETED';
@@ -127,13 +169,34 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
             {/* Garis Scanline Futuristik */}
             <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.03)_50%)] bg-[length:100%_4px] pointer-events-none" />
 
-            {/* Tombol Tutup */}
-            <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-cyan-400 transition-colors z-20">
-              <X size={20} />
-            </button>
+            {/* Tombol Tutup & Edit/Delete Actions */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
+              {!isCompleted && !isEditing && (
+                <>
+                  <button 
+                    onClick={() => setIsEditing(true)} 
+                    className="text-gray-500 hover:text-yellow-400 transition-colors"
+                    title="Edit Directive"
+                  >
+                    <Edit size={16} />
+                  </button>
+                  <button 
+                    onClick={handleDelete}
+                    className="text-gray-500 hover:text-red-500 transition-colors"
+                    title="Delete Directive"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                  <div className="w-[1px] h-4 bg-gray-700 mx-1"></div>
+                </>
+              )}
+              <button onClick={onClose} className="text-gray-500 hover:text-cyan-400 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
 
             {/* HEADER: Tipe & Status */}
-            <div className="flex items-center gap-3 mb-6 border-b border-cyan-900/50 pb-4">
+            <div className="flex items-center gap-3 mb-6 border-b border-cyan-900/50 pb-4 pr-16">
               {isCompleted ? (
                 <CheckCircle className="text-green-500" size={24} />
               ) : directive.status === 'IN_PROGRESS' ? (
@@ -142,10 +205,20 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
                 <CircleDashed className="text-gray-400" size={24} />
               )}
               
-              <div>
-                <h3 className={`font-primary tracking-[0.2em] text-lg uppercase leading-tight ${isCompleted ? 'text-green-400' : 'text-light'}`}>
-                  {directive.title}
-                </h3>
+              <div className="w-full">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="bg-[#05000a] border border-cyan-500/50 p-2 w-full text-white font-primary tracking-[0.1em] text-sm focus:outline-none focus:border-cyan-400 mb-2"
+                  />
+                ) : (
+                  <h3 className={`font-primary tracking-[0.2em] text-lg uppercase leading-tight ${isCompleted ? 'text-green-400' : 'text-light'}`}>
+                    {directive.title}
+                  </h3>
+                )}
+                
                 <div className="flex items-center gap-2 mt-1">
                   <span className="font-primary text-[8px] text-accent tracking-widest bg-accent/10 px-2 py-0.5 border border-accent/20">
                     CATEGORY: {directive.category}
@@ -166,9 +239,35 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
               <h4 className="font-primary text-cyan-400 text-[10px] tracking-[0.2em] mb-2 flex items-center gap-2">
                 <FileText size={14} /> [ MISSION LOG DETAILS ]
               </h4>
-              <div className="bg-primary/50 border border-light/40 p-4 text-gray-300 font-secondary text-sm leading-relaxed whitespace-pre-wrap">
-                {directive.mission_log || directive.description || "No specific briefing provided for this operation."}
-              </div>
+              {isEditing ? (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    value={editLog}
+                    onChange={(e) => setEditLog(e.target.value)}
+                    className="w-full h-32 bg-[#05000a] border border-cyan-500/50 p-4 text-cyan-100 font-secondary text-sm outline-none focus:border-cyan-400 resize-none"
+                    placeholder="Enter mission details..."
+                  />
+                  <div className="flex gap-2 justify-end mt-2">
+                    <button 
+                      onClick={() => setIsEditing(false)}
+                      className="px-4 py-2 border border-red-900/50 text-red-400 font-primary text-[10px] tracking-widest hover:bg-red-900/20"
+                    >
+                      CANCEL
+                    </button>
+                    <button 
+                      onClick={handleUpdate}
+                      disabled={updateDirective.isPending}
+                      className="px-4 py-2 bg-cyan-900/20 border border-cyan-400 text-cyan-400 font-primary text-[10px] tracking-widest hover:bg-cyan-400 hover:text-black flex items-center gap-2"
+                    >
+                      {updateDirective.isPending ? 'SAVING...' : 'SAVE CHANGES'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-primary/50 border border-light/40 p-4 text-gray-300 font-secondary text-sm leading-relaxed whitespace-pre-wrap">
+                  {directive.mission_log || directive.description || "No specific briefing provided for this operation."}
+                </div>
+              )}
             </div>
 
             {/* BUKTI VISUAL (Jika ada) */}
@@ -300,6 +399,7 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
         onClose={() => setShowLogModal(false)} 
         directive={directive}
         onQuizGenerated={handleQuizGenerated}
+        onSkip={handleSkipLog}
       />
 
       <QuizModal 

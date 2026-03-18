@@ -11,8 +11,15 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
   const [isSearching, setIsSearching] = useState(false);
 
   // Tambahkan declineAction di hook useSocial Anda
-  const { useInbox, searchCaptains, sendFriendRequest, acceptAction, declineAction } = useSocial();
+  const { useInbox, markAllAsRead, searchCaptains, sendFriendRequest, acceptAction, declineAction } = useSocial();
   const { data: notifications, isLoading: inboxLoading } = useInbox();
+
+  // Mark all as read when modal opens
+  useEffect(() => {
+    if (isOpen) {
+        markAllAsRead.mutate();
+    }
+  }, [isOpen]);
 
   // Handle Search Debounce
   useEffect(() => {
@@ -110,7 +117,7 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                           
                           {/* TEXT CONTAINER (min-w-0 untuk mengizinkan text-truncate) */}
                           <div className="flex-1 min-w-0">
-                            <p className="font-secondary text-xs text-light leading-relaxed">
+                            <p className="font-primary text-xs text-light leading-relaxed">
                               <span className="text-cyan-400 font-bold">{notif.sender?.username}</span> {notif.message}
                             </p>
                             <span className="font-primary text-[8px] text-gray-500 tracking-widest mt-1.5 block">
@@ -169,7 +176,7 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="ENTER CAPTAIN'S USERNAME..." 
-                      className="w-full bg-primary/50 border border-light/30 text-light font-secondary text-[10px] tracking-wider pl-12 pr-4 py-3.5 outline-none focus:border-accent transition-colors"
+                      className="w-full bg-primary/50 border border-light/30 text-light font-primary text-[10px] tracking-wider pl-12 pr-4 py-3.5 outline-none focus:border-accent transition-colors"
                     />
                   </div>
 

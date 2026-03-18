@@ -46,5 +46,44 @@ export const useMissionOperations = (setActiveDirective) => {
     }
   });
 
-  return { engageDirective, completeDirective };
+  const updateDirective = useMutation({
+    mutationFn: async ({ id, title, mission_log, priority }) => {
+      const { data, error } = await supabase
+        .from('directives')
+        .update({ title, mission_log, priority })
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    onSuccess: (updatedData) => {
+      queryClient.invalidateQueries({ queryKey: ['directives'] });
+      // Update UI Modal seketika tanpa harus menutupnya
+      setActiveDirective(updatedData);
+      alert("[ SYSTEM UPDATE ]: Parameter misi berhasil diubah.");
+    },
+    onError: (error) => alert(`[ ERROR ]: Gagal mengubah parameter. ${error.message}`)
+  });
+
+  // 4. MUTASI BARU: Hapus Misi (Delete)
+  const deleteDirective = useMutation({
+    mutationFn: async (id) => {
+      const { error } = await supabase
+        .from('directives')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw new Error(error.message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['directives'] });
+      // Tutup modal karena datanya sudah lenyap dari radar
+      setActiveDirective(null); 
+    },
+    onError: (error) => alert(`[ ERROR ]: Gagal menghancurkan direktif. ${error.message}`)
+  });
+
+  return { engageDirective, completeDirective, updateDirective, deleteDirective };
 };

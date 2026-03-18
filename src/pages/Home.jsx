@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bell, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';
 import { useMissionOperations } from '../hooks/useMissionOperations';
+import { useSocial } from '../hooks/useSocial';
 import { CommandConsoleModal } from '../components/missions/CommandConsoleModal';
 import { CommsRelayModal } from '../components/social/CommsRelayModal';
 import { RadarPanel } from '../components/missions/RadarPanel';
@@ -27,6 +28,10 @@ const Home = () => {
   };
 
   const { completeDirective } = useMissionOperations(setActiveDirective);
+  const { useInbox } = useSocial();
+  const { data: notifications } = useInbox();
+  
+  const hasUnread = notifications?.some(n => !n.is_read) || false;
 
   return (
     <div className="w-full h-full flex flex-col relative space-y-6">
@@ -47,7 +52,9 @@ const Home = () => {
         >
           <Bell size={16} />
           {/* Notification Dot */}
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]"></span>
+          {hasUnread && (
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]"></span>
+          )}
         </button>
       </div>
 
