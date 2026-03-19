@@ -1,20 +1,16 @@
-import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 
 
 export const useLoginLogic = () => {
-  const navigate = useNavigate();
   const { signIn, signInWithGoogle } = useAuthStore();
 
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }) => {
       await signIn(email, password); 
     },
-    onSuccess: () => {
-      navigate('/dashboard'); 
-    },
+    // Don't navigate here - let the component handle it with the modal
   });
 
 
@@ -41,17 +37,13 @@ export const useLoginLogic = () => {
 
 
 export const useRegisterLogic = () => {
-  const navigate = useNavigate();
   const { signUp } = useAuthStore();
 
   const registerMutation = useMutation({
     mutationFn: async ({ email, password, callsign }) => {
       await signUp(email, password, callsign);
     },
-    onSuccess: () => {
-      alert('ENLISTMENT SUCCESS. Check your comms frequency (email) for verification.');
-      navigate('/login');
-    },
+    // Don't navigate here - let the component handle it with the modal
   });
 
   const initialValues = { callsign: '', email: '', password: '', confirmPassword: '' };

@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/authStore';
+import { useToastStore } from './hooks/useToast';
+import { ToastContainer } from './components/toast';
 import { router } from './routes';
 
 const queryClient = new QueryClient({
@@ -14,6 +16,8 @@ const queryClient = new QueryClient({
 
 function App() {
   const { initialize, isInitializing } = useAuthStore();
+  const { toasts, removeToast } = useToastStore();
+
   useEffect(() => {
     initialize();
   }, [initialize]);
@@ -34,6 +38,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </QueryClientProvider>
   );
 }

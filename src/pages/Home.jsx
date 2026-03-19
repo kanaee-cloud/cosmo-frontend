@@ -3,17 +3,24 @@ import { Bell, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';
 import { useMissionOperations } from '../hooks/useMissionOperations';
+import { useToastStore } from '../hooks/useToast';
 import { CommandConsoleModal } from '../components/missions/CommandConsoleModal';
 import { CommsRelayModal } from '../components/social/CommsRelayModal';
 import { RadarPanel } from '../components/missions/RadarPanel';
 import { LogPanel } from '../components/missions/LogPanel';
 import { DirectiveDetailModal } from '../components/missions/DirectiveDetailModal'; // Import Modal
+import { SuccessModal, FailureModal, AchievementModal } from '../components/modals';
 
 const Home = () => {
   const [isConsoleOpen, setIsConsoleOpen] = useState(false); 
   const [isCommsOpen, setIsCommsOpen] = useState(false);
   const [activeDirective, setActiveDirective] = useState(null);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [failureModalOpen, setFailureModalOpen] = useState(false);
+  const [achievementModalOpen, setAchievementModalOpen] = useState(false);
   const [consoleInput, setConsoleInput] = useState('');
+
+  const { success, error } = useToastStore();
 
   const { 
     directives, directivesLoading, 
@@ -33,6 +40,37 @@ const Home = () => {
 
       {/* HEADER ACTIONS */}
       <div className="flex justify-end items-center gap-4 relative z-20 -mt-2">
+        {/* Demo Modal Buttons */}
+        <div className="flex gap-2 text-[10px]">
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} 
+            onClick={() => {
+              setSuccessModalOpen(true);
+              success('PROTOCOL SUCCESS', 'Operasi berhasil diselesaikan');
+            }} 
+            className="px-3 py-2 border border-[#8a6dfc]/60 bg-[#8a6dfc]/10 hover:bg-[#8a6dfc]/20 text-[#8a6dfc] transition-colors"
+          >
+            SUCCESS
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} 
+            onClick={() => {
+              setFailureModalOpen(true);
+              error('CRITICAL ERROR', 'Sistem mengalami gangguan. Silahkan coba lagi.');
+            }}
+            className="px-3 py-2 border border-[#ff0055]/60 bg-[#ff0055]/10 hover:bg-[#ff0055]/20 text-[#ff0055] transition-colors"
+          >
+            FAILURE
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} 
+            onClick={() => setAchievementModalOpen(true)} 
+            className="px-3 py-2 border border-[#FFB703]/60 bg-[#FFB703]/10 hover:bg-[#FFB703]/20 text-[#FFB703] transition-colors"
+          >
+            ACHIEVE
+          </motion.button>
+        </div>
+
         <motion.button 
           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} 
           onClick={handleEmergencyExit} 
@@ -100,6 +138,26 @@ const Home = () => {
         onClose={() => setActiveDirective(null)} 
         directive={activeDirective}
         setActiveDirective={setActiveDirective}
+      />
+
+      {/* POPUP MODALS - Demo */}
+      <SuccessModal 
+        isOpen={successModalOpen} 
+        title="COMMUNICATION ESTABLISHED"
+        message="Data berhasil diunggah ke mainframe. Sistem siap melanjutkan operasi."
+        onClose={() => setSuccessModalOpen(false)} 
+      />
+      <FailureModal 
+        isOpen={failureModalOpen}
+        title="SYSTEM CRITICAL"
+        message="Gagal menyambungkan ke satelit. Periksa kembali koordinat Anda."
+        onClose={() => setFailureModalOpen(false)}
+        onRetry={() => setFailureModalOpen(false)}
+      />
+      <AchievementModal 
+        isOpen={achievementModalOpen}
+        badgeName="Galactic Voyager"
+        onClose={() => setAchievementModalOpen(false)}
       />
     </div>
   );

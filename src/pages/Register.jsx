@@ -1,10 +1,36 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useRegisterLogic } from '../hooks/useAuth';
+import { useToastStore } from '../hooks/useToast';
+import { SuccessModal } from '../components/modals';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { success, error } = useToastStore();
   const { registerMutation, initialValues, validationSchema, onSubmit } = useRegisterLogic();
+
+  // Show success modal when mutation succeeds
+  useEffect(() => {
+    if (registerMutation.isSuccess) {
+      setShowSuccessModal(true);
+      success('ENLISTMENT COMPLETE', 'Akun Anda berhasil dibuat. Menghubungkan ke mainframe...');
+      // Auto-navigate after success modal closes
+      const timer = setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [registerMutation.isSuccess, navigate, success]);
+
+  // Show error toast on register failure
+  useEffect(() => {
+    if (registerMutation.isError) {
+      error('ENLISTMENT FAILED', 'Gagal membuat akun. Silahkan coba lagi dengan data yang berbeda.');
+    }
+  }, [registerMutation.isError, error]);
 
   return (
     <motion.div 
@@ -95,6 +121,14 @@ const Register = () => {
           </p>
         </div>
       </motion.div>
+
+      {/* Success Modal */}
+      <SuccessModal
+        isOpen={showSuccessModal}
+        title="ENLISTMENT COMPLETE"
+        message="Akun Anda berhasil dibuat. Menghubungkan ke mainframe..."
+        onClose={() => setShowSuccessModal(false)}
+      />
     </motion.div>
   );
 };
