@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Edit3, X, Camera } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
@@ -37,6 +38,7 @@ const ITEMS = [
 ];
 
 export default function Profil() {
+  const navigate = useNavigate();
   const { profile, session } = useAuthStore();
   const matrixColor = useThemeStore((state) => state.matrixColor);
   const { success } = useToastStore();
@@ -88,14 +90,18 @@ export default function Profil() {
     }
 
     try {
-      const { error } = await useAuthStore.getState().supabase.auth.updateUser({
+      const supabase = useAuthStore.getState().supabase;
+      const { error } = await supabase.auth.updateUser({
         data: { user_name: newName },
       });
 
       if (error) throw error;
 
+      // Update profile state dan localStorage
       setDisplayName(newName);
+      setTempName(newName);
       setIsEditingName(false);
+      localStorage.setItem('userName', newName);
       success('NAME UPDATED', 'Nama profil berhasil diperbarui');
     } catch (err) {
       console.error('Error updating name:', err);
@@ -116,6 +122,15 @@ export default function Profil() {
       nameInputRef.current.focus();
     }
   }, [isEditingName]);
+
+  // Load saved name from localStorage on mount
+  useEffect(() => {
+    const savedName = localStorage.getItem('userName');
+    if (savedName) {
+      setDisplayName(savedName);
+      setTempName(savedName);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen w-full p-4 md:p-6 lg:p-8 overflow-auto bg-gradient-to-br from-[#0a0a1a] via-[#1a0b2e] to-[#0d0514]">
@@ -391,6 +406,7 @@ export default function Profil() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/')}
               className="w-full px-3 md:px-4 py-2 md:py-3 text-white font-primary text-xs md:text-sm tracking-[0.2em] rounded-lg hover:opacity-80 transition-all uppercase"
               style={{ backgroundColor: selectedOutfitColor }}
             >
