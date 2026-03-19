@@ -8,7 +8,14 @@ const Sidebar = () => {
   const matrixColor = useThemeStore((state) => state.matrixColor);
 
   const getNavLinkStyle = (path) => {
-    const isActive = location.pathname === path || (path === '/dashboard' && path === '/dashboard/home');
+    // handle legacy /dashboard/profile and new /profile path
+    let isActive = location.pathname === path;
+    if (path === '/profile') {
+      isActive = isActive || location.pathname === '/dashboard/profile' || location.pathname.startsWith('/profile');
+    }
+    if (path === '/dashboard/home') {
+      isActive = isActive || location.pathname === '/dashboard' || location.pathname === '/dashboard/home';
+    }
     if (isActive) {
       return {
         borderColor: matrixColor.hex,
@@ -18,7 +25,7 @@ const Sidebar = () => {
       };
     }
     return {
-      borderColor: 'rgba(var(--color-light), 0.5)', 
+      borderColor: 'rgba(var(--color-light), 0.5)',
       backgroundColor: 'rgba(var(--color-primary), 0.5)',
       color: '#6b7280'
     };
@@ -46,15 +53,7 @@ const Sidebar = () => {
         </div>
       </Link>
 
-      <Link to="/dashboard/profile">
-        <div 
-          className="flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125"
-          style={getNavLinkStyle('/dashboard/profile')}
-        >
-          <User size={18} />
-          <span className="font-primary text-[10px] tracking-widest mt-0.5">PROFILE</span>
-        </div>
-      </Link>
+      {/* Profile link removed from dashboard sidebar per request */}
 
       <Link to="/dashboard/leaderboard">
         <div 

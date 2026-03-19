@@ -67,9 +67,19 @@ export const router = createBrowserRouter([
             { index: true, element: <Navigate to="home" replace /> },
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> },
-            { path: "profile", element: <Profile /> },
+            // legacy dashboard profile removed (use top-level /profile)
             { path: "leaderboard", element: <Leaderboard /> },
         ]
+    },
+
+    // Canonical standalone profile route (no Sidebar/DashboardLayout)
+    {
+        path: "/profile",
+        element: (
+            <ProtectedRoute>
+                <Profile />
+            </ProtectedRoute>
+        )
     },
     {
         path: "*",
