@@ -38,7 +38,7 @@ export const OperatorStatus = () => {
             <Heart size={12} className="text-[#00f0ff]" />
             <p className="font-secondary text-[9px] md:text-[10px] tracking-wider text-[#00f0ff]">CORE SYSTEM</p>
           </div>
-          <p className="text-white font-press text-[9px] md:text-[10px] mt-2 text-center text-[#06FFA5]">OPTIMAL</p>
+          <p className="font-press text-[9px] md:text-[10px] mt-2 text-center text-[#06FFA5]">OPTIMAL</p>
         </motion.div>
       </div>
     </div>
