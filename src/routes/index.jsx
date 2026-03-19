@@ -67,8 +67,15 @@ export const router = createBrowserRouter([
             { index: true, element: <Navigate to="home" replace /> },
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> },
-            { path: "profile", element: <Profile /> },
         ]
+    },
+    {
+        path: "/profile",
+        element: (
+            <ProtectedRoute>
+                <Profil />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/profil",
