@@ -11,8 +11,12 @@ import RaidDeck from "../pages/RaidDeck";
 import Leaderboard from "../pages/Leaderboard";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
-import Theme from "../pages/Theme"; // Import Theme Page
 import Profile from "../pages/Profile";
+
+// Komponen Tab Baru untuk Profil
+import ProfileMainTab from "../components/Profile/profile/ProfileMainTab";
+import PrivacyTab from "../components/Profile/privacy/PrivacyTab";
+import ColorPresets from "../components/Profile/presets/ColorPresets";
 
 export const router = createBrowserRouter([
     {
@@ -25,14 +29,6 @@ export const router = createBrowserRouter([
             }
         ]
     },
-    
-    // 2. TAMBAHKAN ROUTE THEME DI SINI
-    // Diletakkan di luar AuthLayout/DashboardLayout agar bisa diakses siapa saja
-    {
-        path: "/theme",
-        element: <Theme />
-    },
-
     {
         element: <AuthLayout />,
         children: [
@@ -67,19 +63,25 @@ export const router = createBrowserRouter([
             { index: true, element: <Navigate to="home" replace /> },
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> },
-            // legacy dashboard profile removed (use top-level /profile)
             { path: "leaderboard", element: <Leaderboard /> },
         ]
     },
 
-    // Canonical standalone profile route (no Sidebar/DashboardLayout)
+    // RUTE BARU UNTUK PROFIL
     {
         path: "/profile",
         element: (
             <ProtectedRoute>
                 <Profile />
             </ProtectedRoute>
-        )
+        ),
+        children: [
+            // Redirect otomatis saat user mengakses "/profile" langsung
+            { index: true, element: <Navigate to="account" replace /> },
+            { path: "account", element: <ProfileMainTab /> },
+            { path: "privacy", element: <PrivacyTab /> },
+            { path: "color-presets", element: <ColorPresets /> }
+        ]
     },
     {
         path: "*",

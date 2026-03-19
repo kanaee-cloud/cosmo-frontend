@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom'; // PENTING: Untuk mengambil data dari Outlet
 import { Check, X, Edit2 } from 'lucide-react';
 
 import { ProfileDetailsCard } from './ProfileDetailsCard';
@@ -7,19 +8,22 @@ import { AccessLog } from './AccessLog';
 import AvatarUploader from './AvatarUploader';
 import Achievements from './Achievements';
 
-export default function ProfileMainTab({ 
-  profile, 
-  displayName, 
-  setDisplayName, 
-  level, 
-  currentExp, 
-  lastLogin, 
-  accountCreated, 
-  themeBorder, 
-  themeBg, 
-  updateName 
-}) {
-  // State khusus edit nama dipindah ke sini agar komponen induk tetap bersih
+export default function ProfileMainTab() {
+  // Mengambil data yang dilempar oleh <Outlet context={{...}} /> di Profile.jsx
+  const { 
+    profile, 
+    displayName, 
+    setDisplayName, 
+    level, 
+    currentExp, 
+    lastLogin, 
+    accountCreated, 
+    themeBorder, 
+    themeBg, 
+    updateName 
+  } = useOutletContext();
+
+  // State lokal khusus untuk fitur Edit Name
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(displayName);
 

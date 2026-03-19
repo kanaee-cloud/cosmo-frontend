@@ -35,15 +35,6 @@ const Navbar = () => {
                     </Link>
 
                     <div className="flex items-center gap-6 md:gap-8 z-10 font-primary">
-                        
-                        {/* TOMBOL THEME (SELALU MUNCUL) */}
-                        <Link 
-                            to="/theme" 
-                            className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full border border-light/30 hover:border-accent hover:text-accent bg-primary/50 backdrop-blur-md transition-all duration-300 text-light"
-                            title="Change Sector Theme"
-                        >
-                            <Palette size={18} />
-                        </Link>
 
                         {!session ? (
                             <>

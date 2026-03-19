@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Outlet } from 'react-router-dom'; // IMPOR INI
 import { useProfileSettings } from '../hooks/useProfileSettings';
 import { useThemeStore } from '../store/themeStore';
 
 import { ProfileTitle } from '../components/Profile/ProfileTitle';
 import { UserInfoHeader } from '../components/Profile/UserInfoHeader';
 import ProfileSidebar from '../components/Profile/ProfileSidebar';
-
-import ProfileMainTab from '../components/Profile/profile/ProfileMainTab';
-import ChangePassword from '../components/Profile/privacy/ChangePassword';
-import DeleteAccount from '../components/Profile/privacy/DeleteAccount';
-import ColorPresets from '../components/Profile/presets/ColorPresets';
 
 export default function Profile() {
   const { 
@@ -19,12 +15,9 @@ export default function Profile() {
   } = useProfileSettings();
 
   const matrixColor = useThemeStore((state) => state.matrixColor);
-  const setMatrixColor = useThemeStore((state) => state.setMatrixColor);
-
   const themeBorder = '#7a5299';
   const themeBg = '#0a0514';
 
-  const [activeTab, setActiveTab] = useState('profile');
   const [displayName, setDisplayName] = useState('UNKNOWN OPERATOR');
 
   // Sinkronisasi displayName saat data profil dari DB tiba
@@ -58,40 +51,20 @@ export default function Profile() {
             
             {/* SIDEBAR */}
             <div className="w-full lg:w-[260px] shrink-0">
-              <ProfileSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+              <ProfileSidebar />
             </div>
 
             {/* AREA KONTEN UTAMA */}
             <div className="flex-1 w-full min-w-0 h-full">
               
-              {activeTab === 'profile' && (
-                <ProfileMainTab 
-                  profile={profile}
-                  displayName={displayName}
-                  setDisplayName={setDisplayName}
-                  level={level}
-                  currentExp={currentExp}
-                  lastLogin={lastLogin}
-                  accountCreated={accountCreated}
-                  themeBorder={themeBorder}
-                  themeBg={themeBg}
-                  updateName={updateName}
-                />
-              )}
-
-              {activeTab === 'privacy' && (
-                <div className="space-y-6">
-                  <ChangePassword />
-                  <DeleteAccount />
-                </div>
-              )}
-
-              {activeTab === 'colors' && (
-                <ColorPresets 
-                  matrixColor={matrixColor} 
-                  setMatrixColor={setMatrixColor} 
-                />
-              )}
+              {/* OUTLET menggantikan activeTab.
+                Komponen akan otomatis dirender berdasarkan URL (cth: /profile/account)
+                Kita gunakan 'context' untuk mengirim data ke komponen anak
+              */}
+              <Outlet context={{
+                profile, displayName, setDisplayName, level, currentExp,
+                lastLogin, accountCreated, themeBorder, themeBg, updateName
+              }} />
 
             </div>
           </div>
