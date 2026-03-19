@@ -11,7 +11,7 @@ const About = () => {
             <div className="absolute inset-x-0 bottom-0 h-40 to-transparent pointer-events-none z-0"></div>
 
             {/* Decorative Borders */}
-            <div className="absolute left-10 top-20 bottom-20 w-1 border-l-2 border-dashed border-[#1a0b2e] hidden lg:block z-0"></div>
+            <div className="absolute left-10 top-20 bottom-20 w-1 border-l-2 border-dashed border-secondary hidden lg:block z-0"></div>
 
             <motion.div 
                 initial={{ opacity: 0, y: 50 }}
@@ -31,11 +31,11 @@ const About = () => {
                 </div>
 
                 <div className="px-4 pb-8 lg:px-12 text-center flex flex-col items-center gap-6">
-                    <h2 className="text-white text-3xl lg:text-4xl font-semibold font-primary uppercase tracking-wider">
+                    <h2 className="text-text text-3xl lg:text-4xl font-semibold font-primary uppercase tracking-wider">
                         Turn Todo Lists into <span className="text-accent drop-shadow-[0_0_8px_rgba(255,0,85,0.6)]">Space Quests</span>
                     </h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent"></div>
-                    <p className="text-white text-lg leading-relaxed max-w-2xl font-primary">
+                    <p className="text-text text-lg leading-relaxed max-w-2xl font-primary">
                         Engage with your daily tasks like never before. Complete objectives, earn loot, and upgrade your life stats in a retro-futuristic interface designed for high-performance pilots. The universe is waiting for your command.
                     </p>
 

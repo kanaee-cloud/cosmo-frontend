@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Share, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const LogPanel = ({ directives, activeDirective, setActiveDirective }) => {
+  const [filter, setFilter] = useState('ALL');
+
+  const filteredDirectives = directives?.filter(directive => {
+    if (filter === 'ALL') return true;
+    if (filter === 'PENDING') return directive.status !== 'DONE' && directive.status !== 'IN_PROGRESS';
+    if (filter === 'IN_PROGRESS') return directive.status === 'IN_PROGRESS';
+    if (filter === 'COMPLETED') return directive.status === 'DONE';
+    return true;
+  }) || [];
+
   return (
     <div className="xl:col-span-5 flex flex-col gap-6">
       
@@ -13,45 +23,60 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">FLEET READINESS</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">92%</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">COMBAT PROFICIENCY</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">S-RANK</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">TACTICAL EXPERIENCE</div>
           <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">MAX</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">ENERGY RADIUS</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">420.5 LY</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">QUANTUM SYNC</div>
           <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">ACTIVE</div>
         </div>
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
+        <div className="border border-light/50 bg-primary p-4 text-center">
           <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">FLEET MORALE</div>
           <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">EUPHORIC</div>
         </div>
       </div>
 
       {/* OPERATIONAL LOG LIST */}
-      <div className="flex-1 border border-yellow-600/50 bg-[#0a0a1a] flex flex-col relative overflow-hidden min-h-[300px]">
-        <div className="bg-yellow-600/10 border-b border-yellow-600/30 p-3 flex justify-between items-center">
+      <div className="border border-yellow-600/50 bg-[#0a0a1a] flex flex-col relative overflow-hidden h-[450px]">
+        <div className="bg-yellow-600/10 border-b border-yellow-600/30 p-3 flex justify-between items-center flex-wrap gap-2">
           <span className="font-primary text-yellow-500 text-[10px] tracking-widest">OPERATIONAL LOG</span>
-          <span className="font-secondary text-yellow-500/50 text-[8px] tracking-widest">LATEST TRANSMISSIONS</span>
+          
+          <div className="flex gap-1">
+            {['ALL', 'PENDING', 'IN_PROGRESS', 'COMPLETED'].map(status => (
+              <button
+                key={status}
+                onClick={() => setFilter(status)}
+                className={`font-primary text-[8px] tracking-widest px-2 py-1 transition-colors border ${
+                  filter === status 
+                    ? 'bg-yellow-500 text-[#0a0a1a] border-yellow-500' 
+                    : 'text-yellow-500/50 border-transparent hover:text-yellow-500 hover:border-yellow-500/30'
+                }`}
+              >
+                {status.replace('_', ' ')}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
-            {!directives || directives.length === 0 ? (
+            {!filteredDirectives || filteredDirectives.length === 0 ? (
                  <div className="flex flex-col items-center justify-center h-full text-gray-600 font-secondary text-[10px] tracking-widest">
                      <div className="w-8 h-8 border border-dashed border-gray-700 rounded-full mb-2 animate-spin-slow"></div>
-                     NO ACTIVE DIRECTIVES LOGGED.
+                     {filter === 'ALL' ? 'NO ACTIVE DIRECTIVES LOGGED.' : 'NO TRANSMISSIONS FOUND.'}
                  </div>
             ) : (
                 <ul className="flex flex-col gap-2">
                     <AnimatePresence>
-                    {directives.map((directive) => (
+                    {filteredDirectives.map((directive) => (
                         <motion.li 
                             key={directive.id}
                             initial={{ opacity: 0, x: -10 }}

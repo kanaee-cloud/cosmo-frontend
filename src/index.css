@@ -42,13 +42,8 @@
 }
 
 @keyframes stars {
-    from {
-        background-position: 0 0;
-    }
-
-    to {
-        background-position: 0 100%;
-    }
+    from { transform: translateY(0px); }
+    to { transform: translateY(-100px); }
 }
 
 /* Pixel perfect corners fix for retro feel */
@@ -66,27 +61,72 @@
 }
 
 @keyframes glitch-anim {
-    0% {
-        transform: translate(0)
-    }
+    0% { transform: translate(0) }
+    20% { transform: translate(-2px, 2px) }
+    40% { transform: translate(-2px, -2px) }
+    60% { transform: translate(2px, 2px) }
+    80% { transform: translate(2px, -2px) }
+    100% { transform: translate(0) }
+}
 
-    20% {
-        transform: translate(-2px, 2px)
-    }
+@layer base {
+  /* =========================================
+     DEFAULT: SECTOR NEXUS (Tetap original) 
+     ========================================= */
+  :root {
+    --color-primary: 13 5 20;     
+    --color-secondary: 26 11 46;  
+    --color-tertiary: 20 7 36;    
+    --color-light: 138 109 252;   
+    --color-accent: 255 0 85;     
+    --color-text: 255 255 255;    /* Teks Putih */
+  }
 
-    40% {
-        transform: translate(-2px, -2px)
-    }
 
-    60% {
-        transform: translate(2px, 2px)
-    }
+  /* =========================================
+     LIGHT MODE: SECTOR ZENITH (Standar Putih/Abu)
+     ========================================= */
+  .theme-zenith {
+    --color-primary: 249 250 251;  /* Background Abu-abu Pucat */
+    --color-secondary: 255 255 255;/* Putih Murni (Card/Navbar) */
+    --color-tertiary: 229 231 235; /* Abu-abu Terang (Border/Hover) */
+    --color-light: 107 114 128;    /* Abu-abu Medium (Teks Sekunder/Icon) */
+    --color-accent: 17 24 39;      /* Hitam Pekat (Tombol/Highlight) */
+    --color-text: 17 24 39;        /* Teks Utama (Hitam Pekat) */
+  }
+  
+  /* =========================================
+     PENYELESAIAN ERROR POSTCSS (CARA AMAN)
+     ========================================= */
+  body {
+    background-color: rgb(var(--color-primary));
+    color: rgb(var(--color-text));
+    @apply transition-colors duration-500;
+  }
+}
 
-    80% {
-        transform: translate(2px, -2px)
-    }
+/* GLOBAL SCROLLBAR - DARK THEME */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
-    100% {
-        transform: translate(0)
-    }
+::-webkit-scrollbar-track {
+  background: #050510; 
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(138, 109, 252, 0.2); 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(138, 109, 252, 0.5); 
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(138, 109, 252, 0.2) #050510;
 }

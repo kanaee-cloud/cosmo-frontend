@@ -16,7 +16,7 @@ const Call = () => {
                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" style={{ backgroundImage: 'linear-gradient(rgba(138,109,252,1) 1px, transparent 1px), linear-gradient(90deg, rgba(138,109,252,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
 
                 <div className="px-8 py-16 lg:px-12 text-center flex flex-col items-center gap-10 relative z-20">
-                    <h2 className="text-3xl md:text-5xl font-bold text-white font-press leading-[1.4] tracking-wide drop-shadow-[0_0_20px_rgba(138,109,252,0.5)]">
+                    <h2 className="text-3xl md:text-5xl font-bold text-text font-press leading-[1.4] tracking-wide drop-shadow-[0_0_20px_rgba(138,109,252,0.5)]">
                         SYSTEM READY.<br />AWAITING INPUT.
                     </h2>
                     <p className="text-light/70 font-primary text-lg max-w-md">

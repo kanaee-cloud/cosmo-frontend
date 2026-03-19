@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bell, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDashboardLogic } from '../hooks/useDashboard';
 import { useMissionOperations } from '../hooks/useMissionOperations';
 import { useToastStore } from '../hooks/useToast';
+import { useSocial } from '../hooks/useSocial';
 import { CommandConsoleModal } from '../components/missions/CommandConsoleModal';
 import { CommsRelayModal } from '../components/social/CommsRelayModal';
 import { RadarPanel } from '../components/missions/RadarPanel';
@@ -34,6 +35,10 @@ const Home = () => {
   };
 
   const { completeDirective } = useMissionOperations(setActiveDirective);
+  const { useInbox } = useSocial();
+  const { data: notifications } = useInbox();
+  
+  const hasUnread = notifications?.some(n => !n.is_read) || false;
 
   return (
     <div className="w-full h-full flex flex-col relative space-y-6">
@@ -81,11 +86,13 @@ const Home = () => {
         </motion.button>
         <button 
           onClick={() => setIsCommsOpen(true)} 
-          className="relative flex items-center justify-center p-2 border border-[#3d2278]/80 bg-[#0a0a1a]/50 hover:border-accent hover:bg-[#3d2278]/20 text-accent transition-all duration-300"
+          className="relative flex items-center justify-center p-2 border border-light/80 bg-primary/50 hover:border-accent hover:bg-light/20 text-accent transition-all duration-300"
         >
           <Bell size={16} />
           {/* Notification Dot */}
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]"></span>
+          {hasUnread && (
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]"></span>
+          )}
         </button>
       </div>
 

@@ -28,7 +28,7 @@ export const CreateRaidModal = ({ isOpen, onClose }) => {
   return createPortal(
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-[#0a0a1a]/80 backdrop-blur-sm" />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-primary/80 backdrop-blur-sm" />
 
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
@@ -44,11 +44,11 @@ export const CreateRaidModal = ({ isOpen, onClose }) => {
           <form onSubmit={handleSummon} className="flex flex-col gap-4">
             <div>
               <label className="font-secondary text-[10px] text-gray-400 tracking-widest mb-1 block">OPERATION NAME (WORKSPACE)</label>
-              <input type="text" value={operationName} onChange={(e) => setOperationName(e.target.value)} placeholder="e.g. Website Redesign" className="w-full bg-[#0a0a1a] border border-[#3d2278] text-white font-secondary text-xs px-4 py-3 outline-none focus:border-red-500" required />
+              <input type="text" value={operationName} onChange={(e) => setOperationName(e.target.value)} placeholder="e.g. Website Redesign" className="w-full bg-primary border border-light text-text font-secondary text-xs px-4 py-3 outline-none focus:border-red-500" required />
             </div>
             <div>
               <label className="font-secondary text-[10px] text-gray-400 tracking-widest mb-1 block">TARGET MONSTER NAME</label>
-              <input type="text" value={monsterName} onChange={(e) => setMonsterName(e.target.value)} className="w-full bg-[#0a0a1a] border border-[#3d2278] text-white font-secondary text-xs px-4 py-3 outline-none focus:border-red-500" required />
+              <input type="text" value={monsterName} onChange={(e) => setMonsterName(e.target.value)} className="w-full bg-primary border border-light text-text font-secondary text-xs px-4 py-3 outline-none focus:border-red-500" required />
             </div>
             
             <button type="submit" disabled={createWorkspace.isPending} className="mt-4 px-6 py-3 bg-red-900/20 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white font-primary text-[10px] tracking-[0.2em] transition-colors disabled:opacity-50">

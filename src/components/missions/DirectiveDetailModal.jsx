@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity, Radio, Send } from 'lucide-react';
+import { X, CheckCircle, CircleDashed, Image as ImageIcon, FileText, Activity, Radio, Send, Award, ShieldCheck, Edit, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMissionOperations } from '../../hooks/useMissionOperations';
 import { MissionLogModal } from './MissionLogModal';
@@ -8,7 +8,7 @@ import { QuizModal } from './QuizModal';
 import { EvidenceUploadModal } from './EvidenceUploadModal';
 
 export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDirective }) => {
-  const { engageDirective, completeDirective } = useMissionOperations(setActiveDirective);
+  const { engageDirective, completeDirective, updateDirective, deleteDirective } = useMissionOperations(setActiveDirective);
   
   const [showLogModal, setShowLogModal] = useState(false);
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -16,7 +16,10 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
   const [generatedQuiz, setGeneratedQuiz] = useState([]);
   const [missionLogText, setMissionLogText] = useState('');
 
-  const [generateError, setGenerateError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editLog, setEditLog] = useState('');
+
   const [engageStatus, setEngageStatus] = useState(null); // 'success' | 'error' | null
 
   useEffect(() => {
@@ -35,14 +38,38 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
   // Reset status when modal opens/directive changes
   useEffect(() => {
       setEngageStatus(null);
+      setIsEditing(false);
+      if (directive) {
+        setEditTitle(directive.title || '');
+        setEditLog(directive.mission_log || directive.description || '');
+      }
   }, [directive]);
+
+  const handleUpdate = () => {
+    if (!directive) return;
+    updateDirective.mutate({
+      id: directive.id,
+      title: editTitle,
+      mission_log: editLog,
+      priority: directive.priority // Keep existing priority for now
+    }, {
+      onSuccess: () => setIsEditing(false)
+    });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this directive? This action cannot be undone.')) {
+      deleteDirective.mutate(directive.id, {
+        onSuccess: () => onClose()
+      });
+    }
+  };
 
   const handleEngage = () => {
     if (directive) {
         engageDirective.mutate(directive.id, {
             onSuccess: () => {
                 setEngageStatus('success');
-                // Optimistic update so UI reflects change instantly without re-select
                 setActiveDirective({ ...directive, status: 'IN_PROGRESS' });
                 setTimeout(() => setEngageStatus(null), 3000);
             },
@@ -96,6 +123,26 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
     onClose();
   };
 
+  const handleSkipLog = () => {
+    // Opsi B: User skip transmit log -> Reward kecil (20 fuel_cells) & langsung complete
+    completeDirective.mutate({
+      id: directive.id,
+      xp: 20,
+      mission_log: "Mission log transmission skipped by operator.",
+      ai_feedback: "Standard completion protocol. No AI analysis performed.",
+      validation_score: 0
+    });
+    setShowLogModal(false);
+    onClose();
+  };
+
+  // --- EKSTRAKSI DATA PASCA-MISI ---
+  // Kita tarik data evaluasi (Bisa dari properti langsung atau dari array relasi mission_journals)
+  const isCompleted = directive?.status === 'DONE' || directive?.status === 'COMPLETED';
+  const aiFeedbackText = directive?.mission_journals?.[0]?.ai_feedback || directive?.ai_feedback || "No AI feedback recorded for this operation.";
+  const validationScore = directive?.mission_journals?.[0]?.validation_score ?? directive?.validation_score ?? 100;
+  const expEarned = directive?.mission_journals?.[0]?.bonus_exp ?? directive?.xp_awarded ?? 50;
+
   return (
     <>
       {createPortal(
@@ -107,7 +154,7 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#0a0a1a]/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-primary/80 backdrop-blur-sm"
           />
 
           {/* Kotak Modal Detail */}
@@ -122,28 +169,64 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
             {/* Garis Scanline Futuristik */}
             <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.03)_50%)] bg-[length:100%_4px] pointer-events-none" />
 
-            {/* Tombol Tutup */}
-            <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-cyan-400 transition-colors z-20">
-              <X size={20} />
-            </button>
+            {/* Tombol Tutup & Edit/Delete Actions */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
+              {!isCompleted && !isEditing && (
+                <>
+                  <button 
+                    onClick={() => setIsEditing(true)} 
+                    className="text-gray-500 hover:text-yellow-400 transition-colors"
+                    title="Edit Directive"
+                  >
+                    <Edit size={16} />
+                  </button>
+                  <button 
+                    onClick={handleDelete}
+                    className="text-gray-500 hover:text-red-500 transition-colors"
+                    title="Delete Directive"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                  <div className="w-[1px] h-4 bg-gray-700 mx-1"></div>
+                </>
+              )}
+              <button onClick={onClose} className="text-gray-500 hover:text-cyan-400 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
 
             {/* HEADER: Tipe & Status */}
-            <div className="flex items-center gap-3 mb-6 border-b border-cyan-900/50 pb-4">
-              {directive.status === 'IN_PROGRESS' ? (
-                <CheckCircle className="text-orange-400 animate-pulse" size={24} />
+            <div className="flex items-center gap-3 mb-6 border-b border-cyan-900/50 pb-4 pr-16">
+              {isCompleted ? (
+                <CheckCircle className="text-green-500" size={24} />
+              ) : directive.status === 'IN_PROGRESS' ? (
+                <CircleDashed className="text-orange-400 animate-spin-slow" size={24} />
               ) : (
                 <CircleDashed className="text-gray-400" size={24} />
               )}
-              <div>
-                <h3 className="font-primary text-light tracking-[0.2em] text-lg uppercase leading-tight">
-                  {directive.title}
-                </h3>
+              
+              <div className="w-full">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="bg-[#05000a] border border-cyan-500/50 p-2 w-full text-white font-primary tracking-[0.1em] text-sm focus:outline-none focus:border-cyan-400 mb-2"
+                  />
+                ) : (
+                  <h3 className={`font-primary tracking-[0.2em] text-lg uppercase leading-tight ${isCompleted ? 'text-green-400' : 'text-light'}`}>
+                    {directive.title}
+                  </h3>
+                )}
+                
                 <div className="flex items-center gap-2 mt-1">
                   <span className="font-primary text-[8px] text-accent tracking-widest bg-accent/10 px-2 py-0.5 border border-accent/20">
                     CATEGORY: {directive.category}
                   </span>
                   <span className={`font-primary text-[8px] tracking-widest px-2 py-0.5 border ${
-                    directive.status === 'IN_PROGRESS' ? 'text-orange-400 border-orange-400/30 bg-orange-400/10' : 'text-gray-400 border-gray-600 bg-gray-800'
+                    isCompleted ? 'text-green-400 border-green-500/30 bg-green-500/10' :
+                    directive.status === 'IN_PROGRESS' ? 'text-orange-400 border-orange-400/30 bg-orange-400/10' : 
+                    'text-gray-400 border-gray-600 bg-gray-800'
                   }`}>
                     STATUS: {directive.status}
                   </span>
@@ -151,21 +234,49 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
               </div>
             </div>
 
+            {/* KONTEN UTAMA: DESKRIPSI MISI */}
             <div className="mb-6">
               <h4 className="font-primary text-cyan-400 text-[10px] tracking-[0.2em] mb-2 flex items-center gap-2">
                 <FileText size={14} /> [ MISSION LOG DETAILS ]
               </h4>
-              <div className="bg-[#0a0a1a]/50 border border-[#3d2278]/40 p-4 text-gray-300 font-secondary text-sm leading-relaxed whitespace-pre-wrap">
-                {directive.mission_log}
-              </div>
+              {isEditing ? (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    value={editLog}
+                    onChange={(e) => setEditLog(e.target.value)}
+                    className="w-full h-32 bg-[#05000a] border border-cyan-500/50 p-4 text-cyan-100 font-secondary text-sm outline-none focus:border-cyan-400 resize-none"
+                    placeholder="Enter mission details..."
+                  />
+                  <div className="flex gap-2 justify-end mt-2">
+                    <button 
+                      onClick={() => setIsEditing(false)}
+                      className="px-4 py-2 border border-red-900/50 text-red-400 font-primary text-[10px] tracking-widest hover:bg-red-900/20"
+                    >
+                      CANCEL
+                    </button>
+                    <button 
+                      onClick={handleUpdate}
+                      disabled={updateDirective.isPending}
+                      className="px-4 py-2 bg-cyan-900/20 border border-cyan-400 text-cyan-400 font-primary text-[10px] tracking-widest hover:bg-cyan-400 hover:text-black flex items-center gap-2"
+                    >
+                      {updateDirective.isPending ? 'SAVING...' : 'SAVE CHANGES'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-primary/50 border border-light/40 p-4 text-gray-300 font-secondary text-sm leading-relaxed whitespace-pre-wrap">
+                  {directive.mission_log || directive.description || "No specific briefing provided for this operation."}
+                </div>
+              )}
             </div>
 
+            {/* BUKTI VISUAL (Jika ada) */}
             {directive.evidence_link && (
               <div className="mb-6">
                 <h4 className="font-primary text-cyan-400 text-[10px] tracking-[0.2em] mb-2 flex items-center gap-2">
                   <ImageIcon size={14} /> [ VISUAL EVIDENCE ATTACHED ]
                 </h4>
-                <div className="relative group rounded-sm overflow-hidden border border-[#3d2278]/40 bg-[#0a0a1a]">
+                <div className="relative group rounded-sm overflow-hidden border border-light/40 bg-primary">
                   <img 
                     src={directive.evidence_link} 
                     alt="Mission Evidence" 
@@ -176,59 +287,100 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
               </div>
             )}
 
-            {/* ACTION BUTTONS */}
-            <AnimatePresence>
-                {engageStatus && (
+            {/* LOGIKA CONDITIONAL: PENDING/IN PROGRESS vs COMPLETED */}
+            {isCompleted ? (
+              
+              /* --- TAMPILAN JIKA MISI SUDAH SELESAI --- */
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                className="mt-6 border border-green-500/40 bg-green-900/10 p-5 relative overflow-hidden"
+              >
+                {/* Efek Garis Samping */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-green-500/50" />
+
+                <h4 className="font-primary text-green-400 text-[10px] tracking-[0.2em] mb-4 flex items-center gap-2">
+                  <ShieldCheck size={16} /> [ POST-MISSION ANALYSIS REPORT ]
+                </h4>
+                
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="bg-[#0a0a1a]/50 border border-green-500/30 p-3">
+                    <span className="block font-primary text-[9px] text-green-500/80 tracking-widest mb-1">VALIDATION SCORE</span>
+                    <span className="font-primary text-2xl text-green-400">{validationScore}%</span>
+                  </div>
+                  <div className="bg-[#0a0a1a]/50 border border-green-500/30 p-3">
+                    <span className="block font-primary text-[9px] text-green-500/80 tracking-widest mb-1">XP EARNED</span>
+                    <span className="font-primary text-2xl text-yellow-400 flex items-center gap-2">
+                      <Award size={20} className="text-yellow-500" /> +{expEarned} FC
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a1a] border border-green-900/50 p-4">
+                  <span className="block font-primary text-[9px] text-green-500 tracking-widest mb-2 border-b border-green-900/30 pb-1">AI EVALUATION LOG</span>
+                  <p className="font-secondary text-gray-300 text-xs leading-relaxed whitespace-pre-wrap">
+                    {aiFeedbackText}
+                  </p>
+                </div>
+              </motion.div>
+
+            ) : (
+
+              <>
+                <AnimatePresence>
+                  {engageStatus && (
                     <motion.div 
-                        initial={{ opacity: 0, y: -10 }} 
-                        animate={{ opacity: 1, y: 0 }} 
-                        exit={{ opacity: 0 }}
-                        className={`mb-4 p-3 border ${engageStatus === 'success' ? 'border-green-500 bg-green-500/10 text-green-400' : 'border-red-500 bg-red-500/10 text-red-500'} font-primary text-[10px] tracking-widest text-center`}
+                      initial={{ opacity: 0, y: -10 }} 
+                      animate={{ opacity: 1, y: 0 }} 
+                      exit={{ opacity: 0 }}
+                      className={`mb-4 p-3 border ${engageStatus === 'success' ? 'border-green-500 bg-green-500/10 text-green-400' : 'border-red-500 bg-red-500/10 text-red-500'} font-primary text-[10px] tracking-widest text-center`}
                     >
-                        {engageStatus === 'success' ? '[ PROTOCOL ENGAGED SUCCESSFULLY ]' : '[ ERROR: ENGAGEMENT FAILED ]'}
+                      {engageStatus === 'success' ? '[ PROTOCOL ENGAGED SUCCESSFULLY ]' : '[ ERROR: ENGAGEMENT FAILED ]'}
                     </motion.div>
-                )}
-            </AnimatePresence>
+                  )}
+                </AnimatePresence>
 
-            <div className="grid grid-cols-2 gap-4 mt-8 mb-6">
-               <button
-                 onClick={handleEngage}
-                 disabled={directive.status !== 'PENDING' || engageDirective.isPending}
-                 className={`py-4 border flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
-                   directive.status !== 'PENDING'
-                     ? 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-not-allowed' 
-                     : 'border-orange-500/50 bg-orange-900/10 text-orange-400 hover:bg-orange-900/30 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]'
-                 }`}
-               >
-                 {engageDirective.isPending ? (
-                     <>
-                        <CircleDashed className="animate-spin text-orange-400" size={24} />
-                        <span className="font-primary text-xs tracking-[0.2em]">ENGAGING...</span>
-                     </>
-                 ) : (
-                     <>
-                        <Radio size={24} className={directive.status === 'IN_PROGRESS' ? 'text-orange-500' : 'animate-pulse'} />
-                        <span className="font-primary text-xs tracking-[0.2em]">
-                        {directive.status === 'IN_PROGRESS' || directive.status === 'DONE' ? 'PROTOCOLS ENGAGED' : 'ENGAGE PROTOCOLS'}
-                        </span>
-                     </>
-                 )}
-               </button>
+                <div className="grid grid-cols-2 gap-4 mt-8 mb-6">
+                  <button
+                    onClick={handleEngage}
+                    disabled={directive.status !== 'PENDING' || engageDirective.isPending}
+                    className={`py-4 border flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
+                      directive.status !== 'PENDING'
+                        ? 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-not-allowed' 
+                        : 'border-orange-500/50 bg-orange-900/10 text-orange-400 hover:bg-orange-900/30 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]'
+                    }`}
+                  >
+                    {engageDirective.isPending ? (
+                        <>
+                          <CircleDashed className="animate-spin text-orange-400" size={24} />
+                          <span className="font-primary text-xs tracking-[0.2em]">ENGAGING...</span>
+                        </>
+                    ) : (
+                        <>
+                          <Radio size={24} className={directive.status === 'IN_PROGRESS' ? 'text-orange-500' : 'animate-pulse'} />
+                          <span className="font-primary text-xs tracking-[0.2em]">
+                          {directive.status === 'IN_PROGRESS' ? 'PROTOCOLS ENGAGED' : 'ENGAGE PROTOCOLS'}
+                          </span>
+                        </>
+                    )}
+                  </button>
 
-               <button
-                 onClick={handleTransmit}
-                 disabled={directive.status !== 'IN_PROGRESS'}
-                 className={`py-4 border flex flex-col items-center justify-center gap-2 transition-all ${
-                   directive.status !== 'IN_PROGRESS'
-                     ? 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-not-allowed'
-                     : 'border-cyan-500/50 bg-cyan-900/10 text-cyan-400 hover:bg-cyan-900/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]'
-                 }`}
-               >
-                 <Send size={24} />
-                 <span className="font-primary text-xs tracking-[0.2em]">TRANSMIT DATA</span>
-               </button>
-            </div>
+                  <button
+                    onClick={handleTransmit}
+                    disabled={directive.status !== 'IN_PROGRESS'}
+                    className={`py-4 border flex flex-col items-center justify-center gap-2 transition-all ${
+                      directive.status !== 'IN_PROGRESS'
+                        ? 'border-gray-800 bg-gray-900/50 text-gray-600 cursor-not-allowed'
+                        : 'border-cyan-500/50 bg-cyan-900/10 text-cyan-400 hover:bg-cyan-900/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]'
+                    }`}
+                  >
+                    <Send size={24} />
+                    <span className="font-primary text-xs tracking-[0.2em]">TRANSMIT DATA</span>
+                  </button>
+                </div>
+              </>
+            )}
 
+            {/* FOOTER METADATA */}
             <div className="mt-8 pt-4 border-t border-[#3d2278]/40 flex justify-between items-center text-gray-500 font-secondary text-[9px] tracking-widest">
               <span className="flex items-center gap-1"><Activity size={12} /> RECORDED: {new Date(directive.created_at).toLocaleString()}</span>
               <span>ID: {directive.id.split('-')[0]}</span>
@@ -237,15 +389,17 @@ export const DirectiveDetailModal = ({ isOpen, onClose, directive, setActiveDire
           </motion.div>
         </div>
       )}
-    </AnimatePresence>,
-    document.body
-  )}
+        </AnimatePresence>,
+        document.body
+      )}
 
+      {/* CHILDREN MODALS */}
       <MissionLogModal 
         isOpen={showLogModal} 
         onClose={() => setShowLogModal(false)} 
         directive={directive}
         onQuizGenerated={handleQuizGenerated}
+        onSkip={handleSkipLog}
       />
 
       <QuizModal 

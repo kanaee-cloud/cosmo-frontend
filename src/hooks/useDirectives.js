@@ -11,7 +11,7 @@ export const useActiveDirectives = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('directives')
-        .select('*')
+        .select('*, mission_journals (*)')
         .eq('user_id', session.user.id)
         .neq('status', 'ARCHIVED')
         .order('created_at', { ascending: false });
