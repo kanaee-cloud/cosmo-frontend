@@ -12,6 +12,7 @@ import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 import Theme from "../pages/Theme"; // Import Theme Page
 import Profile from "../pages/Profile";
+import Profil from "../pages/Profil";
 
 export const router = createBrowserRouter([
     {
@@ -68,6 +69,14 @@ export const router = createBrowserRouter([
             { path: "raid-deck", element: <RaidDeck /> },
             { path: "profile", element: <Profile /> },
         ]
+    },
+    {
+        path: "/profil",
+        element: (
+            <ProtectedRoute>
+                <Profil />
+            </ProtectedRoute>
+        )
     },
     {
         path: "*",
