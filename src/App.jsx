@@ -2,9 +2,7 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/authStore';
-import { useToastStore } from './hooks/useToast';
-import { ToastContainer } from './components/toast';
-import { useThemeStore } from './store/themeStore'; // IMPORT THEME STORE
+import { useThemeStore } from './store/themeStore'; 
 import { router } from './routes';
 
 const queryClient = new QueryClient({
@@ -19,7 +17,6 @@ function App() {
   const { initialize, isInitializing } = useAuthStore();
   const { toasts, removeToast } = useToastStore();
   
-  // Use separate selectors for better performance and to avoid re-render loops
   const activeTheme = useThemeStore((state) => state.activeTheme);
   const matrixColor = useThemeStore((state) => state.matrixColor);
 
@@ -31,18 +28,20 @@ function App() {
   useEffect(() => {
     if (matrixColor?.rgb) {
       document.documentElement.style.setProperty('--color-matrix', matrixColor.rgb);
-      // Explicitly remove the primary override to fix any lingering pink background
       document.documentElement.style.removeProperty('--color-primary');
     }
   }, [matrixColor]);
 
-  // EFFECT UNTUK MENGGANTI TEMA DI BODY
+  // PERBAIKAN: EFFECT UNTUK MENGGANTI TEMA DI BODY
   useEffect(() => {
-    // Hapus semua class tema tambahan terlebih dahulu
-    document.body.classList.remove('theme-zenith');
+    // 1. Daftar semua tema yang ada (selain default nexus)
+    const allThemes = ['theme-zenith', 'theme-abyss', 'theme-mars'];
     
-    // Jika bukan tema default (nexus), tambahkan class-nya
-    if (activeTheme !== 'nexus') {
+    // 2. Hapus SEMUA class tema dari body agar tidak menumpuk
+    document.body.classList.remove(...allThemes);
+    
+    // 3. Jika bukan tema default (nexus), tambahkan class-nya
+    if (activeTheme && activeTheme !== 'nexus') {
       document.body.classList.add(`theme-${activeTheme}`);
     }
   }, [activeTheme]);

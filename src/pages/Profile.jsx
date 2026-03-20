@@ -1,26 +1,24 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Edit3, LogOut } from 'lucide-react';
-import { useAuthStore } from '../store/authStore';
+import { Outlet } from 'react-router-dom'; // IMPOR INI
+import { useProfileSettings } from '../hooks/useProfileSettings';
 import { useThemeStore } from '../store/themeStore';
-import { useToastStore } from '../hooks/useToast';
-import AvatarSelector from '../components/Profile/AvatarSelector';
+
+import { ProfileTitle } from '../components/Profile/ProfileTitle';
+import { UserInfoHeader } from '../components/Profile/UserInfoHeader';
+import ProfileSidebar from '../components/Profile/ProfileSidebar';
 
 export default function Profile() {
-  const { profile, session } = useAuthStore();
+  const { 
+    profile, updateName, level, currentExp, 
+    lastLogin, accountCreated 
+  } = useProfileSettings();
+
   const matrixColor = useThemeStore((state) => state.matrixColor);
-  const { success } = useToastStore();
+  const themeBorder = '#7a5299';
+  const themeBg = '#0a0514';
 
   const [displayName, setDisplayName] = useState('UNKNOWN OPERATOR');
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [tempName, setTempName] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState('👨‍🚀');
-  const [stats, setStats] = useState({
-    rating: '34.25%',
-    kills: '13.65',
-    playtime: '12304',
-    victories: '4858+',
-  });
 
   // Load avatar from localStorage on mount
   useEffect(() => {
@@ -34,70 +32,50 @@ export default function Profile() {
   useEffect(() => {
     const name = profile?.user_name || profile?.username || session?.user?.email?.split('@')[0]?.toUpperCase() || 'UNKNOWN OPERATOR';
     setDisplayName(name);
-    setTempName(name);
-  }, [profile, session]);
-
-  const handleAvatarChange = (emoji) => {
-    setSelectedAvatar(emoji);
-    localStorage.setItem('userAvatar', emoji);
-    success('AVATAR UPDATED', 'Avatar profil berhasil diubah');
-  };
-
-  const handleSaveName = async () => {
-    if (!tempName.trim()) return;
-    const newName = tempName.trim().toUpperCase();
-
-    if (newName === displayName) {
-      setIsEditingName(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await useAuthStore.getState().supabase.auth.updateUser({
-        data: { user_name: newName },
-      });
-
-      if (error) throw error;
-
-      setDisplayName(newName);
-      setIsEditingName(false);
-      success('NAME UPDATED', 'Nama profil berhasil diperbarui');
-    } catch (err) {
-      console.error('Error updating name:', err);
-    }
-  };
+  }, [profile]);
 
   return (
-    <div className="min-h-screen w-full p-8 overflow-auto">
-      {/* Background glow */}
-      <div
-        className="fixed top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20 pointer-events-none"
-        style={{ backgroundColor: matrixColor.hex, filter: `blur(120px)` }}
-      />
-
-      <motion.div
-        className="max-w-7xl mx-auto relative z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+    <div className="min-h-screen w-full p-4 md:p-6 flex justify-center items-start bg-primary text-text">
+      
+      <motion.div 
+        className="w-full relative z-10"
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.5 }}
       >
-        {/* Page Title */}
-        <div className="mb-8">
-          <motion.h1
-            className="font-primary text-4xl tracking-[0.3em] text-white mb-2 relative inline-block"
-            style={{
-              textShadow: `0 0 20px ${matrixColor.hex}80`,
-            }}
-          >
-            PROFIL PEMAIN
-            <motion.div
-              className="absolute bottom-0 left-0 h-1"
-              style={{ backgroundColor: matrixColor.hex }}
-              initial={{ width: 0 }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+        <div className="w-full flex flex-col gap-6">
+          
+          <div className="flex flex-col gap-4">
+            <ProfileTitle matrixColor={matrixColor} />
+            <UserInfoHeader 
+              displayName={displayName} 
+              level={level} 
+              profile={profile} 
+              matrixColor={matrixColor} 
             />
-          </motion.h1>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
+            
+            {/* SIDEBAR */}
+            <div className="w-full lg:w-[260px] shrink-0">
+              <ProfileSidebar />
+            </div>
+
+            {/* AREA KONTEN UTAMA */}
+            <div className="flex-1 w-full min-w-0 h-full">
+              
+              {/* OUTLET menggantikan activeTab.
+                Komponen akan otomatis dirender berdasarkan URL (cth: /profile/account)
+                Kita gunakan 'context' untuk mengirim data ke komponen anak
+              */}
+              <Outlet context={{
+                profile, displayName, setDisplayName, level, currentExp,
+                lastLogin, accountCreated, themeBorder, themeBg, updateName
+              }} />
+
+            </div>
+          </div>
         </div>
 
         {/* Main Profile Card */}

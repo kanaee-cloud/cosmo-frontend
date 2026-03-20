@@ -69,7 +69,7 @@ export const MissionLogModal = ({ isOpen, onClose, directive, onQuizGenerated, o
                 type="button"
                 onClick={onSkip}
                 disabled={loading}
-                className="flex-1 py-3 bg-gray-900/50 border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200 font-primary text-xs tracking-[0.1em] transition-all disabled:opacity-50"
+                className="flex-1 py-3 bg-gray-900/50 border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-text font-primary text-xs tracking-[0.1em] transition-all disabled:opacity-50"
               >
                 SKIP TRANSMISSION
               </button>

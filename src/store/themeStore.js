@@ -1,4 +1,3 @@
-// src/store/themeStore.js
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -16,11 +15,13 @@ export const useThemeStore = create(
     (set) => ({
       activeTheme: 'nexus', // default theme
       matrixColor: THEME_COLORS[0], // default color
+      
+      // Fungsi ini murni hanya mengubah state sekarang
       setTheme: (theme) => set({ activeTheme: theme }),
       setMatrixColor: (color) => set({ matrixColor: color }),
     }),
     {
-      name: 'cosmo-theme-storage', // nama key di local storage
+      name: 'cosmo-theme-storage', 
       partialize: (state) => ({ activeTheme: state.activeTheme, matrixColor: state.matrixColor }),
     }
   )

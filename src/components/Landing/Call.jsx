@@ -22,7 +22,7 @@ const Call = () => {
                     <p className="text-light/70 font-primary text-lg max-w-md">
                         Your dashboard is configured. Begin your first mission and start earning XP.
                     </p>
-                    <button className="relative group overflow-hidden bg-accent px-10 py-5 font-press text-[10px] text-white shadow-[0_0_20px_rgba(255,0,85,0.5)] hover:shadow-[0_0_30px_rgba(255,0,85,0.8)] hover:bg-white hover:text-accent transition-all duration-300 pixel-corners w-full max-w-xs outline-none focus:ring-4 focus:ring-accent/30 active:scale-95">
+                    <button className="relative group overflow-hidden bg-accent px-10 py-5 font-press text-[10px] text-white shadow-[0_0_20px_rgb(var(--color-accent)_/_0.5)] hover:shadow-[0_0_30px_rgb(var(--color-accent)_/_0.8)] hover:bg-white hover:text-accent transition-all duration-300 pixel-corners w-full max-w-xs outline-none focus:ring-4 focus:ring-accent/30 active:scale-95">
                         <span className="relative z-10 flex items-center justify-center gap-2">
                             <span className="material-symbols-outlined text-sm">rocket_launch</span>
                             INITIATE LAUNCH_

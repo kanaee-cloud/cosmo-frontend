@@ -17,7 +17,7 @@ const RaidDeck = () => {
   return (
     <div className="min-h-screen p-4 md:p-8 relative overflow-hidden">
       {/* Background efek Red Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,85,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,85,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgb(var(--color-accent)_/_0.03)_1px,transparent_1px),linear-gradient(90deg,rgb(var(--color-accent)_/_0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
       {/* HEADER NAVIGASI */}
       <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 border-b border-red-900/50 pb-6">
@@ -47,7 +47,7 @@ const RaidDeck = () => {
         <motion.button
           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
           onClick={() => setIsRaidModalOpen(true)}
-          className="px-6 py-3 bg-red-900/20 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white font-primary text-[10px] tracking-[0.25em] flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,0,85,0.2)]"
+          className="px-6 py-3 bg-red-900/20 border border-red-500 text-red-400 hover:bg-red-500 hover:text-white font-primary text-[10px] tracking-[0.25em] flex items-center gap-2 transition-colors shadow-[0_0_15px_rgb(var(--color-accent)_/_0.2)]"
         >
           <Radar size={16} />
           <span>SCAN NEW TARGET (SUMMON)</span>

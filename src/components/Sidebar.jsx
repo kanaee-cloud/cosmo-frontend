@@ -1,35 +1,36 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Skull, User } from 'lucide-react';
-import { useThemeStore } from '../store/themeStore';
+import { LayoutDashboard, Skull, Crown } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
-  const matrixColor = useThemeStore((state) => state.matrixColor);
 
-  const getNavLinkStyle = (path) => {
-    const isActive = location.pathname === path || (path === '/dashboard' && path === '/dashboard/home');
-    if (isActive) {
-      return {
-        borderColor: matrixColor.hex,
-        backgroundColor: `${matrixColor.hex}1A`, // ~10% opacity
-        color: matrixColor.hex,
-        boxShadow: `0 0 15px ${matrixColor.hex}33`
-      };
+  // Mengubah dari inline style menjadi semantic Tailwind classes
+  const getNavLinkClass = (path) => {
+    let isActive = location.pathname === path;
+    
+    // Logic deteksi rute aktif
+    if (path === '/profile') {
+      isActive = isActive || location.pathname === '/dashboard/profile' || location.pathname.startsWith('/profile');
     }
-    return {
-      borderColor: 'rgba(var(--color-light), 0.5)', 
-      backgroundColor: 'rgba(var(--color-primary), 0.5)',
-      color: '#6b7280'
-    };
+    if (path === '/dashboard/home') {
+      isActive = isActive || location.pathname === '/dashboard' || location.pathname === '/dashboard/home';
+    }
+
+    // Jika aktif: border dan teks menyala terang (Accent) dengan efek shadow
+    if (isActive) {
+      return `border-accent bg-accent/10 text-accent shadow-[0_0_15px_rgb(var(--color-accent)_/_0.2)]`;
+    }
+    
+    // Jika tidak aktif: warna redup (Tertiary/Light), menyala saat di-hover
+    return `border-tertiary bg-secondary/50 text-light/70 hover:border-accent hover:text-accent`;
   };
 
   return (
     <aside className="w-full lg:w-56 flex-shrink-0 flex flex-col gap-3">
       <Link to="/dashboard/home">
         <div 
-          className="flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125"
-          style={getNavLinkStyle('/dashboard/home')}
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/home')}`}
         >
           <LayoutDashboard size={18} />
           <span className="font-primary text-[10px] tracking-widest mt-0.5">COMMAND DECK</span>
@@ -38,21 +39,19 @@ const Sidebar = () => {
       
       <Link to="/dashboard/raid-deck">
         <div 
-          className="flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125"
-          style={getNavLinkStyle('/dashboard/raid-deck')}
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/raid-deck')}`}
         >
           <Skull size={18} />
           <span className="font-primary text-[10px] tracking-widest mt-0.5">RAID ARENA</span>
         </div>
       </Link>
 
-      <Link to="/dashboard/profile">
+      <Link to="/dashboard/leaderboard">
         <div 
-          className="flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125"
-          style={getNavLinkStyle('/dashboard/profile')}
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/leaderboard')}`}
         >
-          <User size={18} />
-          <span className="font-primary text-[10px] tracking-widest mt-0.5">PROFILE</span>
+          <Crown size={18} />
+          <span className="font-primary text-[10px] tracking-widest mt-0.5">LEADERBOARD</span>
         </div>
       </Link>
     </aside>

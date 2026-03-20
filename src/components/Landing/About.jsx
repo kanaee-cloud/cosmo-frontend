@@ -32,7 +32,7 @@ const About = () => {
 
                 <div className="px-4 pb-8 lg:px-12 text-center flex flex-col items-center gap-6">
                     <h2 className="text-text text-3xl lg:text-4xl font-semibold font-primary uppercase tracking-wider">
-                        Turn Todo Lists into <span className="text-accent drop-shadow-[0_0_8px_rgba(255,0,85,0.6)]">Space Quests</span>
+                        Turn Todo Lists into <span className="text-accent drop-shadow-[0_0_8px_rgb(var(--color-accent)_/_0.6)]">Space Quests</span>
                     </h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent"></div>
                     <p className="text-text text-lg leading-relaxed max-w-2xl font-primary">

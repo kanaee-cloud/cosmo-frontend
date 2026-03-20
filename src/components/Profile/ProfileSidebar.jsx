@@ -1,0 +1,26 @@
+import { NavLink } from 'react-router-dom';
+
+export default function ProfileSidebar() {
+  const getNavClass = ({ isActive }) => 
+    `p-4 border border-tertiary font-secondary tracking-widest text-xs uppercase transition-all duration-500 block text-center lg:text-left ${
+      isActive 
+        ? 'bg-accent/20 text-accent border-accent shadow-[0_0_10px_rgb(var(--color-accent)_/_0.2)]' 
+        : 'bg-secondary text-light hover:bg-tertiary hover:border-light/50'
+    }`;
+
+  return (
+    <div className="flex flex-col gap-3">
+      <NavLink to="/profile/account" className={getNavClass}>
+        [ Setting ]
+      </NavLink>
+      
+      <NavLink to="/profile/privacy" className={getNavClass}>
+        [ Privacy ]
+      </NavLink>
+      
+      <NavLink to="/profile/color-presets" className={getNavClass}>
+        [ Theme ]
+      </NavLink>
+    </div>
+  );
+}

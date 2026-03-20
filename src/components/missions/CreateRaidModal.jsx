@@ -33,7 +33,7 @@ export const CreateRaidModal = ({ isOpen, onClose }) => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-md p-6 border border-red-900/80 bg-secondary/95 shadow-[0_0_50px_rgba(255,0,85,0.2)] z-10"
+          className="relative w-full max-w-md p-6 border border-red-900/80 bg-secondary/95 shadow-[0_0_50px_rgb(var(--color-accent)_/_0.2)] z-10"
         >
           <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-red-400"><X size={20} /></button>
           

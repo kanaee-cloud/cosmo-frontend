@@ -99,7 +99,7 @@
                       key={index}
                       onClick={() => !showResult && handleOptionSelect(index)}
                       className={`w-full text-left p-4 border transition-all duration-300 font-secondary text-sm md:text-base relative overflow-hidden group
-                        ${selectedOption === index ? 'border-cyan-400 bg-cyan-900/30 text-white' : 'border-gray-800 text-gray-400 hover:border-cyan-800 hover:text-gray-200'}
+                        ${selectedOption === index ? 'border-cyan-400 bg-cyan-900/30 text-white' : 'border-gray-800 text-gray-400 hover:border-cyan-800 hover:text-text'}
                         ${showResult && index === quizQuestions[currentQuestion].correct_index ? '!border-green-500 !bg-green-900/30 !text-green-400' : ''}
                         ${showResult && selectedOption === index && index !== quizQuestions[currentQuestion].correct_index ? '!border-red-500 !bg-red-900/30 !text-red-400' : ''}
                       `}

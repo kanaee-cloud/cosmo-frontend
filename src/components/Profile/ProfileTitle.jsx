@@ -1,12 +1,14 @@
-import { motion } from 'framer-motion';
-
-export const ProfileTitle = ({ matrixColor }) => {
+export const ProfileTitle = () => {
   return (
-    <motion.div className="mb-8" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-      <h1 className="font-primary text-4xl md:text-5xl font-black tracking-[0.2em] uppercase mb-2" style={{ color: matrixColor.hex }}>
-        PROFILE
-      </h1>
-      <p className="text-xs md:text-sm text-gray-400 tracking-widest">[ CAPTAIN STATUS OVERVIEW ]</p>
-    </motion.div>
+    <div className="border-b-2 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-2 border-tertiary">
+      <div>
+        <h1 className="font-press text-lg md:text-xl tracking-widest uppercase text-light drop-shadow-[0_0_8px_rgba(201,191,230,0.5)]">
+          [ SYSTEM PROFILE ]
+        </h1>
+      </div>
+      <div className="text-accent font-secondary text-[10px] tracking-[0.2em] animate-pulse">
+        OP_STATUS: CONNECTED
+      </div>
+    </div>
   );
 };
