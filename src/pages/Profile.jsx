@@ -27,7 +27,7 @@ export default function Profile() {
   }, [profile]);
 
   return (
-    <div className="min-h-screen w-full p-4 md:p-6 flex justify-center items-start bg-[#05020a] text-gray-200">
+    <div className="min-h-screen w-full p-4 md:p-6 flex justify-center items-start bg-primary text-text">
       
       <motion.div 
         className="w-full relative z-10"

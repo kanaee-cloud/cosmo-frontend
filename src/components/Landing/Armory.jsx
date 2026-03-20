@@ -9,7 +9,7 @@ const armoryData = [
         topIcon: "assignment",
         mainIcon: "list_alt",
         styles: {
-            wrapperHover: "hover:border-accent hover:shadow-[0_0_15px_rgba(255,0,85,0.3)]",
+            wrapperHover: "hover:border-accent hover:shadow-[0_0_15px_rgb(var(--color-accent)_/_0.3)]",
             topIconBorderHover: "group-hover:border-accent",
             topIconTextHover: "group-hover:text-accent",
             mainIconWrapperHover: "group-hover:bg-accent/10 group-hover:border-accent/30",
@@ -19,7 +19,7 @@ const armoryData = [
         bottomContent: (
             <div className="mt-auto pt-4">
                 <div className="w-full bg-secondary h-2 rounded-none overflow-hidden border border-light/10">
-                    <div className="bg-accent h-full w-3/4 animate-pulse shadow-[0_0_8px_rgba(255,0,85,0.8)]"></div>
+                    <div className="bg-accent h-full w-3/4 animate-pulse shadow-[0_0_8px_rgb(var(--color-accent)_/_0.8)]"></div>
                 </div>
                 <span className="text-[10px] text-light font-press mt-2 block text-right tracking-widest">SYNC: 75%</span>
             </div>
@@ -105,7 +105,7 @@ const Armory = () => {
                 <div className="p-8 lg:p-12 relative z-20">
                     {/* Header */}
                     <div className="flex items-center gap-4 mb-12">
-                        <span className="material-symbols-outlined text-accent text-3xl drop-shadow-[0_0_8px_rgba(255,0,85,0.6)]">shield</span>
+                        <span className="material-symbols-outlined text-accent text-3xl drop-shadow-[0_0_8px_rgb(var(--color-accent)_/_0.6)]">shield</span>
                         <h2 className="text-text text-2xl lg:text-3xl font-bold font-press tracking-wide text-shadow-neon">THE ARMORY</h2>
                         <div className="h-[2px] bg-gradient-to-r from-light/30 to-transparent flex-1"></div>
                     </div>

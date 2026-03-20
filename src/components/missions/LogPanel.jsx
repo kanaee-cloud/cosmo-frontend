@@ -18,37 +18,39 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
       
       {/* STATS GRID */}
       <div className="grid grid-cols-2 gap-4">
-        {/* ... existing stats ... */}
-        <div className="border border-[#3d2278]/50 bg-[#0a0a1a] p-4 text-center">
-          <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">FLEET READINESS</div>
-          <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">92%</div>
+        {/* Menggunakan bg-secondary dan border-tertiary */}
+        <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">FLEET READINESS</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">92%</div>
         </div>
-        <div className="border border-light/50 bg-primary p-4 text-center">
-          <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">COMBAT PROFICIENCY</div>
-          <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">S-RANK</div>
+        <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">COMBAT PROFICIENCY</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">S-RANK</div>
         </div>
-        <div className="border border-light/50 bg-primary p-4 text-center">
-          <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">TACTICAL EXPERIENCE</div>
+        <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">TACTICAL EXPERIENCE</div>
           <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">MAX</div>
         </div>
-        <div className="border border-light/50 bg-primary p-4 text-center">
-          <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">ENERGY RADIUS</div>
-          <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">420.5 LY</div>
+        <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">ENERGY RADIUS</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">420.5 LY</div>
         </div>
-        <div className="border border-light/50 bg-primary p-4 text-center">
-          <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">QUANTUM SYNC</div>
-          <div className="font-primary text-cyan-400 text-sm md:text-base tracking-widest">ACTIVE</div>
+        <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">QUANTUM SYNC</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">ACTIVE</div>
         </div>
-        <div className="border border-light/50 bg-primary p-4 text-center">
-          <div className="font-secondary text-gray-500 text-[8px] tracking-[0.2em] mb-1">FLEET MORALE</div>
+        <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">FLEET MORALE</div>
           <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">EUPHORIC</div>
         </div>
       </div>
 
       {/* OPERATIONAL LOG LIST */}
-      <div className="border border-yellow-600/50 bg-[#0a0a1a] flex flex-col relative overflow-hidden h-[450px]">
-        <div className="bg-yellow-600/10 border-b border-yellow-600/30 p-3 flex justify-between items-center flex-wrap gap-2">
-          <span className="font-primary text-yellow-500 text-[10px] tracking-widest">OPERATIONAL LOG</span>
+      <div className="border border-accent/50 bg-secondary flex flex-col relative overflow-hidden h-[450px] transition-colors duration-500 shadow-[0_0_15px_rgb(var(--color-accent)_/_0.1)]">
+        
+        {/* Header List */}
+        <div className="bg-accent/10 border-b border-accent/30 p-3 flex justify-between items-center flex-wrap gap-2 transition-colors duration-500">
+          <span className="font-primary text-accent text-[10px] tracking-widest">OPERATIONAL LOG</span>
           
           <div className="flex gap-1">
             {['ALL', 'PENDING', 'IN_PROGRESS', 'COMPLETED'].map(status => (
@@ -57,8 +59,8 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
                 onClick={() => setFilter(status)}
                 className={`font-primary text-[8px] tracking-widest px-2 py-1 transition-colors border ${
                   filter === status 
-                    ? 'bg-yellow-500 text-[#0a0a1a] border-yellow-500' 
-                    : 'text-yellow-500/50 border-transparent hover:text-yellow-500 hover:border-yellow-500/30'
+                    ? 'bg-accent text-primary border-accent shadow-[0_0_8px_rgb(var(--color-accent)_/_0.5)]' 
+                    : 'text-accent/50 border-transparent hover:text-accent hover:border-accent/30'
                 }`}
               >
                 {status.replace('_', ' ')}
@@ -69,8 +71,8 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
             {!filteredDirectives || filteredDirectives.length === 0 ? (
-                 <div className="flex flex-col items-center justify-center h-full text-gray-600 font-secondary text-[10px] tracking-widest">
-                     <div className="w-8 h-8 border border-dashed border-gray-700 rounded-full mb-2 animate-spin-slow"></div>
+                 <div className="flex flex-col items-center justify-center h-full text-light/50 font-secondary text-[10px] tracking-widest">
+                     <div className="w-8 h-8 border border-dashed border-tertiary rounded-full mb-2 animate-spin-slow"></div>
                      {filter === 'ALL' ? 'NO ACTIVE DIRECTIVES LOGGED.' : 'NO TRANSMISSIONS FOUND.'}
                  </div>
             ) : (
@@ -81,15 +83,17 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
                             key={directive.id}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            whileHover={{ x: 5, backgroundColor: 'rgba(234, 179, 8, 0.05)' }}
+                            whileHover={{ x: 5 }}
                             onClick={() => setActiveDirective(directive)}
-                            className="w-full flex items-center justify-between p-3 border border-[#3d2278]/30 hover:border-yellow-500/50 cursor-pointer transition-all group"
+                            // Hover effect diatur via Tailwind dengan bg-accent/5
+                            className="w-full flex items-center justify-between p-3 border border-tertiary hover:border-accent/50 hover:bg-accent/5 cursor-pointer transition-all group"
                         >
                             <div className="flex flex-col gap-1 items-start">
-                                <span className={`font-primary text-[10px] tracking-widest ${directive.priority === 'CRITICAL' ? 'text-red-400' : directive.priority === 'ELEVATED' ? 'text-yellow-400' : 'text-cyan-400'}`}>
+                                {/* Title warna warni sesuai priority, yang STANDARD ikut warna accent tema */}
+                                <span className={`font-primary text-[10px] tracking-widest ${directive.priority === 'CRITICAL' ? 'text-red-400' : directive.priority === 'ELEVATED' ? 'text-yellow-400' : 'text-accent'}`}>
                                     {directive.title}
                                 </span>
-                                <div className="flex gap-2 text-[8px] font-secondary text-gray-500">
+                                <div className="flex gap-2 text-[8px] font-secondary text-light/50">
                                     <span className="uppercase">{directive.category}</span>
                                     <span>•</span>
                                     <span>{new Date(directive.created_at).toLocaleDateString()}</span>
@@ -106,7 +110,7 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
                                         <Clock size={10} /> ENGAGED
                                     </span>
                                 ) : (
-                                    <span className="flex items-center gap-1 font-primary text-[9px] text-gray-400 border border-gray-800 px-2 py-1 group-hover:text-yellow-500 group-hover:border-yellow-900">
+                                    <span className="flex items-center gap-1 font-primary text-[9px] text-light/50 border border-tertiary px-2 py-1 group-hover:text-accent group-hover:border-accent transition-colors">
                                         PENDING
                                     </span>
                                 )}
@@ -118,7 +122,8 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
             )}
         </div>
         
-        <div className="absolute bottom-0 right-0 border-t border-l border-yellow-600/50 w-4 h-4" />
+        {/* Dekorasi Pojok Bawah */}
+        <div className="absolute bottom-0 right-0 border-t border-l border-accent/50 w-4 h-4" />
       </div>
 
     </div>

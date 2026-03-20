@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom'; // PENTING: Untuk mengambil data dari Outlet
+import { useOutletContext } from 'react-router-dom';
 import { Check, X, Edit2 } from 'lucide-react';
 
 import { ProfileDetailsCard } from './ProfileDetailsCard';
@@ -8,24 +8,46 @@ import { AccessLog } from './AccessLog';
 import AvatarUploader from './AvatarUploader';
 import Achievements from './Achievements';
 
+const MOCK_BADGES = [
+  { id: 1, icon: '🛡️', name: 'DEFENDER', locked: false },
+  { id: 2, icon: '🚀', name: 'SPEEDSTER', locked: false },
+  { id: 3, icon: '🛸', name: 'UFO HUNTER', locked: false },
+  { id: 4, icon: '👑', name: 'SUPREME', locked: false },
+  { id: 5, icon: '?', name: 'LOCKED', locked: true },
+  { id: 6, icon: '?', name: 'LOCKED', locked: true },
+  { id: 7, icon: '?', name: 'LOCKED', locked: true },
+  { id: 8, icon: '?', name: 'LOCKED', locked: true },
+  { id: 9, icon: '?', name: 'LOCKED', locked: true },
+];
+
 export default function ProfileMainTab() {
-  // Mengambil data yang dilempar oleh <Outlet context={{...}} /> di Profile.jsx
   const { 
-    profile, 
-    displayName, 
-    setDisplayName, 
-    level, 
-    currentExp, 
-    lastLogin, 
-    accountCreated, 
-    themeBorder, 
-    themeBg, 
-    updateName 
+    profile, displayName, setDisplayName, level, currentExp, 
+    lastLogin, accountCreated, updateName 
   } = useOutletContext();
 
-  // State lokal khusus untuk fitur Edit Name
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(displayName);
+  const [selectedBadgeIds, setSelectedBadgeIds] = useState([1, 2, 3]);
+  const [currentAvatar, setCurrentAvatar] = useState(profile?.avatar_url || '🤖');
+
+  const handleSelectAvatar = (newAvatar) => {
+    setCurrentAvatar(newAvatar);
+  };
+
+  const displayBadges = MOCK_BADGES.filter(b => selectedBadgeIds.includes(b.id));
+
+  const handleToggleBadge = (badge) => {
+    if (badge.locked) return;
+    if (selectedBadgeIds.includes(badge.id)) {
+      setSelectedBadgeIds(prev => prev.filter(id => id !== badge.id));
+    } else {
+      setSelectedBadgeIds(prev => {
+        if (prev.length >= 3) { return [...prev.slice(1), badge.id]; }
+        return [...prev, badge.id];
+      });
+    }
+  };
 
   const handleEditName = () => {
     setTempName(displayName);
@@ -59,54 +81,52 @@ export default function ProfileMainTab() {
 
   return (
     <div 
-      className="border-2 p-4 md:p-5 flex flex-col shadow-[0_0_30px_rgba(122,82,153,0.15)] h-full min-h-[500px]"
-      style={{ borderColor: themeBorder, backgroundColor: themeBg }}
+      className="border-2 border-tertiary bg-primary p-4 md:p-5 flex flex-col shadow-[0_0_30px_rgb(var(--color-tertiary)_/_0.15)] h-full min-h-[500px] transition-colors duration-500"
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full items-stretch">
         
-        {/* --- KIRI: UNIFIED CARD --- */}
-        <div 
-          className="border flex flex-col relative bg-[#07030e] h-full"
-          style={{ borderColor: themeBorder }}
-        >
+        {/* --- KIRI: LOG KAPTEN DKK --- */}
+        <div className="border border-tertiary flex flex-col relative bg-secondary h-full transition-colors duration-500">
           <ProfileDetailsCard
-            profile={profile}
+            currentAvatar={currentAvatar} 
             displayName={displayName}
             level={level}
             currentExp={currentExp}
+            displayBadges={displayBadges}
           />
           <OperatorStatus currentExp={currentExp} />
           <AccessLog lastLogin={lastLogin} accountCreated={accountCreated} />
         </div>
 
-        {/* --- TENGAH: UPLOAD & EDIT NAME --- */}
-        <div 
-          className="flex flex-col items-center justify-center p-6 border transition-all duration-300 relative h-full"
-          style={{ borderColor: themeBorder }}
-        >
-          <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,240,255,0.03)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+        {/* --- TENGAH: AVATAR & EDIT NAME --- */}
+        <div className="flex flex-col items-center justify-start p-6 border border-tertiary transition-all duration-500 relative h-full">
+          <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgb(var(--color-light)_/_0.03)_50%)] bg-[length:100%_4px] pointer-events-none opacity-30"></div>
           
-          <div className="relative z-10 w-full flex flex-col items-center gap-8">
+          <div className="relative z-10 w-full flex flex-col items-center gap-8 flex-1">
             <div className="w-full">
-              <h3 className="text-center font-secondary text-[#c9bfe6] text-xs tracking-widest uppercase mb-4">
-                UPLOAD VISUAL DATA
+              <h3 className="text-center font-secondary text-light text-sm tracking-widest uppercase mb-5 border-b border-tertiary pb-2 transition-colors duration-500">
+                RECONFIGURE VISUALS
               </h3>
-              <AvatarUploader profile={profile} />
+              
+              <AvatarUploader 
+                currentAvatar={currentAvatar} 
+                onSelectAvatar={handleSelectAvatar} 
+              />
             </div>
 
-            <div className="w-full border-t border-[#3b2b5a] pt-6">
-              <h3 className="text-center font-secondary text-[#c9bfe6] text-xs tracking-widest uppercase mb-4">
+            <div className="w-full border-t border-tertiary pt-6 mt-auto transition-colors duration-500">
+              <h3 className="text-center font-secondary text-light text-xs tracking-widest uppercase mb-4 transition-colors duration-500">
                 RECONFIGURE IDENTITY
               </h3>
               
               {!isEditingName ? (
                 <div className="flex flex-col items-center gap-3">
-                  <div className="font-press text-xs md:text-sm text-[#00f0ff] text-center uppercase break-all">
+                  <div className="font-press text-xs md:text-sm text-light text-center uppercase break-all transition-colors duration-500">
                     {displayName}
                   </div>
                   <button
                     onClick={handleEditName}
-                    className="flex items-center gap-2 px-6 py-2 border border-[#ff0055] text-[#ff0055] hover:bg-[#ff0055]/10 transition-colors font-secondary text-[10px] tracking-widest mt-2"
+                    className="flex items-center gap-2 px-6 py-2 border border-accent text-accent hover:bg-accent/10 transition-colors duration-500 font-secondary text-[10px] tracking-widest mt-2"
                   >
                     <Edit2 size={12} /> EDIT ID
                   </button>
@@ -119,21 +139,14 @@ export default function ProfileMainTab() {
                     onChange={(e) => setTempName(e.target.value.toLowerCase())}
                     maxLength={20} 
                     autoFocus
-                    className="w-full px-3 py-3 border border-[#00f0ff] bg-transparent font-press text-xs text-[#00f0ff] focus:outline-none text-center uppercase shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+                    className="w-full px-3 py-3 border border-light bg-transparent font-press text-xs text-light focus:outline-none text-center uppercase shadow-[0_0_10px_rgb(var(--color-light)_/_0.2)] transition-colors duration-500"
                     placeholder="ENTER ID..."
                   />
                   <div className="flex gap-2">
-                    <button
-                      onClick={handleSaveName} 
-                      disabled={updateName?.isPending}
-                      className="flex-1 flex justify-center items-center gap-2 py-2 border border-[#00f0ff] bg-[#00f0ff]/10 text-[#00f0ff] hover:bg-[#00f0ff]/30 font-secondary text-[10px]"
-                    >
+                    <button onClick={handleSaveName} disabled={updateName?.isPending} className="flex-1 flex justify-center items-center gap-2 py-2 border border-light bg-light/10 text-light hover:bg-light/30 font-secondary text-[10px] transition-colors duration-500">
                       <Check size={14} /> {updateName?.isPending ? 'UPLINK...' : 'CONFIRM'}
                     </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="flex-1 flex justify-center items-center gap-2 py-2 border border-[#ff0055] bg-[#ff0055]/10 text-[#ff0055] hover:bg-[#ff0055]/30 font-secondary text-[10px]"
-                    >
+                    <button onClick={handleCancelEdit} className="flex-1 flex justify-center items-center gap-2 py-2 border border-accent bg-accent/10 text-accent hover:bg-accent/30 font-secondary text-[10px] transition-colors duration-500">
                       <X size={14} /> CANCEL
                     </button>
                   </div>
@@ -144,7 +157,11 @@ export default function ProfileMainTab() {
         </div>
 
         {/* --- KANAN: ACHIEVEMENTS --- */}
-        <Achievements themeBorder={themeBorder} />
+        <Achievements 
+          badges={MOCK_BADGES} 
+          selectedBadgeIds={selectedBadgeIds} 
+          onToggleBadge={handleToggleBadge} 
+        />
 
       </div>
     </div>

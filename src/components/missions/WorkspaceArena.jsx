@@ -15,7 +15,7 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
   const { useFriendsList } = useSocial();
   const { data: friends } = useFriendsList();
 
-  if (isLoading) return <div className="p-8 text-red-500 animate-pulse text-center tracking-widest text-xs font-primary">ESTABLISHING CONNECTION TO RAID INSTANCE...</div>;
+  if (isLoading) return <div className="p-8 text-accent animate-pulse text-center tracking-widest text-xs font-primary transition-colors duration-500">ESTABLISHING CONNECTION TO RAID INSTANCE...</div>;
   if (!raid) return null;
 
   const hpPercentage = (raid.boss.currentHp / raid.boss.maxHp) * 100;
@@ -39,22 +39,22 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
   };
 
   return (
-    <div className="p-6 md:p-8 border border-red-900/50 bg-primary shadow-[0_0_50px_rgba(255,0,85,0.1)] relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-red-600/10 blur-[100px] pointer-events-none" />
+    <div className="p-6 md:p-8 border border-accent/50 bg-primary shadow-[0_0_50px_rgb(var(--color-accent)_/_0.1)] relative overflow-hidden transition-colors duration-500">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-accent/10 blur-[100px] pointer-events-none transition-colors duration-500" />
 
       {/* 1. HEADER ARENA & BOSS HP BAR */}
       <div className="mb-10 text-center relative z-10">
-        <h2 className={`font-primary text-xl md:text-3xl tracking-[0.3em] uppercase mb-2 flex justify-center items-center gap-3 ${raid.boss.isDefeated ? 'text-green-500 line-through opacity-50' : 'text-accent'}`}>
+        <h2 className={`font-primary text-xl md:text-3xl tracking-[0.3em] uppercase mb-2 flex justify-center items-center gap-3 transition-colors duration-500 ${raid.boss.isDefeated ? 'text-green-500 line-through opacity-50' : 'text-accent'}`}>
           <ShieldAlert size={28} /> {monsterName || 'VOID LEVIATHAN'}
         </h2>
-        <p className="font-secondary text-gray-400 text-[10px] tracking-widest uppercase mb-6">
+        <p className="font-secondary text-light/70 text-[10px] tracking-widest uppercase mb-6 transition-colors duration-500">
           OPERATION: {workspaceName}
         </p>
 
         {/* BOSS HEALTH BAR */}
-        <div className="w-full max-w-2xl mx-auto bg-[#1a0505] h-6 md:h-8 border-2 border-red-900/50 relative overflow-hidden skew-x-[-10deg]">
+        <div className="w-full max-w-2xl mx-auto bg-secondary h-6 md:h-8 border-2 border-accent/50 relative overflow-hidden skew-x-[-10deg] transition-colors duration-500">
           <motion.div 
-            className="h-full bg-gradient-to-r from-red-800 to-accent"
+            className="h-full bg-gradient-to-r from-accent/50 to-accent"
             initial={{ width: "100%" }}
             animate={{ width: `${Math.max(0, hpPercentage)}%` }}
             transition={{ duration: 1, type: "spring" }}
@@ -69,8 +69,8 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
         
         {/* 2. DAFTAR TUGAS (CO-OP DIRECTIVES) */}
         <div className="md:col-span-2 space-y-4">
-          <div className="flex justify-between items-center border-b border-cyan-900/50 pb-2 mb-4">
-            <h3 className="font-primary text-cyan-400 text-xs tracking-widest flex items-center gap-2">
+          <div className="flex justify-between items-center border-b border-tertiary pb-2 mb-4 transition-colors duration-500">
+            <h3 className="font-primary text-accent text-xs tracking-widest flex items-center gap-2 transition-colors duration-500">
               <Crosshair size={14}/> CO-OP OBJECTIVES
             </h3>
           </div>
@@ -81,27 +81,27 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
               <input 
                 type="text" value={newTaskTitle} onChange={(e) => setNewTaskTitle(e.target.value)}
                 placeholder="LOAD NEW AMMUNITION (TASK)..." 
-                className="flex-1 bg-primary border border-light text-text font-secondary text-[10px] px-3 py-2 outline-none focus:border-cyan-500" 
+                className="flex-1 bg-primary border border-tertiary text-text font-secondary text-[10px] px-3 py-2 outline-none focus:border-accent transition-colors duration-500" 
               />
-              <button type="submit" disabled={addRaidObjective.isPending} className="px-4 bg-cyan-900/20 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white transition-colors">
+              <button type="submit" disabled={addRaidObjective.isPending} className="px-4 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-primary transition-colors duration-500">
                 <Plus size={16} />
               </button>
             </form>
           )}
           
           {raid.directives.length === 0 ? (
-            <p className="text-gray-500 font-secondary text-[10px] tracking-widest text-center py-8 border border-dashed border-light/40">
+            <p className="text-light/50 font-secondary text-[10px] tracking-widest text-center py-8 border border-dashed border-tertiary transition-colors duration-500">
               NO OBJECTIVES SET. THE MONSTER IS DORMANT.
             </p>
           ) : (
             <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
               {raid.directives.map((task) => (
-                <div key={task.id} className={`flex justify-between items-center p-3 border ${task.status === 'COMPLETED' ? 'border-gray-800 bg-primary/40' : 'border-light/50 bg-primary/80'}`}>
+                <div key={task.id} className={`flex justify-between items-center p-3 border transition-colors duration-500 ${task.status === 'COMPLETED' ? 'border-tertiary/50 bg-primary/40' : 'border-tertiary bg-secondary/80'}`}>
                   <div className="flex items-center gap-3">
-                    {task.status === 'COMPLETED' ? <CheckCircle className="text-green-500" size={16} /> : <CircleDashed className="text-gray-500" size={16} />}
+                    {task.status === 'COMPLETED' ? <CheckCircle className="text-green-500" size={16} /> : <CircleDashed className="text-light/50" size={16} />}
                     <div>
-                      <span className={`font-secondary text-sm block ${task.status === 'COMPLETED' ? 'text-gray-500 line-through' : 'text-light'}`}>{task.title}</span>
-                      <span className={`font-primary text-[8px] tracking-widest ${task.status === 'COMPLETED' ? 'text-gray-600' : 'text-orange-400'}`}>
+                      <span className={`font-secondary text-sm block transition-colors duration-500 ${task.status === 'COMPLETED' ? 'text-light/50 line-through' : 'text-text'}`}>{task.title}</span>
+                      <span className={`font-primary text-[8px] tracking-widest transition-colors duration-500 ${task.status === 'COMPLETED' ? 'text-light/40' : 'text-accent'}`}>
                         ATK PWR: {task.exp_reward || 100} DMG
                       </span>
                     </div>
@@ -110,7 +110,7 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
                     <button 
                       onClick={() => dealDamage.mutate(task.id)}
                       disabled={dealDamage.isPending}
-                      className="px-3 py-1.5 bg-accent/10 border border-accent/50 text-accent hover:bg-accent hover:text-white font-primary text-[8px] tracking-[0.2em] transition-colors"
+                      className="px-3 py-1.5 bg-accent/10 border border-accent/50 text-accent hover:bg-accent hover:text-primary font-primary text-[8px] tracking-[0.2em] transition-colors duration-500"
                     >
                       {dealDamage.isPending ? 'FIRING...' : 'DEAL DMG'}
                     </button>
@@ -123,29 +123,29 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
 
         {/* 3. PARTY MEMBERS & RECRUITMENT */}
         <div>
-          <h3 className="font-primary text-yellow-400 text-xs tracking-widest border-b border-yellow-900/50 pb-2 mb-4 flex items-center gap-2">
+          <h3 className="font-primary text-accent text-xs tracking-widest border-b border-tertiary pb-2 mb-4 flex items-center gap-2 transition-colors duration-500">
             <Swords size={14}/> RAID PARTY
           </h3>
           <div className="space-y-2 mb-6">
             {raid.members.map((member, i) => (
-              <div key={i} className="flex items-center gap-3 p-2 bg-primary/50 border border-yellow-900/30">
-                <div className="w-8 h-8 rounded-full bg-dark border border-yellow-600 overflow-hidden flex justify-center items-center">
-                   {member.avatar_url ? <img src={member.avatar_url} alt="avatar" /> : <span className="text-yellow-600 font-primary text-[10px]">{member.username?.charAt(0).toUpperCase()}</span>}
+              <div key={i} className="flex items-center gap-3 p-2 bg-secondary/50 border border-tertiary transition-colors duration-500">
+                <div className="w-8 h-8 rounded-full bg-primary border border-accent/50 overflow-hidden flex justify-center items-center transition-colors duration-500">
+                   {member.avatar_url ? <img src={member.avatar_url} alt="avatar" /> : <span className="text-accent font-primary text-[10px]">{member.username?.charAt(0).toUpperCase()}</span>}
                 </div>
-                <span className="font-secondary text-xs text-light tracking-wider">{member.username}</span>
+                <span className="font-secondary text-xs text-light tracking-wider transition-colors duration-500">{member.username}</span>
               </div>
             ))}
           </div>
 
           {/* Form Recruit Ally */}
           {!raid.boss.isDefeated && availableFriends.length > 0 && (
-            <div className="p-3 border border-dashed border-cyan-700/50 bg-cyan-900/10">
-              <label className="font-primary text-[8px] text-cyan-400 tracking-widest mb-2 block">RECRUIT ALLY FROM FRIENDLIST</label>
+            <div className="p-3 border border-dashed border-tertiary bg-secondary/30 transition-colors duration-500">
+              <label className="font-primary text-[8px] text-accent tracking-widest mb-2 block transition-colors duration-500">RECRUIT ALLY FROM FRIENDLIST</label>
               <div className="flex flex-col gap-2">
                 <select 
                   value={selectedFriend} 
                   onChange={(e) => setSelectedFriend(e.target.value)}
-                  className="w-full bg-primary border border-cyan-900 text-text font-secondary text-[10px] px-2 py-2 outline-none"
+                  className="w-full bg-primary border border-tertiary text-text font-secondary text-[10px] px-2 py-2 outline-none transition-colors duration-500"
                 >
                   <option value="">-- SELECT ALLY --</option>
                   {availableFriends.map(f => (
@@ -155,7 +155,7 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName }) => {
                 <button 
                   onClick={handleRecruit}
                   disabled={!selectedFriend || recruitAlly.isPending}
-                  className="w-full p-2 bg-cyan-900/30 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-dark font-primary text-[9px] tracking-widest transition-colors disabled:opacity-50"
+                  className="w-full p-2 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-primary font-primary text-[9px] tracking-widest transition-colors duration-500 disabled:opacity-50"
                 >
                   {recruitAlly.isPending ? 'TRANSMITTING...' : 'SEND INVITE'}
                 </button>

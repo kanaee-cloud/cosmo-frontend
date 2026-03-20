@@ -17,8 +17,8 @@ const Hero = () => {
 
                     {/* Left Content */}
                     <div className="flex flex-col gap-8 max-w-2xl lg:w-3/5 z-10">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 border border-accent/50 bg-accent/10 w-fit rounded-sm shadow-[0_0_10px_rgba(255,0,85,0.2)]">
-                            <span className="size-2 bg-accent rounded-full animate-ping shadow-[0_0_5px_rgba(255,0,85,0.8)]"></span>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 border border-accent/50 bg-accent/10 w-fit rounded-sm shadow-[0_0_10px_rgb(var(--color-accent)_/_0.2)]">
+                            <span className="size-2 bg-accent rounded-full animate-ping shadow-[0_0_5px_rgb(var(--color-accent)_/_0.8)]"></span>
                             <span className="text-accent text-[9px] tracking-widest uppercase font-press">System Online</span>
                         </div>
 
@@ -32,7 +32,7 @@ const Hero = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                            <button className="relative bg-accent px-8 py-3 text-white font-primary text-md tracking-wider hover:scale-105 transition-transform shadow-[0_0_10px_rgba(255,0,85,0.5),0_0_20px_rgba(255,0,85,0.3)] pixel-corners flex items-center justify-center gap-2 group">
+                            <button className="relative bg-accent px-8 py-3 text-white font-primary text-md tracking-wider hover:scale-105 transition-transform shadow-[0_0_10px_rgb(var(--color-accent)_/_0.5),0_0_20px_rgb(var(--color-accent)_/_0.3)] pixel-corners flex items-center justify-center gap-2 group">
                                 <span className="material-symbols-outlined group-hover:animate-bounce text-base">stadia_controller</span>
                                 START MISSION
                             </button>
@@ -70,7 +70,7 @@ const Hero = () => {
 
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                                 <div className="size-24 border border-white/30 rounded-full flex items-center justify-center">
-                                    <div className="size-1 bg-accent rounded-full drop-shadow-[0_0_4px_rgba(255,0,85,1)]"></div>
+                                    <div className="size-1 bg-accent rounded-full drop-shadow-[0_0_4px_rgb(var(--color-accent)_/_1)]"></div>
                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 w-0.5 h-2 bg-white/50"></div>
                                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1 w-0.5 h-2 bg-white/50"></div>
                                     <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-2 h-0.5 bg-white/50"></div>
@@ -80,7 +80,7 @@ const Hero = () => {
                             <div className="absolute top-3 right-3 p-2 border border-light bg-black/80 font-press text-[10px] text-light z-20 pixel-corners shadow-[0_0_8px_rgba(138,109,252,0.4)]">
                                 HUD: ACTIVE
                             </div>
-                            <div className="absolute bottom-4 left-4 p-2 border border-accent bg-black/80 font-press text-[10px] text-accent z-20 pixel-corners flex items-center gap-2 shadow-[0_0_8px_rgba(255,0,85,0.5)]">
+                            <div className="absolute bottom-4 left-4 p-2 border border-accent bg-black/80 font-press text-[10px] text-accent z-20 pixel-corners flex items-center gap-2 shadow-[0_0_8px_rgb(var(--color-accent)_/_0.5)]">
                                 <span className="material-symbols-outlined text-sm">warning</span>
                                 FUEL LOW
                             </div>

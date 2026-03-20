@@ -18,7 +18,7 @@ export default function Leaderboard() {
   }, []);
 
   return (
-    <div className="min-h-screen text-gray-200 p-4 md:p-8 selection:bg-[#ff0055] selection:text-white flex justify-center w-full">
+    <div className="min-h-screen text-text p-4 md:p-8 selection:bg-[#ff0055] selection:text-white flex justify-center w-full">
       <div className="w-full flex flex-col gap-6">
         
         {loading ? (
@@ -26,7 +26,7 @@ export default function Leaderboard() {
         ) : (
           <>
             {/* PANEL ATAS: Hero (Header + Podium) */}
-            <div className="relative border border-[#3b2b5a] bg-transparent pb-6">
+            <div className="relative border border-tertiary bg-transparent pb-6">
               <LeaderboardHeader matrixColor={matrixColor} />
               <LeaderboardHero top3={mockData.top3} />
               <LeaderboardFilters />

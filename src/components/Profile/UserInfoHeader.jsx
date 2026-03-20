@@ -1,26 +1,27 @@
 export const UserInfoHeader = ({ displayName, level, profile }) => {
   return (
-    <div className="border border-[#7a5299] bg-[#0a0514] p-4 flex items-center gap-4 shadow-[0_0_15px_rgba(122,82,153,0.15)] relative overflow-hidden">
+    <div className="border border-tertiary bg-secondary p-4 flex items-center gap-4 shadow-[0_0_15px_rgb(var(--color-tertiary)_/_0.15)] relative overflow-hidden transition-colors duration-500">
       {/* Scanline background */}
-      <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,240,255,0.02)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgb(var(--color-light)_/_0.02)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
       
       {/* Mini Avatar */}
-      <div className="w-12 h-12 border border-[#00f0ff] bg-[#07030e] flex items-center justify-center relative z-10 shadow-[0_0_8px_rgba(0,240,255,0.3)]">
+      <div className="w-12 h-12 border border-light bg-secondary flex items-center justify-center relative z-10 shadow-[0_0_8px_rgb(var(--color-light)_/_0.3)] transition-colors duration-500">
         {profile?.avatar_url ? (
           <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover mix-blend-screen opacity-90" />
         ) : (
-          <span className="font-press text-xl text-[#00f0ff]">
+          <span className="font-press text-xl text-light transition-colors duration-500">
             {displayName.charAt(0).toUpperCase()}
           </span>
         )}
       </div>
 
       <div className="relative z-10">
-        <h2 className="font-press text-sm text-white uppercase tracking-wider">{displayName}</h2>
+        <h2 className="font-press text-sm text-text uppercase tracking-wider transition-colors duration-500">{displayName}</h2>
         <div className="flex items-center gap-3 mt-2">
-          <p className="font-secondary text-[#00f0ff] text-[10px] tracking-widest">RANK/LEVEL: {level}</p>
-          <span className="text-[#3b2b5a]">|</span>
-          <p className="font-secondary text-[#06FFA5] text-[10px] tracking-widest">ACCESS: GRANTED</p>
+          <p className="font-secondary text-light text-[10px] tracking-widest transition-colors duration-500">RANK/LEVEL: {level}</p>
+          <span className="text-tertiary transition-colors duration-500">|</span>
+          {/* Warna hijau neon untuk pesan akses kita pakai green-400 dari tailwind */}
+          <p className="font-secondary text-green-400 text-[10px] tracking-widest">ACCESS: GRANTED</p>
         </div>
       </div>
     </div>

@@ -67,7 +67,6 @@ export const router = createBrowserRouter([
         ]
     },
 
-    // RUTE BARU UNTUK PROFIL
     {
         path: "/profile",
         element: (
