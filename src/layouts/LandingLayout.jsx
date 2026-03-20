@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import bgImage from '../assets/dashboard/bg-image.jpg'
-import bgLightImage from '../assets/dashboard/bg-light.png'
 import Footer from '../components/Footer'
 import { useThemeStore } from '../store/themeStore'
 
@@ -9,7 +8,7 @@ export const LandingLayout = () => {
     const { activeTheme } = useThemeStore();
     const isLightMode = activeTheme === 'zenith';
 
-    const currentBg = isLightMode ? bgLightImage : bgImage;
+    const currentBg = isLightMode ? bgImage : bgImage;
     const overlay = isLightMode ? 'rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)';
 
     return (
