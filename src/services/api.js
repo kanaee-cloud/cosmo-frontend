@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { toast } from '../hooks/useToast';
 
 const WORKER_URL = import.meta.env.VITE_WORKER_URL || 'http://localhost:3000/api';
 
@@ -31,7 +32,9 @@ export const api = {
     
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to generate quiz');
+      const errorMessage = errorData.message || 'Failed to generate quiz';
+      toast.error('Quiz Generation Error', errorMessage);
+      throw new Error(errorMessage);
     }
     
     return response.json();
@@ -48,7 +51,9 @@ export const api = {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to validate mission');
+        const errorMessage = errorData.message || 'Failed to validate mission';
+        toast.error('Mission Validation Error', errorMessage);
+        throw new Error(errorMessage);
     }
 
     return response.json();

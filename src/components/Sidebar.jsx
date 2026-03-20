@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Skull, Crown } from 'lucide-react';
+import { LayoutDashboard, Skull, Crown, ArrowLeft } from 'lucide-react';
+import CyberButton from './ui/CyberButton';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -54,6 +55,15 @@ const Sidebar = () => {
           <span className="font-primary text-[10px] tracking-widest mt-0.5">LEADERBOARD</span>
         </div>
       </Link>
+
+      <div className="mt-4 pt-4 border-t border-white/10">
+        <CyberButton 
+          to="/profile" 
+          text="PROFILE" 
+          subText="Return to" 
+          icon={ArrowLeft}
+        />
+      </div>
     </aside>
   );
 };

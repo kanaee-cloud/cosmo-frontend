@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
+import { toast } from '../hooks/useToast';
 
 export const useAuthStore = create((set) => ({
   session: null,
@@ -27,11 +28,16 @@ export const useAuthStore = create((set) => ({
   logout: async () => {
     await supabase.auth.signOut();
     set({ session: null, profile: null });
+    toast.info('Logged Out', 'Session ended successfully');
   },
 
   signIn: async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+    if (error) {
+        toast.error('Login Failed', error.message);
+        throw error;
+    }
+    toast.success('Welcome Back', 'Access granted to Cosmo Command');
   },
 
   signUp: async (email, password, username) => {
@@ -42,7 +48,11 @@ export const useAuthStore = create((set) => ({
         data: { user_name: username }
       }
     });
-    if (error) throw error;
+    if (error) {
+        toast.error('Registration Failed', error.message);
+        throw error;
+    }
+    toast.success('Registration Complete', 'Verification email sent to your inbox');
   },
 
   signInWithGoogle: async () => {
@@ -52,6 +62,9 @@ export const useAuthStore = create((set) => ({
         redirectTo: `${window.location.origin}/dashboard`
       }
     });
-    if (error) throw error;
+    if (error) {
+        toast.error('OAuth Error', error.message);
+        throw error;
+    }
   },
 }));

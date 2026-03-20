@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import bgImage from '../assets/dashboard/bg-image.jpg'
-import bgLightImage from '../assets/dashboard/bg-light.png'
 import Footer from '../components/Footer'
 import { useThemeStore } from '../store/themeStore'
 
