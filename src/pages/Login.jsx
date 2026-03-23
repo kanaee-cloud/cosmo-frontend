@@ -1,11 +1,37 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { LockKeyhole, Zap, Fingerprint } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useLoginLogic } from '../hooks/useAuth';
+import { useToastStore } from '../hooks/useToast';
+import { SuccessModal } from '../components/modals';
 
 const Login = () => {
+    const navigate = useNavigate();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const { success, error } = useToastStore();
     const { loginMutation, initialValues, validationSchema, onSubmit, signInWithGoogle } = useLoginLogic();
+
+    // Show success modal when mutation succeeds
+    useEffect(() => {
+        if (loginMutation.isSuccess) {
+            setShowSuccessModal(true);
+            success('COMMUNICATION ESTABLISHED', 'Authentikasi berhasil. Menghubungkan ke mainframe...');
+            // Auto-navigate after success modal closes
+            const timer = setTimeout(() => {
+                navigate('/dashboard');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [loginMutation.isSuccess, navigate, success]);
+
+    // Show error toast on login failure
+    useEffect(() => {
+        if (loginMutation.isError) {
+            error('AUTHENTICATION FAILED', 'Kredensial tidak valid. Periksa kembali data Anda.');
+        }
+    }, [loginMutation.isError, error]);
 
     return (
         <motion.div
@@ -94,6 +120,14 @@ const Login = () => {
                     </p>
                 </div>
             </motion.div>
+
+            {/* Success Modal */}
+            <SuccessModal
+                isOpen={showSuccessModal}
+                title="COMMUNICATION ESTABLISHED"
+                message="Authentikasi berhasil. Menghubungkan ke mainframe..."
+                onClose={() => setShowSuccessModal(false)}
+            />
         </motion.div>
     );
 };

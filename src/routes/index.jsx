@@ -12,6 +12,7 @@ import Leaderboard from "../pages/Leaderboard";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
+import Profil from "../pages/Profil";
 
 // Komponen Tab Baru untuk Profil
 import ProfileMainTab from "../components/Profile/profile/ProfileMainTab";

@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore'; 
 import { router } from './routes';
+import { useToastStore } from './hooks/useToast';
+import ToastContainer from './components/toast/ToastContainer';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +17,7 @@ const queryClient = new QueryClient({
 
 function App() {
   const { initialize, isInitializing } = useAuthStore();
+  const { toasts, removeToast } = useToastStore();
   
   const activeTheme = useThemeStore((state) => state.activeTheme);
   const matrixColor = useThemeStore((state) => state.matrixColor);
@@ -59,6 +62,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </QueryClientProvider>
   );
 }

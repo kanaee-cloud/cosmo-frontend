@@ -1,47 +1,68 @@
 import React, { useState } from 'react';
-import { Share, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { Clock, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useProfileSettings } from '../../hooks/useProfileSettings';
 
 export const LogPanel = ({ directives, activeDirective, setActiveDirective }) => {
   const [filter, setFilter] = useState('ALL');
+  
+  // 1. Tarik Data Nyata Kapten
+  const { level, currentExp } = useProfileSettings();
 
+  // 2. Filter Direktif
   const filteredDirectives = directives?.filter(directive => {
     if (filter === 'ALL') return true;
-    if (filter === 'PENDING') return directive.status !== 'DONE' && directive.status !== 'IN_PROGRESS';
+    if (filter === 'PENDING') return directive.status !== 'DONE' && directive.status !== 'IN_PROGRESS' && directive.status !== 'COMPLETED';
     if (filter === 'IN_PROGRESS') return directive.status === 'IN_PROGRESS';
-    if (filter === 'COMPLETED') return directive.status === 'DONE';
+    if (filter === 'COMPLETED') return directive.status === 'DONE' || directive.status === 'COMPLETED';
     return true;
   }) || [];
+
+  // 3. Kalkulasi Metrik Dinamis
+  const totalDirectives = directives?.length || 0;
+  const completedDirectives = directives?.filter(d => d.status === 'DONE' || d.status === 'COMPLETED').length || 0;
+  
+  // Readiness = Persentase misi yang diselesaikan (Max 100%)
+  const readiness = totalDirectives === 0 ? 100 : Math.round((completedDirectives / totalDirectives) * 100);
+  
+  // Proficiency = Tergantung Level Kapten
+  const proficiency = level >= 20 ? 'S-RANK' : level >= 10 ? 'A-RANK' : level >= 5 ? 'B-RANK' : 'C-RANK';
+  
+  // Radius = Meluas berdasarkan Level
+  const energyRadius = level ? (level * 42.5).toFixed(1) : '0.0';
+
+  // Morale = Tergantung Readiness (Persentase penyelesaian misi)
+  const morale = readiness >= 80 ? 'EUPHORIC' : readiness >= 50 ? 'STEADY' : 'CRITICAL';
+  const moraleColor = readiness >= 80 ? 'text-green-400' : readiness >= 50 ? 'text-yellow-400' : 'text-red-400';
 
   return (
     <div className="xl:col-span-5 flex flex-col gap-6">
       
-      {/* STATS GRID */}
+      {/* STATS GRID (DINAMIS) */}
       <div className="grid grid-cols-2 gap-4">
-        {/* Menggunakan bg-secondary dan border-tertiary */}
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">FLEET READINESS</div>
-          <div className="font-primary text-accent text-sm md:text-base tracking-widest">92%</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">{readiness}%</div>
         </div>
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">COMBAT PROFICIENCY</div>
-          <div className="font-primary text-accent text-sm md:text-base tracking-widest">S-RANK</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">{proficiency}</div>
         </div>
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">TACTICAL EXPERIENCE</div>
-          <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">MAX</div>
+          <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">{currentExp} FC</div>
         </div>
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">ENERGY RADIUS</div>
-          <div className="font-primary text-accent text-sm md:text-base tracking-widest">420.5 LY</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">{energyRadius} LY</div>
         </div>
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">QUANTUM SYNC</div>
-          <div className="font-primary text-accent text-sm md:text-base tracking-widest">ACTIVE</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">STABLE</div>
         </div>
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">FLEET MORALE</div>
-          <div className="font-primary text-green-400 text-sm md:text-base tracking-widest">EUPHORIC</div>
+          <div className={`font-primary text-sm md:text-base tracking-widest ${moraleColor}`}>{morale}</div>
         </div>
       </div>
 
@@ -85,11 +106,10 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
                             animate={{ opacity: 1, x: 0 }}
                             whileHover={{ x: 5 }}
                             onClick={() => setActiveDirective(directive)}
-                            // Hover effect diatur via Tailwind dengan bg-accent/5
                             className="w-full flex items-center justify-between p-3 border border-tertiary hover:border-accent/50 hover:bg-accent/5 cursor-pointer transition-all group"
                         >
                             <div className="flex flex-col gap-1 items-start">
-                                {/* Title warna warni sesuai priority, yang STANDARD ikut warna accent tema */}
+                                {/* Title warna warni sesuai priority */}
                                 <span className={`font-primary text-[10px] tracking-widest ${directive.priority === 'CRITICAL' ? 'text-red-400' : directive.priority === 'ELEVATED' ? 'text-yellow-400' : 'text-accent'}`}>
                                     {directive.title}
                                 </span>
@@ -101,7 +121,7 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
                             </div>
 
                             <div className="flex items-center gap-2">
-                                {directive.status === 'DONE' ? (
+                                {directive.status === 'DONE' || directive.status === 'COMPLETED' ? (
                                     <span className="flex items-center gap-1 font-primary text-[9px] text-green-500 border border-green-900 bg-green-900/10 px-2 py-1">
                                         <CheckCircle size={10} /> COMPLETED
                                     </span>

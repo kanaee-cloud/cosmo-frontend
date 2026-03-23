@@ -27,7 +27,7 @@ export default function Profile() {
   }, [profile]);
 
   return (
-    <div className="min-h-screen w-full p-4 md:p-6 flex justify-center items-start bg-primary text-text">
+    <div className="min-h-screen w-full font-primary p-4 md:p-6 flex justify-center items-start bg-primary text-text">
       
       <motion.div 
         className="w-full relative z-10"
@@ -57,10 +57,6 @@ export default function Profile() {
             {/* AREA KONTEN UTAMA */}
             <div className="flex-1 w-full min-w-0 h-full">
               
-              {/* OUTLET menggantikan activeTab.
-                Komponen akan otomatis dirender berdasarkan URL (cth: /profile/account)
-                Kita gunakan 'context' untuk mengirim data ke komponen anak
-              */}
               <Outlet context={{
                 profile, displayName, setDisplayName, level, currentExp,
                 lastLogin, accountCreated, themeBorder, themeBg, updateName
