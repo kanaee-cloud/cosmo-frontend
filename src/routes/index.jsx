@@ -21,6 +21,7 @@ import Pomodoro from "../pages/Pomodoro";
 import ProfileMainTab from "../components/Profile/profile/ProfileMainTab";
 import PrivacyTab from "../components/Profile/privacy/PrivacyTab";
 import ColorPresets from "../components/Profile/presets/ColorPresets";
+import Forum from "../pages/Forum";
 
 export const router = createBrowserRouter([
     {
@@ -70,6 +71,7 @@ export const router = createBrowserRouter([
             { path: "leaderboard", element: <Leaderboard /> },
             // Menambahkan route Pomodoro di dalam Dashboard
             { path: "pomodoro", element: <Pomodoro /> },
+            { path: "forum", element: <Forum /> },
         ]
     },
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Skull, Crown, ArrowLeft, Timer } from 'lucide-react'; 
+import { LayoutDashboard, Skull, Crown, ArrowLeft, Timer, MessageCirclePlus } from 'lucide-react'; 
 import CyberButton from './ui/CyberButton';
 
 const Sidebar = () => {
@@ -58,6 +58,14 @@ const Sidebar = () => {
         >
           <Timer size={18} />
           <span className="font-primary text-[10px] tracking-widest mt-0.5">POMODORO</span>
+        </div>
+      </Link>
+      <Link to="/dashboard/forum">
+        <div 
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/forum')}`}
+        >
+          <MessageCirclePlus  size={18} />
+          <span className="font-primary text-[10px] tracking-widest mt-0.5">FORUM</span>
         </div>
       </Link>
 

@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { Clock, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProfileSettings } from '../../hooks/useProfileSettings';
+import { usePomodoro } from '../../hooks/usePomodoro'; // Import Hook Pomodoro
 
 export const LogPanel = ({ directives, activeDirective, setActiveDirective }) => {
   const [filter, setFilter] = useState('ALL');
   
   // 1. Tarik Data Nyata Kapten
   const { level, currentExp } = useProfileSettings();
+
+  // Tarik Data Statistik Pomodoro
+  const { usePomodoroStats } = usePomodoro();
+  const { data: pomodoroStats } = usePomodoroStats();
+  const focusHours = pomodoroStats?.totalHours || '0.0';
 
   // 2. Filter Direktif
   const filteredDirectives = directives?.filter(directive => {
@@ -56,10 +62,13 @@ export const LogPanel = ({ directives, activeDirective, setActiveDirective }) =>
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">ENERGY RADIUS</div>
           <div className="font-primary text-accent text-sm md:text-base tracking-widest">{energyRadius} LY</div>
         </div>
+        
+        {/* QUANTUM SYNC diganti menjadi TOTAL FOCUS TIME */}
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
-          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">QUANTUM SYNC</div>
-          <div className="font-primary text-accent text-sm md:text-base tracking-widest">STABLE</div>
+          <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">TOTAL FOCUS TIME</div>
+          <div className="font-primary text-accent text-sm md:text-base tracking-widest">{focusHours} HR</div>
         </div>
+        
         <div className="border border-tertiary bg-secondary p-4 text-center transition-colors duration-500">
           <div className="font-secondary text-light/70 text-[8px] tracking-[0.2em] mb-1">FLEET MORALE</div>
           <div className={`font-primary text-sm md:text-base tracking-widest ${moraleColor}`}>{morale}</div>

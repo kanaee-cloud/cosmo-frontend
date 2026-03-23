@@ -1,6 +1,7 @@
 import React from 'react';
-import { Zap } from 'lucide-react';
+import { Zap, Activity } from 'lucide-react';
 import { useChronoCore } from '../hooks/useChronoCore';
+import { usePomodoro } from '../hooks/usePomodoro'; // Import Hook Supabase
 import TimerModal from '../components/modals/TimerModal';
 import PreFlightCheckModal from '../components/Pomodoro/PreFlightCheckModal';
 import TimerHUD from '../components/Pomodoro/TimerHUD';
@@ -9,6 +10,8 @@ import ActionPanel from '../components/Pomodoro/ActionPanel';
 
 export default function Pomodoro() {
   const core = useChronoCore();
+  const { usePomodoroStats } = usePomodoro();
+  const { data: stats } = usePomodoroStats(); // Tarik data Analitik
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center min-h-[80vh] p-4 relative overflow-hidden">
@@ -17,6 +20,15 @@ export default function Pomodoro() {
       <div className={`absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 blur-[120px] rounded-full pointer-events-none transition-colors duration-1000 ${
         core.currentPhase === 'break' ? 'bg-light/10' : (core.isRunning ? 'bg-accent/20' : 'bg-accent/5')
       }`}></div>
+
+      {/* Analytics Panel (Pojok Kiri Atas) */}
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 border border-tertiary bg-secondary/80 backdrop-blur-sm p-3 hidden md:flex items-center gap-3 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+         <Activity size={16} className="text-accent" />
+         <div>
+            <div className="font-secondary text-[8px] text-light/50 tracking-widest uppercase">TOTAL FOCUS TIME</div>
+            <div className="font-primary text-xs text-accent tracking-widest">{stats?.totalHours || '0.0'} HOURS</div>
+         </div>
+      </div>
 
       {/* Pop-up Reward Notification */}
       {core.rewardMessage && (

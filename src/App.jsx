@@ -16,7 +16,8 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { initialize, isInitializing } = useAuthStore();
+  const initialize = useAuthStore((state) => state.initialize);
+  const isInitializing = useAuthStore((state) => state.isInitializing);
   const { toasts, removeToast } = useToastStore();
   
   const activeTheme = useThemeStore((state) => state.activeTheme);

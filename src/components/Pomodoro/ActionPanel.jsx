@@ -15,7 +15,7 @@ export default function ActionPanel({ core }) {
         <button 
           onClick={currentPhase === 'break' ? undefined : toggleTimer}
           disabled={currentPhase === 'break'} // TOMBOL DIMATIKAN SAAT COOLING
-          className={`flex-1 border-2 font-press uppercase tracking-widest text-sm md:text-base py-6 transition-all duration-500 flex items-center justify-center gap-3 relative overflow-hidden group ${
+          className={`flex-1 border-2 font-primary uppercase tracking-widest text-sm md:text-base py-6 transition-all duration-500 flex items-center justify-center gap-3 relative overflow-hidden group ${
             currentPhase === 'break'
               ? 'border-light/30 bg-light/10 text-light cursor-not-allowed opacity-80' // Visual saat dimatikan
               : 'border-accent bg-accent/5 text-accent hover:bg-accent/20 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_20px_rgb(var(--color-accent)_/_0.2)]'
