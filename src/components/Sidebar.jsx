@@ -1,16 +1,14 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Skull, Crown, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, Skull, Crown, ArrowLeft, Timer } from 'lucide-react'; 
 import CyberButton from './ui/CyberButton';
 
 const Sidebar = () => {
   const location = useLocation();
 
-  // Mengubah dari inline style menjadi semantic Tailwind classes
   const getNavLinkClass = (path) => {
     let isActive = location.pathname === path;
     
-    // Logic deteksi rute aktif
     if (path === '/profile') {
       isActive = isActive || location.pathname === '/dashboard/profile' || location.pathname.startsWith('/profile');
     }
@@ -18,12 +16,10 @@ const Sidebar = () => {
       isActive = isActive || location.pathname === '/dashboard' || location.pathname === '/dashboard/home';
     }
 
-    // Jika aktif: border dan teks menyala terang (Accent) dengan efek shadow
     if (isActive) {
       return `border-accent bg-accent/10 text-accent shadow-[0_0_15px_rgb(var(--color-accent)_/_0.2)]`;
     }
     
-    // Jika tidak aktif: warna redup (Tertiary/Light), menyala saat di-hover
     return `border-tertiary bg-secondary/50 text-light/70 hover:border-accent hover:text-accent`;
   };
 
@@ -53,6 +49,15 @@ const Sidebar = () => {
         >
           <Crown size={18} />
           <span className="font-primary text-[10px] tracking-widest mt-0.5">LEADERBOARD</span>
+        </div>
+      </Link>
+
+      <Link to="/dashboard/pomodoro">
+        <div 
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/pomodoro')}`}
+        >
+          <Timer size={18} />
+          <span className="font-primary text-[10px] tracking-widest mt-0.5">POMODORO</span>
         </div>
       </Link>
 

@@ -14,6 +14,9 @@ import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Profil from "../pages/Profil";
 
+// Import halaman Pomodoro baru
+import Pomodoro from "../pages/Pomodoro";
+
 // Komponen Tab Baru untuk Profil
 import ProfileMainTab from "../components/Profile/profile/ProfileMainTab";
 import PrivacyTab from "../components/Profile/privacy/PrivacyTab";
@@ -65,6 +68,8 @@ export const router = createBrowserRouter([
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> },
             { path: "leaderboard", element: <Leaderboard /> },
+            // Menambahkan route Pomodoro di dalam Dashboard
+            { path: "pomodoro", element: <Pomodoro /> },
         ]
     },
 
