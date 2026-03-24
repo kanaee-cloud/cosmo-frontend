@@ -1,11 +1,37 @@
+import React from 'react';
+import { 
+  Star, 
+  BatteryCharging, 
+  Flame,
+  Bot, 
+  BrainCircuit, 
+  Cpu, 
+  Ghost, 
+  Skull, 
+  User 
+} from 'lucide-react';
+
+// Map untuk menerjemahkan ID dari AvatarUploader kembali menjadi komponen Ikon
+const AVATAR_MAP = {
+  bot: Bot,
+  brain: BrainCircuit,
+  cpu: Cpu,
+  ghost: Ghost,
+  skull: Skull,
+  user: User
+};
+
 export const ProfileDetailsCard = ({
-  currentAvatar = '🤖', 
+  currentAvatar = 'user', // Default disesuaikan ke ID
   displayName,
   level = 1,
   currentExp = 0,
   displayBadges = []
 }) => {
   const isImageUrl = currentAvatar.startsWith('http');
+  
+  // Menentukan ikon avatar jika menggunakan preset dari Avatar Matrix
+  const AvatarIcon = AVATAR_MAP[currentAvatar];
 
   return (
     <div className="p-4 md:p-5 flex flex-col relative border-b border-tertiary transition-colors duration-500">
@@ -22,7 +48,15 @@ export const ProfileDetailsCard = ({
           >
             {isImageUrl ? (
               <img src={currentAvatar} alt="Avatar" className="w-full h-full object-cover mix-blend-screen opacity-90" />
+            ) : AvatarIcon ? (
+              // Render Ikon Lucide jika ID cocok dengan AVATAR_MAP
+              <AvatarIcon 
+                size={48} 
+                strokeWidth={1.5}
+                className="text-light hover:animate-pulse transition-all duration-500 drop-shadow-[0_0_10px_rgb(var(--color-light)_/_0.7)]" 
+              />
             ) : (
+              // Fallback jika tidak ada gambar dan ID tidak dikenali
               <span className="font-secondary text-5xl text-light hover:animate-pulse transition-all duration-500 drop-shadow-[0_0_10px_rgb(var(--color-light)_/_0.7)]">
                 {currentAvatar}
               </span>
@@ -38,8 +72,8 @@ export const ProfileDetailsCard = ({
         <div className="flex flex-col gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              {/* Bintang emas standar, level info */}
-              <span className="text-yellow-400 text-sm">⭐</span>
+              {/* Ikon Level */}
+              <Star size={14} className="text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.6)]" fill="currentColor" />
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">LEVEL</span>
             </div>
             <div className="font-press text-[10px] md:text-xs text-light tracking-wider ml-6 transition-colors duration-500">
@@ -49,7 +83,8 @@ export const ProfileDetailsCard = ({
 
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-accent text-sm transition-colors duration-500">🛢️</span>
+              {/* Ikon XP Pool */}
+              <BatteryCharging size={14} className="text-accent drop-shadow-[0_0_5px_currentColor]" />
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">XP POOL</span>
             </div>
             <div className="font-press text-[10px] md:text-xs text-light tracking-wider ml-6 transition-colors duration-500">
@@ -59,7 +94,8 @@ export const ProfileDetailsCard = ({
 
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-orange-500 text-sm">🔥</span>
+              {/* Ikon Warp Streak */}
+              <Flame size={14} className="text-orange-500 drop-shadow-[0_0_5px_rgba(249,115,22,0.6)]" />
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">WARP STREAK</span>
             </div>
             <div className="font-press text-[10px] md:text-xs text-orange-500 tracking-wider ml-6">

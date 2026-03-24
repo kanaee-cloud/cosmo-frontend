@@ -22,6 +22,8 @@ import ProfileMainTab from "../components/Profile/profile/ProfileMainTab";
 import PrivacyTab from "../components/Profile/privacy/PrivacyTab";
 import ColorPresets from "../components/Profile/presets/ColorPresets";
 import Forum from "../pages/Forum";
+import AuthenticationPage from "../pages/AuthenticationPage";
+import AchievementsPage from "../pages/AchievementsPage";
 
 export const router = createBrowserRouter([
     {
@@ -31,7 +33,8 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 element: <Landing />
-            }
+            },
+
         ]
     },
     {
@@ -39,21 +42,21 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/login",
-                element: 
-                (
-                  <PublicRoute>
-                    <Login />
-                  </PublicRoute>
-                )
+                element:
+                    (
+                        <PublicRoute>
+                            <Login />
+                        </PublicRoute>
+                    )
             },
             {
                 path: "/register",
-                element: 
-                (
-                  <PublicRoute>
-                    <Register />
-                  </PublicRoute>
-                )
+                element:
+                    (
+                        <PublicRoute>
+                            <Register />
+                        </PublicRoute>
+                    )
             }
         ]
     },
@@ -69,9 +72,9 @@ export const router = createBrowserRouter([
             { path: "home", element: <Home /> },
             { path: "raid-deck", element: <RaidDeck /> },
             { path: "leaderboard", element: <Leaderboard /> },
-            // Menambahkan route Pomodoro di dalam Dashboard
             { path: "pomodoro", element: <Pomodoro /> },
             { path: "forum", element: <Forum /> },
+            { path: "achievements", element: <AchievementsPage /> },
         ]
     },
 
@@ -87,11 +90,15 @@ export const router = createBrowserRouter([
             { index: true, element: <Navigate to="account" replace /> },
             { path: "account", element: <ProfileMainTab /> },
             { path: "privacy", element: <PrivacyTab /> },
-            { path: "color-presets", element: <ColorPresets /> }
+            { path: "color-presets", element: <ColorPresets /> },
         ]
     },
     {
         path: "*",
         element: <NotFound />
+    },
+    {
+        path: "/success",
+        element: <AuthenticationPage />
     }
 ]);

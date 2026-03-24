@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Check, X, Edit2 } from 'lucide-react';
+import { Check, X, Edit2, Shield, Rocket, Radar, Crown, Lock } from 'lucide-react';
 
 import { ProfileDetailsCard } from './ProfileDetailsCard';
 import { OperatorStatus } from './OperatorStatus';
@@ -8,16 +8,17 @@ import { AccessLog } from './AccessLog';
 import AvatarUploader from './AvatarUploader';
 import Achievements from './Achievements';
 
+// MOCK DATA: Diganti menggunakan komponen Lucide React
 const MOCK_BADGES = [
-  { id: 1, icon: '🛡️', name: 'DEFENDER', locked: false },
-  { id: 2, icon: '🚀', name: 'SPEEDSTER', locked: false },
-  { id: 3, icon: '🛸', name: 'UFO HUNTER', locked: false },
-  { id: 4, icon: '👑', name: 'SUPREME', locked: false },
-  { id: 5, icon: '?', name: 'LOCKED', locked: true },
-  { id: 6, icon: '?', name: 'LOCKED', locked: true },
-  { id: 7, icon: '?', name: 'LOCKED', locked: true },
-  { id: 8, icon: '?', name: 'LOCKED', locked: true },
-  { id: 9, icon: '?', name: 'LOCKED', locked: true },
+  { id: 1, icon: <Shield size={20} />, name: 'DEFENDER', locked: false },
+  { id: 2, icon: <Rocket size={20} />, name: 'SPEEDSTER', locked: false },
+  { id: 3, icon: <Radar size={20} />, name: 'UFO HUNTER', locked: false },
+  { id: 4, icon: <Crown size={20} />, name: 'SUPREME', locked: false },
+  { id: 5, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
+  { id: 6, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
+  { id: 7, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
+  { id: 8, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
+  { id: 9, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
 ];
 
 export default function ProfileMainTab() {
@@ -29,7 +30,7 @@ export default function ProfileMainTab() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(displayName);
   const [selectedBadgeIds, setSelectedBadgeIds] = useState([1, 2, 3]);
-  const [currentAvatar, setCurrentAvatar] = useState(profile?.avatar_url || '🤖');
+  const [currentAvatar, setCurrentAvatar] = useState(profile?.avatar_url || 'bot');
 
   const handleSelectAvatar = (newAvatar) => {
     setCurrentAvatar(newAvatar);

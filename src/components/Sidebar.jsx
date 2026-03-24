@@ -68,6 +68,15 @@ const Sidebar = () => {
           <span className="font-primary text-[10px] tracking-widest mt-0.5">FORUM</span>
         </div>
       </Link>
+      
+      <Link to="/dashboard/achievements">
+        <div 
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/achievements')}`}
+        >
+          <Crown  size={18} />
+          <span className="font-primary text-[10px] tracking-widest mt-0.5">ACHIEVEMENTS</span>
+        </div>
+      </Link>
 
       <div className="mt-4 pt-4 border-t border-white/10">
         <CyberButton 
