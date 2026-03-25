@@ -14,16 +14,18 @@ import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Profil from "../pages/Profil";
 
-// Import halaman Pomodoro baru
+// Import halaman
 import Pomodoro from "../pages/Pomodoro";
+import Forum from "../pages/Forum";
+import AuthenticationPage from "../pages/AuthenticationPage";
+import AchievementsPage from "../pages/AchievementsPage";
+import Matriks from "../pages/Matriks"; // <-- IMPORT MATRIKS BARU
 
 // Komponen Tab Baru untuk Profil
 import ProfileMainTab from "../components/Profile/profile/ProfileMainTab";
 import PrivacyTab from "../components/Profile/privacy/PrivacyTab";
 import ColorPresets from "../components/Profile/presets/ColorPresets";
-import Forum from "../pages/Forum";
-import AuthenticationPage from "../pages/AuthenticationPage";
-import AchievementsPage from "../pages/AchievementsPage";
+
 
 export const router = createBrowserRouter([
     {
@@ -34,7 +36,6 @@ export const router = createBrowserRouter([
                 index: true,
                 element: <Landing />
             },
-
         ]
     },
     {
@@ -42,21 +43,19 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/login",
-                element:
-                    (
-                        <PublicRoute>
-                            <Login />
-                        </PublicRoute>
-                    )
+                element: (
+                    <PublicRoute>
+                        <Login />
+                    </PublicRoute>
+                )
             },
             {
                 path: "/register",
-                element:
-                    (
-                        <PublicRoute>
-                            <Register />
-                        </PublicRoute>
-                    )
+                element: (
+                    <PublicRoute>
+                        <Register />
+                    </PublicRoute>
+                )
             }
         ]
     },
@@ -75,9 +74,9 @@ export const router = createBrowserRouter([
             { path: "pomodoro", element: <Pomodoro /> },
             { path: "forum", element: <Forum /> },
             { path: "achievements", element: <AchievementsPage /> },
+            { path: "matriks", element: <Matriks /> }, // <-- ROUTE MATRIKS BARU
         ]
     },
-
     {
         path: "/profile",
         element: (
@@ -86,7 +85,6 @@ export const router = createBrowserRouter([
             </ProtectedRoute>
         ),
         children: [
-            // Redirect otomatis saat user mengakses "/profile" langsung
             { index: true, element: <Navigate to="account" replace /> },
             { path: "account", element: <ProfileMainTab /> },
             { path: "privacy", element: <PrivacyTab /> },

@@ -81,7 +81,7 @@ export default function CreatePostModal({ onClose, currentCategory }) {
                 placeholder="ENTER SUBJECT..."
                 maxLength={100}
                 autoFocus
-                className="w-full bg-primary/50 border border-tertiary focus:border-accent p-3 font-secondary text-sm text-white outline-none transition-colors"
+                className="w-full bg-primary/50 border border-tertiary focus:border-accent p-3 font-secondary text-sm text-white outline-none transition-colors duration-300 ease-in-out"
               />
             </div>
 
@@ -96,7 +96,8 @@ export default function CreatePostModal({ onClose, currentCategory }) {
                     key={cat}
                     type="button"
                     onClick={() => setCategory(cat)}
-                    className={`p-3 border font-primary text-[10px] tracking-widest transition-all ${
+                    // PERUBAHAN DI SINI: duration-300 ease-in-out
+                    className={`p-3 border font-primary text-[10px] tracking-widest transition-all duration-300 ease-in-out ${
                       category === cat
                         ? 'border-accent bg-accent/20 text-accent shadow-[0_0_10px_rgba(6,255,165,0.2)]'
                         : 'border-tertiary/50 bg-primary/30 text-light/50 hover:border-accent/50 hover:text-light'
@@ -117,7 +118,7 @@ export default function CreatePostModal({ onClose, currentCategory }) {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="WRITE YOUR MESSAGE HERE..."
-                className="w-full bg-primary/50 border border-tertiary focus:border-accent p-4 font-secondary text-sm text-white outline-none resize-none h-40 custom-scrollbar transition-colors"
+                className="w-full bg-primary/50 border border-tertiary focus:border-accent p-4 font-secondary text-sm text-white outline-none resize-none h-40 custom-scrollbar transition-colors duration-300 ease-in-out"
               />
             </div>
 
@@ -126,14 +127,14 @@ export default function CreatePostModal({ onClose, currentCategory }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 border border-gray-600 text-gray-400 hover:bg-gray-800 hover:text-white font-primary text-[10px] tracking-widest transition-colors"
+                className="px-6 py-3 border border-gray-600 text-gray-400 hover:bg-gray-800 hover:text-white font-primary text-[10px] tracking-widest transition-colors duration-300 ease-in-out"
               >
                 ABORT
               </button>
               <button
                 type="submit"
                 disabled={createPost.isPending || !title.trim() || !content.trim()}
-                className="px-8 py-3 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-[#0a0a1a] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-primary text-[10px] tracking-[0.2em] shadow-[0_0_15px_rgba(6,255,165,0.2)] hover:shadow-[0_0_25px_rgba(6,255,165,0.5)]"
+                className="px-8 py-3 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-[#0a0a1a] transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-primary text-[10px] tracking-[0.2em] shadow-[0_0_15px_rgba(6,255,165,0.2)] hover:shadow-[0_0_25px_rgba(6,255,165,0.5)]"
               >
                 <Send size={14} />
                 {createPost.isPending ? 'BROADCASTING...' : 'BROADCAST'}

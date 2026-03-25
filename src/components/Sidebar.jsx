@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Skull, Crown, ArrowLeft, Timer, MessageCirclePlus } from 'lucide-react'; 
+// IMPORT ICON "Grid" UNTUK MATRIKS
+import { LayoutDashboard, Skull, Crown, ArrowLeft, Timer, MessageCirclePlus, Grid } from 'lucide-react'; 
 import CyberButton from './ui/CyberButton';
 
 const Sidebar = () => {
@@ -52,6 +53,16 @@ const Sidebar = () => {
         </div>
       </Link>
 
+      {/* --- TOMBOL MATRIKS BARU --- */}
+      <Link to="/dashboard/matriks">
+        <div 
+          className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/matriks')}`}
+        >
+          <Grid size={18} />
+          <span className="font-primary text-[10px] tracking-widest mt-0.5">MATRIX</span>
+        </div>
+      </Link>
+
       <Link to="/dashboard/pomodoro">
         <div 
           className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/pomodoro')}`}
@@ -60,6 +71,7 @@ const Sidebar = () => {
           <span className="font-primary text-[10px] tracking-widest mt-0.5">POMODORO</span>
         </div>
       </Link>
+      
       <Link to="/dashboard/forum">
         <div 
           className={`flex items-center gap-3 p-4 border transition-all duration-300 hover:brightness-125 ${getNavLinkClass('/dashboard/forum')}`}
