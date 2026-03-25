@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Icons from 'lucide-react'; // 1. Import seluruh icon Lucide
 import { 
   Star, 
   BatteryCharging, 
@@ -11,7 +12,6 @@ import {
   User 
 } from 'lucide-react';
 
-// Map untuk menerjemahkan ID dari AvatarUploader kembali menjadi komponen Ikon
 const AVATAR_MAP = {
   bot: Bot,
   brain: BrainCircuit,
@@ -22,16 +22,21 @@ const AVATAR_MAP = {
 };
 
 export const ProfileDetailsCard = ({
-  currentAvatar = 'user', // Default disesuaikan ke ID
+  currentAvatar = 'user',
   displayName,
   level = 1,
   currentExp = 0,
   displayBadges = []
 }) => {
   const isImageUrl = currentAvatar.startsWith('http');
-  
-  // Menentukan ikon avatar jika menggunakan preset dari Avatar Matrix
   const AvatarIcon = AVATAR_MAP[currentAvatar];
+
+  // 2. Fungsi Pembantu: Merender Ikon Dinamis dari String (icon_name)
+  const renderBadgeIcon = (iconName) => {
+    // Cari ikon di library Lucide berdasarkan namanya. Jika tidak ketemu, pakai HelpCircle
+    const IconComponent = Icons[iconName] || Icons.HelpCircle; 
+    return <IconComponent size={20} className="text-accent drop-shadow-[0_0_5px_currentColor]" />;
+  };
 
   return (
     <div className="p-4 md:p-5 flex flex-col relative border-b border-tertiary transition-colors duration-500">
@@ -49,14 +54,12 @@ export const ProfileDetailsCard = ({
             {isImageUrl ? (
               <img src={currentAvatar} alt="Avatar" className="w-full h-full object-cover mix-blend-screen opacity-90" />
             ) : AvatarIcon ? (
-              // Render Ikon Lucide jika ID cocok dengan AVATAR_MAP
               <AvatarIcon 
                 size={48} 
                 strokeWidth={1.5}
                 className="text-light hover:animate-pulse transition-all duration-500 drop-shadow-[0_0_10px_rgb(var(--color-light)_/_0.7)]" 
               />
             ) : (
-              // Fallback jika tidak ada gambar dan ID tidak dikenali
               <span className="font-secondary text-5xl text-light hover:animate-pulse transition-all duration-500 drop-shadow-[0_0_10px_rgb(var(--color-light)_/_0.7)]">
                 {currentAvatar}
               </span>
@@ -72,7 +75,6 @@ export const ProfileDetailsCard = ({
         <div className="flex flex-col gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              {/* Ikon Level */}
               <Star size={14} className="text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.6)]" fill="currentColor" />
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">LEVEL</span>
             </div>
@@ -83,7 +85,6 @@ export const ProfileDetailsCard = ({
 
           <div>
             <div className="flex items-center gap-2 mb-1">
-              {/* Ikon XP Pool */}
               <BatteryCharging size={14} className="text-accent drop-shadow-[0_0_5px_currentColor]" />
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">XP POOL</span>
             </div>
@@ -94,7 +95,6 @@ export const ProfileDetailsCard = ({
 
           <div>
             <div className="flex items-center gap-2 mb-1">
-              {/* Ikon Warp Streak */}
               <Flame size={14} className="text-orange-500 drop-shadow-[0_0_5px_rgba(249,115,22,0.6)]" />
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">WARP STREAK</span>
             </div>
@@ -103,6 +103,9 @@ export const ProfileDetailsCard = ({
             </div>
           </div>
           
+          {/* ========================================== */}
+          {/* 3. RENDER IKON BADGES (YANG SUDAH DI-EQUIP) */}
+          {/* ========================================== */}
           <div className="mt-2 border-t border-tertiary pt-4 transition-colors duration-500">
             <span className="font-secondary text-light/60 text-[9px] tracking-widest uppercase mb-3 block transition-colors duration-500">
               [ ACTIVE COMMENDATIONS ]
@@ -110,8 +113,13 @@ export const ProfileDetailsCard = ({
             <div className="flex gap-3">
               {displayBadges.length > 0 ? (
                 displayBadges.map(badge => (
-                  <div key={badge.id} className="w-10 h-10 border border-light bg-light/10 flex items-center justify-center text-lg shadow-[0_0_10px_rgb(var(--color-light)_/_0.3)] transition-colors duration-500" title={badge.name}>
-                    {badge.icon}
+                  <div 
+                    key={badge.id} 
+                    className="w-10 h-10 border border-accent bg-accent/10 flex items-center justify-center text-lg shadow-[0_0_10px_rgb(var(--color-accent)_/_0.2)] transition-colors duration-500" 
+                    title={`${badge.name}\n${badge.description}`}
+                  >
+                    {/* Memanggil fungsi render ikon dinamis di sini */}
+                    {renderBadgeIcon(badge.icon_name)}
                   </div>
                 ))
               ) : (
@@ -123,5 +131,5 @@ export const ProfileDetailsCard = ({
         </div>
       </div>
     </div>
-  );
+  );  
 };

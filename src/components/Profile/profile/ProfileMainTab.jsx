@@ -1,25 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Check, X, Edit2, Shield, Rocket, Radar, Crown, Lock } from 'lucide-react';
-
+import { Check, X, Edit2 } from 'lucide-react'; // Icon mockup dihapus, sisa icon UI
 import { ProfileDetailsCard } from './ProfileDetailsCard';
 import { OperatorStatus } from './OperatorStatus';
 import { AccessLog } from './AccessLog';
 import AvatarUploader from './AvatarUploader';
 import Achievements from './Achievements';
-
-// MOCK DATA: Diganti menggunakan komponen Lucide React
-const MOCK_BADGES = [
-  { id: 1, icon: <Shield size={20} />, name: 'DEFENDER', locked: false },
-  { id: 2, icon: <Rocket size={20} />, name: 'SPEEDSTER', locked: false },
-  { id: 3, icon: <Radar size={20} />, name: 'UFO HUNTER', locked: false },
-  { id: 4, icon: <Crown size={20} />, name: 'SUPREME', locked: false },
-  { id: 5, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
-  { id: 6, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
-  { id: 7, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
-  { id: 8, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
-  { id: 9, icon: <Lock size={20} className="text-light/30" />, name: 'LOCKED', locked: true },
-];
+import { useAchievements } from '../../../hooks/useAchievements';
+import { toast } from '../../../hooks/useToast';
 
 export default function ProfileMainTab() {
   const { 
@@ -27,27 +15,51 @@ export default function ProfileMainTab() {
     lastLogin, accountCreated, updateName 
   } = useOutletContext();
 
+  // 2. AMBIL DATA DARI DATABASE
+  const { useUserAchievements, equipBadges } = useAchievements();
+  const { data: allAchievements = [] } = useUserAchievements();
+
+  // 3. FILTER KHUSUS GELAR (BADGE) SAJA
+  const badges = allAchievements.filter(a => a.type === 'BADGE');
+
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(displayName);
-  const [selectedBadgeIds, setSelectedBadgeIds] = useState([1, 2, 3]);
   const [currentAvatar, setCurrentAvatar] = useState(profile?.avatar_url || 'bot');
+  const [selectedBadgeIds, setSelectedBadgeIds] = useState([]);
+
+  // 4. SINKRONISASI LENCANA TERPAKAI DARI DATABASE KE UI
+  useEffect(() => {
+    if (badges.length > 0) {
+      const equipped = badges.filter(b => b.isEquipped).map(b => b.id);
+      setSelectedBadgeIds(equipped);
+    }
+  }, [allAchievements]);
 
   const handleSelectAvatar = (newAvatar) => {
     setCurrentAvatar(newAvatar);
   };
 
-  const displayBadges = MOCK_BADGES.filter(b => selectedBadgeIds.includes(b.id));
+  const displayBadges = badges.filter(b => selectedBadgeIds.includes(b.id));
 
+  // 5. LOGIKA TOGGLE & SIMPAN KE DATABASE
   const handleToggleBadge = (badge) => {
-    if (badge.locked) return;
+    if (badge.isLocked) return; // Gunakan isLocked dari data asli
+
+    let newSelection;
     if (selectedBadgeIds.includes(badge.id)) {
-      setSelectedBadgeIds(prev => prev.filter(id => id !== badge.id));
+      // Copot lencana
+      newSelection = selectedBadgeIds.filter(id => id !== badge.id);
     } else {
-      setSelectedBadgeIds(prev => {
-        if (prev.length >= 3) { return [...prev.slice(1), badge.id]; }
-        return [...prev, badge.id];
-      });
+      // Pasang lencana (Max 3)
+      if (selectedBadgeIds.length >= 3) { 
+        newSelection = [...selectedBadgeIds.slice(1), badge.id]; 
+      } else {
+        newSelection = [...selectedBadgeIds, badge.id];
+      }
     }
+    
+    setSelectedBadgeIds(newSelection); // Update UI Instan
+    equipBadges.mutate(newSelection);  // Simpan ke Supabase di background
   };
 
   const handleEditName = () => {
@@ -70,7 +82,7 @@ export default function ProfileMainTab() {
         setIsEditingName(false);
       },
       onError: (err) => {
-        alert(`TRANSMISSION ERROR: ${err.message}`);
+        toast.error("TRANSMISSION ERROR", err.message);
       }
     });
   };
@@ -93,7 +105,7 @@ export default function ProfileMainTab() {
             displayName={displayName}
             level={level}
             currentExp={currentExp}
-            displayBadges={displayBadges}
+            displayBadges={displayBadges} // Mengirim data lencana asli
           />
           <OperatorStatus currentExp={currentExp} />
           <AccessLog lastLogin={lastLogin} accountCreated={accountCreated} />
@@ -157,9 +169,9 @@ export default function ProfileMainTab() {
           </div>
         </div>
 
-        {/* --- KANAN: ACHIEVEMENTS --- */}
+        {/* --- KANAN: ACHIEVEMENTS / BADGES GALLERY --- */}
         <Achievements 
-          badges={MOCK_BADGES} 
+          achievements={badges} // Meneruskan data badges asli (ubah prop name agar sesuai)
           selectedBadgeIds={selectedBadgeIds} 
           onToggleBadge={handleToggleBadge} 
         />

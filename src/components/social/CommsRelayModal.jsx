@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Search, UserPlus, Bell, Check, Users, Swords, ShieldOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocial } from '../../hooks/useSocial';
+import { toast } from '../../hooks/useToast';
 
 export const CommsRelayModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('INBOX'); 
@@ -49,8 +50,8 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
 
   const handleAddFriend = (userId) => {
     sendFriendRequest.mutate(userId, {
-      onSuccess: () => alert("TRANSMISSION SENT!"),
-      onError: () => alert("TRANSMISSION FAILED. MIGHT BE ALREADY PENDING.")
+      onSuccess: () => toast.success("SUCCESS", "TRANSMISSION SENT!"),
+      onError: () => toast.error("FAILED", "TRANSMISSION FAILED. MIGHT BE ALREADY PENDING.")
     });
   };
 

@@ -1,10 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from '../store/authStore';
+import { useAchievements } from './useAchievements';
 
 export const useForum = () => {
   const queryClient = useQueryClient();
   const userId = useAuthStore((state) => state.session?.user?.id);
+  const { evaluateEvent } = useAchievements();
 
   // 1. Ambil Semua Post beserta data pembuatnya dan jumlah balasan
   const usePosts = (category = 'ALL') => useQuery({
@@ -52,7 +54,11 @@ export const useForum = () => {
       }]);
       if (error) throw error;
     },
-    onSuccess: () => queryClient.invalidateQueries(['forumPosts'])
+    onSuccess: () => {
+      queryClient.invalidateQueries(['forumPosts'])
+      console.log("Menembakkan sinyal SOCIAL_CONNECTED..."); // Tambahkan ini untuk debugging
+      evaluateEvent.mutate({ eventName: 'SOCIAL_CONNECTED' });
+    }
   });
 
   // 4. Buat Balasan Baru

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../services/supabase';
+import { toast } from './useToast';
 
 export const useMissionOperations = (setActiveDirective) => {
   const queryClient = useQueryClient();
@@ -62,9 +63,9 @@ export const useMissionOperations = (setActiveDirective) => {
       queryClient.invalidateQueries({ queryKey: ['directives'] });
       // Update UI Modal seketika tanpa harus menutupnya
       setActiveDirective(updatedData);
-      alert("[ SYSTEM UPDATE ]: Parameter misi berhasil diubah.");
+      toast.success("SYSTEM UPDATE", "Parameter misi berhasil diubah.");
     },
-    onError: (error) => alert(`[ ERROR ]: Gagal mengubah parameter. ${error.message}`)
+    onError: (error) => toast.error("ERROR", `Gagal mengubah parameter. ${error.message}`)
   });
 
   // 4. MUTASI BARU: Hapus Misi (Delete)
@@ -82,7 +83,7 @@ export const useMissionOperations = (setActiveDirective) => {
       // Tutup modal karena datanya sudah lenyap dari radar
       setActiveDirective(null); 
     },
-    onError: (error) => alert(`[ ERROR ]: Gagal menghancurkan direktif. ${error.message}`)
+    onError: (error) => toast.error("ERROR", `Gagal menghancurkan direktif. ${error.message}`)
   });
 
   return { engageDirective, completeDirective, updateDirective, deleteDirective };

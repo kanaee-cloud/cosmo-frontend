@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from '../store/authStore';
+import { toast } from './useToast';
 
 export const useWorkspaces = () => {
   const queryClient = useQueryClient();
@@ -112,7 +113,7 @@ export const useWorkspaces = () => {
 
       if (error) throw new Error(error.message);
     },
-    onSuccess: () => alert("TRANSMISSION SENT TO ALLY'S INBOX!")
+    onSuccess: () => toast.success("TRANSMISSION SENT", "ALLY'S INBOX HAS RECEIVED THE INVITE!")
   });
 
   const addRaidObjective = useMutation({

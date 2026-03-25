@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock } from 'lucide-react';
+import { toast } from '../../../hooks/useToast';
 
 export default function ChangePassword() {
   const [currentPwd, setCurrentPwd] = useState('');
@@ -7,8 +8,8 @@ export default function ChangePassword() {
   const [confirmPwd, setConfirmPwd] = useState('');
 
   const handleChange = () => {
-    if (newPwd !== confirmPwd) return alert('New password and confirm do not match');
-    alert('Password changed (UI-only)');
+    if (newPwd !== confirmPwd) return toast.error('ERROR', 'New password and confirm do not match');
+    toast.success('SUCCESS', 'Password changed (UI-only)');
     setCurrentPwd(''); setNewPwd(''); setConfirmPwd('');
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Trash2 } from 'lucide-react';
 import DeleteAccountModal from './DeleteAccountModal'; // Impor modal baru
+import { toast } from '../../../hooks/useToast';
 
 export default function DeleteAccount() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State untuk modal
@@ -11,7 +12,7 @@ export default function DeleteAccount() {
 
   const handleConfirmDelete = () => {
     // UI-only: tampilkan pesan dan tutup modal
-    alert('INISIASI PURGE AKUN BERHASIL (UI-ONLY). SELAMAT TINGGAL, OPERATOR.');
+    toast.success('PURGE INITIATED', 'INISIASI PURGE AKUN BERHASIL (UI-ONLY). SELAMAT TINGGAL, OPERATOR.');
     setIsModalOpen(false);
   };
 
