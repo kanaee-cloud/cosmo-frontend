@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../services/supabase';
 import { toast } from './useToast';
+import { useAchievements } from './useAchievements';
 
 export const useMissionOperations = (setActiveDirective) => {
   const queryClient = useQueryClient();
+  const { evaluateEvent } = useAchievements();
 
   const engageDirective = useMutation({
     mutationFn: async (id) => {
@@ -86,5 +88,32 @@ export const useMissionOperations = (setActiveDirective) => {
     onError: (error) => toast.error("ERROR", `Gagal menghancurkan direktif. ${error.message}`)
   });
 
-  return { engageDirective, completeDirective, updateDirective, deleteDirective };
+  const completeMission = useMutation({
+    mutationFn: async ({ taskId, evidenceUrl }) => {
+      // Logika Anda untuk mengupdate status di Supabase menjadi 'DONE'
+      const { data, error } = await supabase
+         .from('directives')
+         .update({ status: 'DONE', evidence_link: evidenceUrl })
+         .eq('id', taskId)
+         .select()
+         .single();
+
+      if (error) throw error;
+      return data; // Wajib me-return data agar bisa dibaca oleh onSuccess
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['directives']); 
+
+      console.log("Mendeteksi misi selesai. Menembakkan sinyal ke mesin..."); 
+      evaluateEvent.mutate({
+        eventName: 'MISSION_COMPLETED',
+        payload: {
+  
+          hasEvidence: !!data.evidence_link 
+        }
+      });
+    }
+  });
+
+  return { engageDirective, completeDirective, updateDirective, deleteDirective, completeMission };
 };

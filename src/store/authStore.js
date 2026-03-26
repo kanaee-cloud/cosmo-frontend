@@ -32,11 +32,30 @@ export const useAuthStore = create((set) => ({
   },
 
   signIn: async (email, password) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    // 1. Ekstrak data dan error dari respon Supabase
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    
     if (error) {
         toast.error('Login Failed', error.message);
         throw error;
     }
+
+    // 2. PERBAIKAN: Langsung simpan session ke state global (Zustand)
+    if (data?.session) {
+        set({ session: data.session });
+
+        // 3. PERBAIKAN: Tarik juga data profile dari tabel users agar UI langsung ter-update
+        const { data: profileData } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', data.session.user.id)
+            .single();
+            
+        if (profileData) {
+            set({ profile: profileData });
+        }
+    }
+
     toast.success('Welcome Back', 'Access granted to Cosmo Command');
   },
 

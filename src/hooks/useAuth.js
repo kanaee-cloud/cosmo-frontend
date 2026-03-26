@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 
-
 export const useLoginLogic = () => {
   const { signIn, signInWithGoogle } = useAuthStore();
 
@@ -13,14 +12,12 @@ export const useLoginLogic = () => {
     // Don't navigate here - let the component handle it with the modal
   });
 
-
   const initialValues = { email: '', password: '' };
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('INVALID FREQUENCY FORMAT').required('FREQUENCY REQUIRED'),
     password: Yup.string().required('ACCESS CODE REQUIRED'),
   });
-
 
   const onSubmit = (values) => {
     loginMutation.mutate(values);
@@ -34,7 +31,6 @@ export const useLoginLogic = () => {
     signInWithGoogle
   };
 };
-
 
 export const useRegisterLogic = () => {
   const { signUp } = useAuthStore();
