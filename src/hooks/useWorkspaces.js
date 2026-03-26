@@ -21,7 +21,7 @@ export const useWorkspaces = () => {
         `)
         .eq('user_id', myId);
       if (error) throw new Error(error.message);
-      return data.map(d => d.workspaces); // Format ulang array
+      return data.map(d => d.workspaces); 
     },
     enabled: !!myId,
   });
@@ -44,33 +44,39 @@ export const useWorkspaces = () => {
 
       if (memError || dirError) throw new Error("RAID DATA CORRUPTED");
 
-      // --- KALKULASI HP BOS ---
-      const maxHp = directives.length > 0 ? directives.length * 100 : 100;
-      const completedTasks = directives.filter(d => d.status === 'COMPLETED').length;
-      const damageDealt = completedTasks * 100;
-      const currentHp = maxHp - damageDealt;
+      // --- PERBAIKAN: KALKULASI HP BOS DINAMIS SESUAI DAMAGE ---
+      // 1. Max HP = Total semua exp_reward dari seluruh tugas di ruangan ini
+      const maxHp = directives.reduce((total, task) => total + (task.exp_reward || 0), 0);
+      
+      // 2. Damage Dealt = Total exp_reward dari tugas yang berstatus 'COMPLETED'
+      const damageDealt = directives
+        .filter(d => d.status === 'COMPLETED')
+        .reduce((total, task) => total + (task.exp_reward || 0), 0);
+        
+      // 3. Sisa HP = Max HP dikurangi Damage Dealt
+      const currentHp = Math.max(0, maxHp - damageDealt);
 
       return {
         members: members.map(m => m.users),
         directives,
         boss: {
-          maxHp,
-          currentHp,
+          // Jika belum ada tugas, berikan ilusi HP 0 agar terkesan "Dormant/Tidur"
+          maxHp: maxHp === 0 ? 0 : maxHp,
+          currentHp: maxHp === 0 ? 0 : currentHp,
           damageDealt,
-          isDefeated: currentHp <= 0 && directives.length > 0
+          // Bos HANYA mati jika Max HP > 0 (ada tugas) DAN semua tugas selesai (Current HP = 0)
+          isDefeated: maxHp > 0 && currentHp <= 0 
         }
       };
     },
     enabled: !!workspaceId,
-    refetchInterval: 5000 // Auto-refresh tiap 5 detik untuk sensasi multiplayer!
+    refetchInterval: 5000 // Auto-refresh tiap 5 detik
   });
-
 
   const createWorkspace = useMutation({
     mutationFn: async ({ name, monsterName }) => {
       const { data: { user }, error: authError } = await supabase.auth.getUser();
       if (authError || !user) throw new Error("Gagal memverifikasi identitas Kapten.");
-
 
       const payload = {
         name: name,
@@ -129,10 +135,11 @@ export const useWorkspaces = () => {
         category: 'WORK',
         workspace_id: workspaceId,
         user_id: user.id,
-        exp_reward: randomDamage // <-- Menyuntikkan damage acak ke peluru
+        exp_reward: randomDamage 
       }]);
       if (error) throw new Error(error.message);
     },
+    // PERBAIKAN: Refresh data arena agar HP Bos langsung bertambah
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['workspaceRaid'] })
   });
 
@@ -147,7 +154,9 @@ export const useWorkspaces = () => {
       return data;
     },
     onSuccess: () => {
+      // PERBAIKAN: Refresh data arena agar HP Bos langsung berkurang di UI
       queryClient.invalidateQueries({ queryKey: ['directives'] });
+      queryClient.invalidateQueries({ queryKey: ['workspaceRaid'] });
     }
   });
 

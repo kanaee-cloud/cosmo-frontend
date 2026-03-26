@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Swords, ShieldAlert, Crosshair, CheckCircle, CircleDashed, Plus, ArrowLeft, Zap, Users, Shield } from 'lucide-react';
+import { 
+  ShieldAlert, Crosshair, CheckCircle, CircleDashed, Plus, 
+  ArrowLeft, Zap, Users, Shield, Radar, Radio, UserPlus 
+} from 'lucide-react';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
 import { useSocial } from '../../hooks/useSocial';
 import UserAvatar from '../common/UserAvatar';
@@ -68,13 +71,10 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName, onBack
           
           {/* BOSS PANEL */}
           <div className="relative border border-accent/20 bg-black/40 p-6 flex flex-col items-center justify-center overflow-hidden">
-            {/* Sudut Panel HUD */}
             <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent/50" />
             <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-accent/50" />
             
-            {/* Circular Video Hologram */}
             <div className="relative w-40 h-40 md:w-56 md:h-56 mb-8 mt-4">
-              {/* Outer Rotating HUD Ring */}
               <div className="absolute inset-[-10px] border border-dashed border-accent/40 rounded-full animate-[spin_20s_linear_infinite]" />
               <div className="absolute inset-[-20px] border border-accent/10 rounded-full border-t-accent/50 animate-[spin_10s_linear_infinite_reverse]" />
               
@@ -92,16 +92,12 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName, onBack
               </div>
             </div>
 
-            {/* Boss Info */}
             <h2 className={`font-primary text-xl md:text-2xl tracking-[0.3em] uppercase mb-4 flex items-center gap-3 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)] ${raid.boss.isDefeated ? 'text-red-500 line-through' : 'text-accent'}`}>
               <ShieldAlert size={24} /> {monsterName || 'VOID ENTITY'}
             </h2>
 
-            {/* HP BAR (SKEWED TECH DESIGN) */}
             <div className="w-full max-w-lg bg-black/80 h-8 border-y border-accent/50 relative overflow-hidden skew-x-[-15deg] shadow-[0_0_20px_rgba(6,182,212,0.1)]">
-              {/* Garis-garis latar HP bar */}
               <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_10px,rgba(6,182,212,0.1)_10px,rgba(6,182,212,0.1)_11px)] bg-[length:11px_100%] pointer-events-none" />
-              
               <motion.div 
                 className={`h-full ${raid.boss.isDefeated ? 'bg-red-500' : 'bg-gradient-to-r from-cyan-600 to-accent'}`}
                 initial={{ width: "100%" }}
@@ -116,7 +112,7 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName, onBack
             </div>
           </div>
 
-          {/* OBJECTIVES PANEL (AMMUNITION) */}
+          {/* OBJECTIVES PANEL */}
           <div className="border border-accent/20 bg-black/40 p-5">
             <h3 className="font-primary text-accent text-[10px] tracking-[0.2em] mb-4 flex items-center gap-2 border-b border-accent/20 pb-2">
               <Zap size={14}/> WEAPON PAYLOADS (TASKS)
@@ -191,29 +187,64 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName, onBack
               ))}
             </div>
 
-            {/* RECRUITMENT FORM */}
+            {/* ======================================================= */}
+            {/* GAMIFIED RECRUITMENT FORM (RADAR SCANNER LIST)          */}
+            {/* ======================================================= */}
             {!raid.boss.isDefeated && availableFriends.length > 0 && (
               <div className="mt-auto pt-4 border-t border-dashed border-accent/30">
-                <label className="font-primary text-[8px] text-accent/70 tracking-[0.2em] mb-2 block">TRANSMIT SOS TO FLEET</label>
-                <div className="flex flex-col gap-2">
-                  <select 
-                    value={selectedFriend} 
-                    onChange={(e) => setSelectedFriend(e.target.value)}
-                    className="w-full bg-black/50 border border-accent/30 text-white font-secondary text-xs px-3 py-2 outline-none focus:border-accent transition-colors appearance-none"
-                  >
-                    <option value="" className="bg-[#0A0F15] text-accent/50">-- SELECT ALLY --</option>
+                
+                {/* Radar Header */}
+                <div className="flex items-center justify-between bg-accent/10 p-2 border border-accent/30 mb-3">
+                  <div className="flex items-center gap-2">
+                    <Radar size={14} className="text-accent animate-[spin_3s_linear_infinite]" />
+                    <span className="font-primary text-[8px] text-accent tracking-[0.2em]">ALLIES DETECTED</span>
+                  </div>
+                  <span className="font-secondary text-[10px] text-accent/70 font-bold">{availableFriends.length} FOUND</span>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {/* Custom Interactive List */}
+                  <div className="max-h-[140px] overflow-y-auto custom-scrollbar flex flex-col gap-1 pr-1">
                     {availableFriends.map(f => (
-                      <option key={f.id} value={f.id} className="bg-[#0A0F15]">{f.username}</option>
+                      <div
+                        key={f.id}
+                        onClick={() => setSelectedFriend(f.id)}
+                        className={`group flex items-center gap-3 p-2 cursor-pointer transition-all border-l-2 ${
+                          selectedFriend === f.id 
+                          ? 'bg-accent/20 border-accent shadow-[inset_0_0_15px_rgba(6,182,212,0.3)]' 
+                          : 'bg-black/40 border-transparent hover:bg-accent/5 hover:border-accent/30'
+                        }`}
+                      >
+                        <div className={`w-7 h-7 flex items-center justify-center overflow-hidden border ${selectedFriend === f.id ? 'border-accent' : 'border-accent/30'}`}>
+                          {f.avatar_url ? <UserAvatar avatarId={f.avatar_url} size={16} /> : <UserPlus size={12} className="text-accent/50" />}
+                        </div>
+                        <span className={`font-secondary text-xs tracking-wider uppercase transition-colors ${selectedFriend === f.id ? 'text-white font-bold' : 'text-light/70 group-hover:text-light'}`}>
+                          {f.username}
+                        </span>
+                        {/* Target Lock Animation */}
+                        {selectedFriend === f.id && (
+                          <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="ml-auto text-accent">
+                            <Crosshair size={14} className="animate-pulse" />
+                          </motion.div>
+                        )}
+                      </div>
                     ))}
-                  </select>
+                  </div>
+
+                  {/* SOS Transmit Button */}
                   <button 
                     onClick={handleRecruit}
                     disabled={!selectedFriend || recruitAlly.isPending}
-                    className="w-full p-2 bg-accent/10 border border-accent/50 text-accent hover:bg-accent hover:text-black font-primary text-[9px] tracking-[0.2em] transition-all disabled:opacity-30"
+                    className="group relative w-full flex justify-center items-center gap-2 p-3 mt-2 border border-red-500 bg-red-900/20 text-red-400 hover:bg-red-500 hover:text-white font-primary text-[10px] tracking-[0.2em] transition-all disabled:opacity-40 disabled:border-accent/30 disabled:text-accent/40 disabled:bg-transparent disabled:hover:bg-transparent overflow-hidden"
                   >
-                    {recruitAlly.isPending ? 'TRANSMITTING...' : 'SEND INVITE'}
+                    <div className="absolute inset-0 bg-red-500 w-0 group-hover:w-full transition-all duration-500 ease-out opacity-20" />
+                    <Radio size={14} className={`relative z-10 ${recruitAlly.isPending ? "animate-ping" : "group-hover:animate-pulse"}`} />
+                    <span className="relative z-10">
+                      {recruitAlly.isPending ? 'TRANSMITTING SOS...' : 'SEND SOS PROTOCOL'}
+                    </span>
                   </button>
                 </div>
+
               </div>
             )}
           </div>

@@ -104,6 +104,26 @@ export const useProfileSettings = () => {
     }
   });
 
+  const deleteAccount = useMutation({
+    mutationFn: async () => {
+      // 1. Panggil fungsi penghancur di database
+      const { error } = await supabase.rpc('delete_user');
+      if (error) throw new Error("Gagal menginisiasi protokol penghancuran: " + error.message);
+      
+      // 2. Bersihkan sesi lokal
+      await supabase.auth.signOut();
+    },
+    onSuccess: () => {
+      setProfile(null);
+      useAuthStore.getState().logout(); // Paksa state global untuk logout
+      success('ACCOUNT TERMINATED', 'Data Kapten telah dihapus permanen dari mainframe.');
+      // Catatan: Setelah ini state session menjadi null, dan Navbar/Router akan otomatis melempar Anda ke halaman Login.
+    },
+    onError: (err) => {
+      showError('TERMINATION FAILED', err.message);
+    }
+  });
+
   // 5. Kalkulasi Data Dinamis
   const currentExp = profile?.fuel_cells || 0;
   const level = Math.floor(currentExp / 100) + 1;
@@ -117,6 +137,7 @@ export const useProfileSettings = () => {
     isLoading,
     updateName,
     updatePassword,
+    deleteAccount,
     updateAvatar, // <-- PASTIKAN DI-RETURN DI SINI
     level,
     currentExp,
