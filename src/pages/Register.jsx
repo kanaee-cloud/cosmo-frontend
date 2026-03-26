@@ -4,18 +4,22 @@ import { motion } from 'framer-motion';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useRegisterLogic } from '../hooks/useAuth';
 import { useToastStore } from '../hooks/useToast';
-import { SuccessModal } from '../components/modals';
+import { useModalStore } from '../store/modalStore';
 
 const Register = () => {
   const navigate = useNavigate();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const openModal = useModalStore(state => state.openModal);
   const { success, error } = useToastStore();
   const { registerMutation, initialValues, validationSchema, onSubmit } = useRegisterLogic();
 
   // Show success modal when mutation succeeds
   useEffect(() => {
     if (registerMutation.isSuccess) {
-      setShowSuccessModal(true);
+      openModal({
+        type: 'success',
+        title: 'ENLISTMENT COMPLETE',
+        message: 'Akun Anda berhasil dibuat. Menghubungkan ke mainframe...'
+      });
       success('ENLISTMENT COMPLETE', 'Akun Anda berhasil dibuat. Menghubungkan ke mainframe...');
       // Auto-navigate after success modal closes
       const timer = setTimeout(() => {
@@ -122,13 +126,6 @@ const Register = () => {
         </div>
       </motion.div>
 
-      {/* Success Modal */}
-      <SuccessModal
-        isOpen={showSuccessModal}
-        title="ENLISTMENT COMPLETE"
-        message="Akun Anda berhasil dibuat. Menghubungkan ke mainframe..."
-        onClose={() => setShowSuccessModal(false)}
-      />
     </motion.div>
   );
 };

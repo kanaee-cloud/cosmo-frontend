@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useForum } from '../hooks/useForum';
 import ForumThreadModal from '../components/Forum/ForumThreadModal';
 import CreatePostModal from '../components/Forum/CreatePostModal';
+import UserAvatar from '../components/common/UserAvatar';
 
 const CATEGORIES = [
   { id: 'ALL', label: 'ALL CHANNELS', icon: <MessageSquare size={14} /> },
@@ -90,8 +91,8 @@ export default function Forum() {
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-dark border border-accent overflow-hidden">
-                       {post.author?.avatar_url ? <img src={post.author.avatar_url} alt="A" /> : <div className="w-full h-full bg-accent/20" />}
+                    <div className="w-5 h-5 rounded-full bg-dark border border-accent overflow-hidden flex justify-center items-center">
+                       {post.author?.avatar_url ? <UserAvatar avatarId={post.author.avatar_url} size={14} /> : <div className="w-full h-full bg-accent/20" />}
                     </div>
                     <span className="font-secondary text-[10px] text-cyan-400">
                       {post.author?.username || 'UNKNOWN PILOT'}

@@ -67,40 +67,7 @@ export default function AvatarUploader({ currentAvatar, onSelectAvatar }) {
         </div>
       </div>
 
-      {/* SECTION 2: SEPARATOR 'OR' */}
-      <div className="w-full relative flex items-center justify-center my-2">
-        <div className="absolute w-full border-t border-tertiary transition-colors duration-500"></div>
-        <span className="relative z-10 font-press text-[8px] text-tertiary bg-secondary px-4 transition-colors duration-500">OR</span>
-      </div>
-
-      {/* SECTION 3: UNGGAH VISUAL CUSTOM */}
-      <div className="w-full">
-        <h4 className="font-secondary text-[10px] md:text-xs text-light/60 tracking-widest uppercase mb-4 transition-colors duration-500">
-          TRANSMIT CUSTOM DATA
-        </h4>
-        
-        {/* Kotak unggah */}
-        <div 
-          className={`relative w-full h-24 border-2 border-dashed flex items-center justify-center group cursor-pointer hover:bg-accent/10 transition-colors duration-500 ${
-            !isUsingPreset && currentAvatar && currentAvatar.startsWith('http')
-              ? 'border-accent bg-accent/10 text-accent' // Style jika ada foto terunggah
-              : 'border-tertiary bg-secondary text-light/60'
-          }`}
-        >
-          {/* Decorative corners */}
-          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-accent transition-colors duration-500"></div>
-          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-light transition-colors duration-500"></div>
-
-          <div className="flex flex-col items-center gap-2 group-hover:text-accent transition-colors duration-500">
-            <Upload size={20} />
-            <span className="font-secondary text-[9px] md:text-[10px] tracking-widest">UPLOAD VISUAL</span>
-          </div>
-          
-          <p className="absolute bottom-2 font-secondary text-[7px] text-tertiary tracking-widest transition-colors duration-500">
-            JPG, PNG, GIF | MAX 2MB
-          </p>
-        </div>
-      </div>
+      {/* KODE SEPARATOR DAN UPLOAD CUSTOM TELAH DIHAPUS SESUAI PERMINTAAN */}
 
     </div>
   );

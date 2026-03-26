@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, LogOut, User, Palette } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import UserAvatar from './common/UserAvatar';
 
 const Navbar = () => {
     const { session, profile, logout } = useAuthStore();
@@ -65,14 +66,14 @@ const Navbar = () => {
                                 >
                                     <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary flex items-center justify-center overflow-hidden border border-accent shrink-0">
                                         {profile?.avatar_url || session?.user?.user_metadata?.avatar_url ? (
-                                            <img src={profile?.avatar_url || session?.user?.user_metadata?.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                            <UserAvatar avatarId={profile?.avatar_url || session?.user?.user_metadata?.avatar_url} size={18} />
                                         ) : (
                                             <User size={14} className="text-accent md:w-4 md:h-4" />
                                         )}
                                     </div>
                                     {/* PERBAIKAN: Nama Kapten disembunyikan di layar HP agar navbar tidak berantakan */}
                                     <span className="hidden sm:block text-text text-xs md:text-sm font-bold tracking-wide max-w-[120px] truncate">
-                                        {profile?.user_name || session?.user?.user_metadata?.user_name || session?.user?.email?.split('@')[0] || 'Agent'}
+                                        {profile?.username || session?.user?.user_metadata?.username || session?.user?.email?.split('@')[0] || 'Agent'}
                                     </span>
                                 </button>
 

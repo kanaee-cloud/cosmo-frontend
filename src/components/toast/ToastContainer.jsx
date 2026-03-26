@@ -7,7 +7,7 @@ const ToastContainer = ({ toasts = [], onClose }) => {
       className="fixed top-5 right-5 z-[9999] pointer-events-none"
       style={{
         maxHeight: '100vh',
-        overflow: 'auto',
+        overflow: 'visible',
       }}
     >
       <div className="pointer-events-auto flex flex-col">

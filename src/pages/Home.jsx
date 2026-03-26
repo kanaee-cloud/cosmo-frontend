@@ -9,16 +9,12 @@ import { CommandConsoleModal } from '../components/missions/CommandConsoleModal'
 import { CommsRelayModal } from '../components/social/CommsRelayModal';
 import { RadarPanel } from '../components/missions/RadarPanel';
 import { LogPanel } from '../components/missions/LogPanel';
-import { DirectiveDetailModal } from '../components/missions/DirectiveDetailModal'; // Import Modal
-import { SuccessModal, FailureModal, AchievementModal } from '../components/modals';
+import { DirectiveDetailModal } from '../components/missions/DirectiveDetailModal';
 
 const Home = () => {
   const [isConsoleOpen, setIsConsoleOpen] = useState(false); 
   const [isCommsOpen, setIsCommsOpen] = useState(false);
   const [activeDirective, setActiveDirective] = useState(null);
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const [failureModalOpen, setFailureModalOpen] = useState(false);
-  const [achievementModalOpen, setAchievementModalOpen] = useState(false);
   const [consoleInput, setConsoleInput] = useState('');
 
   const { success, error } = useToastStore();
@@ -116,25 +112,6 @@ const Home = () => {
         setActiveDirective={setActiveDirective}
       />
 
-      {/* POPUP MODALS - Demo */}
-      <SuccessModal 
-        isOpen={successModalOpen} 
-        title="COMMUNICATION ESTABLISHED"
-        message="Data berhasil diunggah ke mainframe. Sistem siap melanjutkan operasi."
-        onClose={() => setSuccessModalOpen(false)} 
-      />
-      <FailureModal 
-        isOpen={failureModalOpen}
-        title="SYSTEM CRITICAL"
-        message="Gagal menyambungkan ke satelit. Periksa kembali koordinat Anda."
-        onClose={() => setFailureModalOpen(false)}
-        onRetry={() => setFailureModalOpen(false)}
-      />
-      <AchievementModal 
-        isOpen={achievementModalOpen}
-        badgeName="Galactic Voyager"
-        onClose={() => setAchievementModalOpen(false)}
-      />
     </div>
   );
 };

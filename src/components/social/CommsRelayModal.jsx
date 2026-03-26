@@ -4,6 +4,7 @@ import { X, Search, UserPlus, Bell, Check, Users, Swords, ShieldOff } from 'luci
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocial } from '../../hooks/useSocial';
 import { toast } from '../../hooks/useToast';
+import UserAvatar from '../common/UserAvatar';
 
 export const CommsRelayModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('INBOX'); 
@@ -113,7 +114,7 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                         <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
                           {/* AVATAR ANTI-GENCET (flex-shrink-0) */}
                           <div className="w-10 h-10 rounded-full bg-dark border border-accent overflow-hidden flex items-center justify-center flex-shrink-0">
-                            {notif.sender?.avatar_url ? <img src={notif.sender.avatar_url} alt="sender" className="w-full h-full object-cover" /> : <Users size={18} className="text-accent" />}
+                            {notif.sender?.avatar_url ? <UserAvatar avatarId={notif.sender.avatar_url} size={24} /> : <Users size={18} className="text-accent" />}
                           </div>
                           
                           {/* TEXT CONTAINER (min-w-0 untuk mengizinkan text-truncate) */}
@@ -193,7 +194,7 @@ export const CommsRelayModal = ({ isOpen, onClose }) => {
                           <div className="flex items-center gap-4 flex-1 min-w-0">
                             {/* AVATAR ANTI-GENCET RADAR */}
                             <div className="w-10 h-10 rounded-full bg-dark border border-cyan-800 overflow-hidden flex items-center justify-center flex-shrink-0">
-                              {user.avatar_url ? <img src={user.avatar_url} alt="avatar" className="w-full h-full object-cover" /> : <Users size={16} className="text-gray-500" />}
+                              {user.avatar_url ? <UserAvatar avatarId={user.avatar_url} size={24} /> : <Users size={16} className="text-gray-500" />}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-primary text-[11px] text-light tracking-widest truncate">{user.username}</p>

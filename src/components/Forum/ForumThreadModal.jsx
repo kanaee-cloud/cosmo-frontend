@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Send, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForum } from '../../hooks/useForum';
+import UserAvatar from '../common/UserAvatar';
 
 export default function ForumThreadModal({ post, onClose }) {
   const [replyText, setReplyText] = useState('');
@@ -51,7 +52,7 @@ export default function ForumThreadModal({ post, onClose }) {
               ) : replies?.map(reply => (
                 <div key={reply.id} className="bg-primary/40 border border-tertiary/50 p-4 flex gap-4">
                   <div className="w-8 h-8 rounded-sm bg-dark border border-cyan-800 flex-shrink-0 flex items-center justify-center">
-                    {reply.author?.avatar_url ? <img src={reply.author.avatar_url} className="w-full h-full object-cover" /> : <Cpu size={14} className="text-cyan-500" />}
+                    {reply.author?.avatar_url ? <UserAvatar avatarId={reply.author.avatar_url} size={20} /> : <Cpu size={14} className="text-cyan-500" />}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">

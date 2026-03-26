@@ -5,18 +5,22 @@ import { motion } from 'framer-motion';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useLoginLogic } from '../hooks/useAuth';
 import { useToastStore } from '../hooks/useToast';
-import { SuccessModal } from '../components/modals';
+import { useModalStore } from '../store/modalStore';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const openModal = useModalStore(state => state.openModal);
     const { success, error } = useToastStore();
     const { loginMutation, initialValues, validationSchema, onSubmit, signInWithGoogle } = useLoginLogic();
 
     // Show success modal when mutation succeeds
     useEffect(() => {
         if (loginMutation.isSuccess) {
-            setShowSuccessModal(true);
+            openModal({
+                type: 'success',
+                title: 'COMMUNICATION ESTABLISHED',
+                message: 'Authentikasi berhasil. Menghubungkan ke mainframe...'
+            });
             success('COMMUNICATION ESTABLISHED', 'Authentikasi berhasil. Menghubungkan ke mainframe...');
             // Auto-navigate after success modal closes
             const timer = setTimeout(() => {
@@ -121,13 +125,6 @@ const Login = () => {
                 </div>
             </motion.div>
 
-            {/* Success Modal */}
-            <SuccessModal
-                isOpen={showSuccessModal}
-                title="COMMUNICATION ESTABLISHED"
-                message="Authentikasi berhasil. Menghubungkan ke mainframe..."
-                onClose={() => setShowSuccessModal(false)}
-            />
         </motion.div>
     );
 };

@@ -1,6 +1,7 @@
 import { Users, Swords, Shield, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSocial } from '../../hooks/useSocial';
+import UserAvatar from '../common/UserAvatar';
 
 export const FleetRoster = () => {
   const { useFriendsList } = useSocial();
@@ -54,7 +55,7 @@ export const FleetRoster = () => {
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="w-10 h-10 rounded-full bg-dark border border-cyan-800 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
                 {friend.avatar_url ? (
-                  <img src={friend.avatar_url} alt={friend.username} className="w-full h-full object-cover" />
+                  <UserAvatar avatarId={friend.avatar_url} size={24} />
                 ) : (
                   <Users size={18} className="text-cyan-600" />
                 )}

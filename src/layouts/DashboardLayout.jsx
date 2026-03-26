@@ -5,6 +5,7 @@ import { useDashboardLogic } from '../hooks/useDashboard';
 // matrixColor tidak lagi dibutuhkan karena kita menggunakan CSS Variables globaL
 
 import Sidebar from '../components/Sidebar';
+import UserAvatar from '../components/common/UserAvatar';
 
 export const DashboardLayout = () => {
   const [stardate, setStardate] = useState('');
@@ -55,7 +56,7 @@ export const DashboardLayout = () => {
             className="w-12 h-12 border-2 flex-shrink-0 flex items-center justify-center font-primary text-2xl font-bold bg-secondary overflow-hidden border-accent text-accent transition-colors duration-500"
             style={{ boxShadow: `0 0 15px rgb(var(--color-accent) / 0.4)` }}
           >
-            {profile?.avatar_url ? <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" /> : (profile?.user_name || profile?.username)?.charAt(0).toUpperCase()}
+            {profile?.avatar_url ? <UserAvatar avatarId={profile.avatar_url} size={28} /> : (profile?.user_name || profile?.username)?.charAt(0).toUpperCase()}
           </div>
           
           <div className="flex-1 flex flex-col justify-center gap-1.5 mt-1">

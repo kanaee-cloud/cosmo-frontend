@@ -1,4 +1,18 @@
+import { Bot, BrainCircuit, Cpu, Ghost, Skull, User } from 'lucide-react';
+
+const PRESET_AVATARS = {
+  bot: Bot,
+  brain: BrainCircuit,
+  cpu: Cpu,
+  ghost: Ghost,
+  skull: Skull,
+  user: User
+};
+
 export const UserInfoHeader = ({ displayName, level, profile }) => {
+  const savedAvatar = localStorage.getItem('cosmo-user-avatar');
+  const avatarId = profile?.avatar_url || savedAvatar || 'bot';
+  const AvatarIcon = PRESET_AVATARS[avatarId];
   return (
     <div className="border border-tertiary bg-secondary p-4 flex items-center gap-4 shadow-[0_0_15px_rgb(var(--color-tertiary)_/_0.15)] relative overflow-hidden transition-colors duration-500">
       {/* Scanline background */}
@@ -6,8 +20,8 @@ export const UserInfoHeader = ({ displayName, level, profile }) => {
       
       {/* Mini Avatar */}
       <div className="w-12 h-12 border border-light bg-secondary flex items-center justify-center relative z-10 shadow-[0_0_8px_rgb(var(--color-light)_/_0.3)] transition-colors duration-500">
-        {profile?.avatar_url ? (
-          <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover mix-blend-screen opacity-90" />
+        {AvatarIcon ? (
+          <AvatarIcon size={24} className="text-light mix-blend-screen opacity-90 transition-colors duration-500" />
         ) : (
           <span className="font-press text-xl text-light transition-colors duration-500">
             {displayName.charAt(0).toUpperCase()}

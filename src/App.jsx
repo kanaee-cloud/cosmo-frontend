@@ -6,6 +6,7 @@ import { useThemeStore } from './store/themeStore';
 import { router } from './routes';
 import { useToastStore } from './hooks/useToast';
 import ToastContainer from './components/toast/ToastContainer';
+import GlobalModal from './components/modals/GlobalModal';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -64,6 +65,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
       <ToastContainer toasts={toasts} onClose={removeToast} />
+      <GlobalModal />
     </QueryClientProvider>
   );
 }

@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Trash2 } from 'lucide-react';
-import DeleteAccountModal from './DeleteAccountModal'; // Impor modal baru
+import { useModalStore } from '../../../store/modalStore';
 import { toast } from '../../../hooks/useToast';
 
 export default function DeleteAccount() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk modal
+  const openModal = useModalStore(state => state.openModal);
 
   const handleDeleteRequest = () => {
-    setIsModalOpen(true); // Buka modal konfirmasi
+    openModal({
+      type: 'warning',
+      title: 'HAPUS AKUN PERMANEN',
+      message: 'Gagal mengamankan data?\nMenghapus akun akan menghilangkan seluruh\nriwayat sub-space Anda. Silakan konfirmasi.',
+      confirmText: 'HAPUS DATA',
+      cancelText: 'KEMBALI',
+      showCancel: true,
+      onConfirm: handleConfirmDelete
+    });
   };
 
   const handleConfirmDelete = () => {
     // UI-only: tampilkan pesan dan tutup modal
     toast.success('PURGE INITIATED', 'INISIASI PURGE AKUN BERHASIL (UI-ONLY). SELAMAT TINGGAL, OPERATOR.');
-    setIsModalOpen(false);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false); // Tutup modal tanpa menghapus
   };
 
   return (
@@ -44,12 +47,6 @@ export default function DeleteAccount() {
         </button>
       </div>
 
-      {/* Render Modal Konfirmasi */}
-      <DeleteAccountModal 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
-        onConfirm={handleConfirmDelete} 
-      />
     </>
   );
 }

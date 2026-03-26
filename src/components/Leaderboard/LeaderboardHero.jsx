@@ -1,4 +1,5 @@
 import React from 'react';
+import UserAvatar from '../common/UserAvatar';
 
 export default function LeaderboardHero({ top3 }) {
   const podium = [top3[0], top3[1], top3[2]];
@@ -39,11 +40,7 @@ export default function LeaderboardHero({ top3 }) {
             {/* AVATAR BOX */}
             <div className={`${avatarSize} border-2 mb-2 md:mb-4 transition-colors duration-500 ${borderColor} overflow-hidden bg-[#0a0a1a] flex items-center justify-center shadow-[0_0_15px_rgb(var(--color-accent)_/_0.2)] shrink-0`}>
               {pilot.avatar_url ? (
-                <img 
-                  src={pilot.avatar_url} 
-                  alt={pilot.username} 
-                  className="w-full h-full object-cover"
-                />
+                <UserAvatar avatarId={pilot.avatar_url} className="w-full h-full p-2" />
               ) : (
                 <span className={`font-press ${isCenter ? 'text-lg sm:text-2xl' : 'text-base sm:text-xl'} ${isCenter ? 'text-accent' : 'text-light/70'}`}>
                   {pilot.username?.charAt(0).toUpperCase() || '?'}

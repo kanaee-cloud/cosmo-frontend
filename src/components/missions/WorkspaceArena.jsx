@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Swords, ShieldAlert, Crosshair, CheckCircle, CircleDashed, Plus, ArrowLeft, Zap, Users, Shield } from 'lucide-react';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
 import { useSocial } from '../../hooks/useSocial';
+import UserAvatar from '../common/UserAvatar';
 import monsterVideo from '../../assets/monster.mp4';
 
 export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName, onBack }) => {
@@ -180,7 +181,7 @@ export const WorkspaceArena = ({ workspaceId, workspaceName, monsterName, onBack
               {raid.members.map((member, i) => (
                 <div key={i} className="flex items-center gap-3 p-2 border-l-2 border-accent/50 bg-accent/5">
                   <div className="w-8 h-8 bg-black border border-accent/50 flex justify-center items-center overflow-hidden">
-                     {member.avatar_url ? <img src={member.avatar_url} alt="avatar" className="w-full h-full object-cover grayscale opacity-80" /> : <Shield className="text-accent/60" size={16} />}
+                     {member.avatar_url ? <UserAvatar avatarId={member.avatar_url} size={18} className="opacity-80" /> : <Shield className="text-accent/60" size={16} />}
                   </div>
                   <div>
                     <span className="font-primary text-[10px] text-white tracking-[0.2em] block">{member.username}</span>

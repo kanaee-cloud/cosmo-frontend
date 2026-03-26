@@ -98,7 +98,6 @@ export const useProfileSettings = () => {
     onSuccess: (data) => {
       setProfile(data); 
       queryClient.invalidateQueries({ queryKey: ['captainProfile', userId] });
-      success('VISUAL RECONFIGURED', 'Avatar berhasil diperbarui di mainframe.');
     },
     onError: (err) => {
       showError('UPDATE FAILED', err.message);

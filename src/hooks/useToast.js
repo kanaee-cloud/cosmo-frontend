@@ -5,7 +5,7 @@ let toastId = 0;
 export const useToastStore = create((set, get) => ({
   toasts: [],
 
-  addToast: (type, title, message, duration = 4000) => {
+  addToast: (type, title, message, duration = 2500) => {
     const id = toastId++;
     const newToast = { id, type, title, message, duration };
 
