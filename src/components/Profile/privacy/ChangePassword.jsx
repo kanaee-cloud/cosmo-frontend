@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
 import { Lock } from 'lucide-react';
-import { toast } from '../../../hooks/useToast';
+import { useToastStore } from '../../../hooks/useToast';
+import { useProfileSettings } from '../../../hooks/useProfileSettings';
+import { useSecurity } from '../../../hooks/useSecurity';
 
 export default function ChangePassword() {
+  const { error } = useToastStore();
+  const { updatePassword } = useSecurity(); 
+
   const [currentPwd, setCurrentPwd] = useState('');
   const [newPwd, setNewPwd] = useState('');
   const [confirmPwd, setConfirmPwd] = useState('');
 
   const handleChange = () => {
-    if (newPwd !== confirmPwd) return toast.error('ERROR', 'New password and confirm do not match');
-    toast.success('SUCCESS', 'Password changed (UI-only)');
-    setCurrentPwd(''); setNewPwd(''); setConfirmPwd('');
+    if (!currentPwd || !newPwd || !confirmPwd) {
+      return error('ERROR', 'Semua kolom cipher harus diisi.');
+    }
+    if (newPwd.length < 6) {
+      return error('WEAK CIPHER', 'Cipher baru minimal harus 6 karakter.');
+    }
+    if (newPwd !== confirmPwd) {
+      return error('MISMATCH', 'New cipher dan confirm cipher tidak sama.');
+    }
+
+    updatePassword.mutate(
+      { currentPassword: currentPwd, newPassword: newPwd },
+      {
+        onSuccess: () => {
+          setCurrentPwd('');
+          setNewPwd('');
+          setConfirmPwd('');
+        }
+      }
+    );
   };
 
   return (
     <div className="p-6 md:p-8 border border-tertiary bg-secondary relative shadow-[0_0_20px_rgb(var(--color-tertiary)_/_0.1)] transition-colors duration-500">
-      {/* Decorative corner accents */}
       <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-accent transition-colors duration-500"></div>
       <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-light transition-colors duration-500"></div>
       
@@ -63,9 +84,11 @@ export default function ChangePassword() {
         <div className="pt-4">
           <button 
             onClick={handleChange} 
-            className="flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 border border-accent bg-accent/10 text-accent hover:bg-accent/30 hover:shadow-[0_0_15px_rgb(var(--color-accent)_/_0.4)] transition-all duration-500 font-secondary text-xs tracking-widest uppercase"
+            disabled={updatePassword.isPending}
+            className="flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 border border-accent bg-accent/10 text-accent hover:bg-accent/30 hover:shadow-[0_0_15px_rgb(var(--color-accent)_/_0.4)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 font-secondary text-xs tracking-widest uppercase"
           >
-            <Lock size={16} /> OVERRIDE CIPHER
+            <Lock size={16} className={updatePassword.isPending ? "animate-pulse" : ""} /> 
+            {updatePassword.isPending ? 'OVERRIDING...' : 'OVERRIDE CIPHER'}
           </button>
         </div>
       </div>
