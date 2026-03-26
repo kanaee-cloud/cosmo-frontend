@@ -58,7 +58,7 @@ export const ProfileDetailsCard = ({
                 size={48} 
                 strokeWidth={1.5}
                 className="text-light hover:animate-pulse transition-all duration-500 drop-shadow-[0_0_10px_rgb(var(--color-light)_/_0.7)]" 
-              />
+              />  
             ) : (
               <span className="font-secondary text-5xl text-light hover:animate-pulse transition-all duration-500 drop-shadow-[0_0_10px_rgb(var(--color-light)_/_0.7)]">
                 {currentAvatar}

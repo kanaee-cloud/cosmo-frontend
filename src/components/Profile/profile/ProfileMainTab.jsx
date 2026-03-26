@@ -1,25 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Check, X, Edit2 } from 'lucide-react'; // Icon mockup dihapus, sisa icon UI
+import { Check, X, Edit2 } from 'lucide-react';
+
 import { ProfileDetailsCard } from './ProfileDetailsCard';
 import { OperatorStatus } from './OperatorStatus';
 import { AccessLog } from './AccessLog';
 import AvatarUploader from './AvatarUploader';
 import Achievements from './Achievements';
+
 import { useAchievements } from '../../../hooks/useAchievements';
-import { toast } from '../../../hooks/useToast';
 
 export default function ProfileMainTab() {
   const { 
     profile, displayName, setDisplayName, level, currentExp, 
-    lastLogin, accountCreated, updateName 
+    lastLogin, accountCreated, updateName, updateAvatar // <-- Tarik dari OutletContext
   } = useOutletContext();
 
-  // 2. AMBIL DATA DARI DATABASE
   const { useUserAchievements, equipBadges } = useAchievements();
   const { data: allAchievements = [] } = useUserAchievements();
-
-  // 3. FILTER KHUSUS GELAR (BADGE) SAJA
   const badges = allAchievements.filter(a => a.type === 'BADGE');
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -27,7 +25,7 @@ export default function ProfileMainTab() {
   const [currentAvatar, setCurrentAvatar] = useState(profile?.avatar_url || 'bot');
   const [selectedBadgeIds, setSelectedBadgeIds] = useState([]);
 
-  // 4. SINKRONISASI LENCANA TERPAKAI DARI DATABASE KE UI
+  // Sinkronisasi badge yang sedang dipakai
   useEffect(() => {
     if (badges.length > 0) {
       const equipped = badges.filter(b => b.isEquipped).map(b => b.id);
@@ -35,22 +33,29 @@ export default function ProfileMainTab() {
     }
   }, [allAchievements]);
 
+  // SINKRONISASI AVATAR DARI DATABASE KE UI SAAT HALAMAN DIMUAT/DI-REFRESH
+  useEffect(() => {
+    if (profile?.avatar_url) {
+      setCurrentAvatar(profile.avatar_url);
+    }
+  }, [profile?.avatar_url]);
+
   const handleSelectAvatar = (newAvatar) => {
-    setCurrentAvatar(newAvatar);
+    setCurrentAvatar(newAvatar); // Ganti gambar di layar secara instan
+    if (updateAvatar) {
+      updateAvatar.mutate(newAvatar); // Simpan permanen ke Supabase
+    }
   };
 
   const displayBadges = badges.filter(b => selectedBadgeIds.includes(b.id));
 
-  // 5. LOGIKA TOGGLE & SIMPAN KE DATABASE
   const handleToggleBadge = (badge) => {
-    if (badge.isLocked) return; // Gunakan isLocked dari data asli
+    if (badge.isLocked) return;
 
     let newSelection;
     if (selectedBadgeIds.includes(badge.id)) {
-      // Copot lencana
       newSelection = selectedBadgeIds.filter(id => id !== badge.id);
     } else {
-      // Pasang lencana (Max 3)
       if (selectedBadgeIds.length >= 3) { 
         newSelection = [...selectedBadgeIds.slice(1), badge.id]; 
       } else {
@@ -58,8 +63,8 @@ export default function ProfileMainTab() {
       }
     }
     
-    setSelectedBadgeIds(newSelection); // Update UI Instan
-    equipBadges.mutate(newSelection);  // Simpan ke Supabase di background
+    setSelectedBadgeIds(newSelection); 
+    equipBadges.mutate(newSelection);  
   };
 
   const handleEditName = () => {
@@ -82,7 +87,7 @@ export default function ProfileMainTab() {
         setIsEditingName(false);
       },
       onError: (err) => {
-        toast.error("TRANSMISSION ERROR", err.message);
+        alert(`TRANSMISSION ERROR: ${err.message}`);
       }
     });
   };
@@ -93,9 +98,7 @@ export default function ProfileMainTab() {
   };
 
   return (
-    <div 
-      className="border-2 border-tertiary bg-primary p-4 md:p-5 flex flex-col shadow-[0_0_30px_rgb(var(--color-tertiary)_/_0.15)] h-full min-h-[500px] transition-colors duration-500"
-    >
+    <div className="border-2 border-tertiary bg-primary p-4 md:p-5 flex flex-col shadow-[0_0_30px_rgb(var(--color-tertiary)_/_0.15)] h-full min-h-[500px] transition-colors duration-500">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full items-stretch">
         
         {/* --- KIRI: LOG KAPTEN DKK --- */}
@@ -105,7 +108,7 @@ export default function ProfileMainTab() {
             displayName={displayName}
             level={level}
             currentExp={currentExp}
-            displayBadges={displayBadges} // Mengirim data lencana asli
+            displayBadges={displayBadges} 
           />
           <OperatorStatus currentExp={currentExp} />
           <AccessLog lastLogin={lastLogin} accountCreated={accountCreated} />
@@ -171,7 +174,7 @@ export default function ProfileMainTab() {
 
         {/* --- KANAN: ACHIEVEMENTS / BADGES GALLERY --- */}
         <Achievements 
-          achievements={badges} // Meneruskan data badges asli (ubah prop name agar sesuai)
+          achievements={badges} 
           selectedBadgeIds={selectedBadgeIds} 
           onToggleBadge={handleToggleBadge} 
         />

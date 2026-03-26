@@ -1,10 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from '../store/authStore';
+import { useToastStore } from './useToast'; 
 
 export const useProfileSettings = () => {
   const queryClient = useQueryClient();
   const { session, profile: storeProfile, setProfile } = useAuthStore();
+  const { success, error: showError } = useToastStore(); 
   const userId = session?.user?.id;
 
   // 1. Ambil Data Aktual dari Tabel Users
@@ -17,19 +19,17 @@ export const useProfileSettings = () => {
       return data;
     },
     enabled: !!userId,
-    initialData: storeProfile // Gunakan data dari zustand sebagai fallback awal
+    initialData: storeProfile 
   });
 
-  // 2. Mutasi Update Nama (Sinkronisasi Auth & Tabel Users)
+  // 2. Mutasi Update Nama 
   const updateName = useMutation({
     mutationFn: async (newName) => {
-      // Update di Supabase Auth Metadata
       const { error: authError } = await supabase.auth.updateUser({
         data: { username: newName }
       });
       if (authError) throw authError;
 
-      // Update di Tabel Users
       const { data, error: dbError } = await supabase
         .from('users')
         .update({ username: newName })
@@ -41,17 +41,75 @@ export const useProfileSettings = () => {
       return data;
     },
     onSuccess: (data) => {
-      setProfile(data); // Update store global
+      setProfile(data); 
       queryClient.invalidateQueries({ queryKey: ['captainProfile', userId] });
+      success('IDENTITY RECONFIGURED', 'Identitas Kapten berhasil diperbarui.');
+    },
+    onError: (err) => {
+      showError('RECONFIGURATION FAILED', err.message);
     }
   });
 
-  // 3. Kalkulasi Data Dinamis
+  // 3. Mutasi Update Password 
+  const updatePassword = useMutation({
+    mutationFn: async ({ currentPassword, newPassword }) => {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) throw new Error("Sesi tidak valid. Silakan login ulang.");
+
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (verifyError) throw new Error("Current Cipher (Password lama) tidak cocok.");
+
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (updateError) throw updateError;
+      return true;
+    },
+    onSuccess: () => {
+      success('SECURITY OVERRIDE', 'Cipher berhasil diperbarui. Akses aman.');
+    },
+    onError: (err) => {
+      showError('OVERRIDE FAILED', err.message);
+    }
+  });
+
+  // 4. Mutasi Update Avatar (BARU DITAMBAHKAN)
+  const updateAvatar = useMutation({
+    mutationFn: async (newAvatar) => {
+      await supabase.auth.updateUser({
+        data: { avatar_url: newAvatar }
+      });
+
+      const { data, error } = await supabase
+        .from('users')
+        .update({ avatar_url: newAvatar })
+        .eq('id', userId)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      setProfile(data); 
+      queryClient.invalidateQueries({ queryKey: ['captainProfile', userId] });
+      success('VISUAL RECONFIGURED', 'Avatar berhasil diperbarui di mainframe.');
+    },
+    onError: (err) => {
+      showError('UPDATE FAILED', err.message);
+    }
+  });
+
+  // 5. Kalkulasi Data Dinamis
   const currentExp = profile?.fuel_cells || 0;
   const level = Math.floor(currentExp / 100) + 1;
   const userEmail = session?.user?.email || 'UNKNOWN@COSMO.NET';
   const displayId = userId?.substring(0, 8).toUpperCase() || 'XXXX-XXXX';
-  
   const accountCreated = profile?.created_at ? new Date(profile.created_at).toLocaleString() : 'UNKNOWN';
   const lastLogin = session?.user?.last_sign_in_at ? new Date(session.user.last_sign_in_at).toLocaleString() : 'UNKNOWN';
 
@@ -59,6 +117,8 @@ export const useProfileSettings = () => {
     profile,
     isLoading,
     updateName,
+    updatePassword,
+    updateAvatar, // <-- PASTIKAN DI-RETURN DI SINI
     level,
     currentExp,
     userEmail,
