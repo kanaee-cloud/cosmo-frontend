@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
@@ -32,10 +33,10 @@ const Hero = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                            <button className="relative bg-accent px-8 py-3 text-white font-primary text-md tracking-wider hover:scale-105 transition-transform shadow-[0_0_10px_rgb(var(--color-accent)_/_0.5),0_0_20px_rgb(var(--color-accent)_/_0.3)] pixel-corners flex items-center justify-center gap-2 group">
+                            <Link to="/register" className="relative bg-accent px-8 py-3 text-white font-primary text-md tracking-wider hover:scale-105 transition-transform shadow-[0_0_10px_rgb(var(--color-accent)_/_0.5),0_0_20px_rgb(var(--color-accent)_/_0.3)] pixel-corners flex items-center justify-center gap-2 group">
                                 <span className="material-symbols-outlined group-hover:animate-bounce text-base">stadia_controller</span>
                                 START MISSION
-                            </button>
+                            </Link>
                             <button className="relative border-2 border-light px-8 py-3 text-light font-primary text-md tracking-wider hover:bg-light hover:text-white transition-colors pixel-corners flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(138,109,252,0.3)_inset]">
                                 <span className="material-symbols-outlined text-base">terminal</span>
                                 VIEW DEMO
