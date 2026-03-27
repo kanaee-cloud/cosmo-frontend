@@ -11,7 +11,7 @@ import ProfileSidebar from '../components/Profile/ProfileSidebar';
 export default function Profile() {
   const { 
     profile, updateName, updatePassword, updateAvatar, // <-- Ambil updateAvatar dari hook
-    level, currentExp, lastLogin, accountCreated 
+    level, currentExp, lastLogin, accountCreated, warpStreak
   } = useProfileSettings();
 
   const matrixColor = useThemeStore((state) => state.matrixColor);
@@ -55,7 +55,7 @@ export default function Profile() {
               <Outlet context={{
                 profile, displayName, setDisplayName, level, currentExp,
                 lastLogin, accountCreated, themeBorder, themeBg, updateName,
-                updatePassword, updateAvatar // <-- Salurkan ke Outlet Context
+                updatePassword, updateAvatar, warpStreak // <-- Salurkan ke Outlet Context
               }} />
             </div>
           </div>

@@ -15,12 +15,58 @@ export const useAuthStore = create((set) => ({
     set({ session });
 
     if (session?.user) {
-      const { data } = await supabase
+      const { data: profileData } = await supabase
         .from('users')
         .select('*')
         .eq('id', session.user.id)
         .single();
-      set({ profile: data });
+        
+      if (profileData) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset jam agar hitungan murni berdasarkan hari
+
+        let currentStreak = profileData.warp_streak || 0;
+        let shouldUpdateDb = false;
+
+        if (!profileData.last_active_date) {
+  
+          currentStreak = 1;
+          shouldUpdateDb = true;
+        } else {
+          const lastActive = new Date(profileData.last_active_date);
+          lastActive.setHours(0, 0, 0, 0);
+
+          const diffTime = today - lastActive;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 1) {
+            currentStreak += 1;
+            shouldUpdateDb = true;
+          } else if (diffDays > 1) {
+            currentStreak = 1;
+            shouldUpdateDb = true;
+          }
+  
+        }
+
+
+        if (shouldUpdateDb) {
+          const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          
+          await supabase
+            .from('users')
+            .update({ 
+              warp_streak: currentStreak, 
+              last_active_date: todayString 
+            })
+            .eq('id', session.user.id);
+            
+          profileData.warp_streak = currentStreak;
+          profileData.last_active_date = todayString;
+        }
+      }
+
+      set({ profile: profileData });
     }
     set({ isInitializing: false });
   },

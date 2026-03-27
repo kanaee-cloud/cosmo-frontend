@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Search, UserPlus, Bell, Check, Users, Swords, ShieldOff } from 'lucide-react';
+import { X, Search, UserPlus, Bell, Check, Users, Swords, ShieldOff, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocial } from '../../hooks/useSocial';
 import { toast } from '../../hooks/useToast';

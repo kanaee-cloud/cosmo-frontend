@@ -13,7 +13,7 @@ import { useAchievements } from '../../../hooks/useAchievements';
 export default function ProfileMainTab() {
   const { 
     profile, displayName, setDisplayName, level, currentExp, 
-    lastLogin, accountCreated, updateName, updateAvatar // <-- Tarik dari OutletContext
+    lastLogin, accountCreated, updateName, updateAvatar, warpStreak // <-- Tarik dari OutletContext
   } = useOutletContext();
 
   const { useUserAchievements, equipBadges } = useAchievements();
@@ -124,6 +124,7 @@ export default function ProfileMainTab() {
             displayName={displayName}
             level={level}
             currentExp={currentExp}
+            warpStreak={warpStreak}
             displayBadges={displayBadges} 
           />
           <OperatorStatus currentExp={currentExp} />

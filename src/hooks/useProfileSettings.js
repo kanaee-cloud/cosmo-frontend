@@ -136,6 +136,7 @@ export const useProfileSettings = () => {
   const displayId = userId?.substring(0, 8).toUpperCase() || 'XXXX-XXXX';
   const accountCreated = profile?.created_at ? new Date(profile.created_at).toLocaleString() : 'UNKNOWN';
   const lastLogin = session?.user?.last_sign_in_at ? new Date(session.user.last_sign_in_at).toLocaleString() : 'UNKNOWN';
+  const warpStreak = profile?.warp_streak || 0;
 
   return {
     profile,
@@ -146,6 +147,7 @@ export const useProfileSettings = () => {
     updateAvatar, // <-- PASTIKAN DI-RETURN DI SINI
     level,
     currentExp,
+    warpStreak,
     userEmail,
     displayId,
     accountCreated,

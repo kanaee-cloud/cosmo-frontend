@@ -26,6 +26,7 @@ export const ProfileDetailsCard = ({
   displayName,
   level = 1,
   currentExp = 0,
+  warpStreak = 0,
   displayBadges = []
 }) => {
   const isImageUrl = currentAvatar.startsWith('http');
@@ -99,7 +100,7 @@ export const ProfileDetailsCard = ({
               <span className="font-secondary text-light/60 text-[10px] tracking-widest uppercase transition-colors duration-500">WARP STREAK</span>
             </div>
             <div className="font-press text-[10px] md:text-xs text-orange-500 tracking-wider ml-6">
-              10 DAYS
+              {warpStreak} DAYS
             </div>
           </div>
           
