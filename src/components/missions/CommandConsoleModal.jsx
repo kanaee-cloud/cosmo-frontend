@@ -79,12 +79,19 @@ export const CommandConsoleModal = ({ isOpen, onClose, initialTitle = '' }) => {
 
                   {/* KATEGORI & LOG */}
                   <div className="flex flex-col gap-2">
-                    <label className="font-primary text-cyan-400 text-[10px] tracking-widest">ASSIGNMENT SECTOR (CATEGORY)</label>
+                    <label className="font-primary text-cyan-400 text-[10px] tracking-widest flex items-center justify-between">
+                      <span>ASSIGNMENT SECTOR (CATEGORY)</span>
+                      {/* Live Validation Guidance */}
+                      <span className="text-[8px] text-cyan-500/80 animate-pulse bg-cyan-900/30 px-2 py-0.5 border border-cyan-800/50">
+                        {formikConfig.values.category === 'GENERAL' && 'REQ: SEND PICTURE -> VALIDATION'}
+                        {(formikConfig.values.category === 'LEARNING' || formikConfig.values.category === 'WORK') && 'REQ: MISSION SUMMARY -> QUIZ'}
+                      </span>
+                    </label>
                     <div className="flex flex-col md:flex-row gap-3">
-                      <Field as="select" name="category" className="w-full md:w-1/3 bg-primary border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400 cursor-pointer">
-                        <option value="GENERAL" title="Send Picture -> Validation">[ GENERAL OPS ]</option>
-                        <option value="LEARNING" title="Summary/Mission Log -> Quiz">[ KNOWLEDGE BASE ]</option>
-                        <option value="WORK" title="Summary/Mission Log -> Quiz">[ FIELD WORK ]</option>
+                      <Field as="select" name="category" className="w-full md:w-1/3 bg-primary border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400 cursor-pointer transition-colors hover:border-cyan-500/50 hover:bg-cyan-900/10">
+                        <option value="GENERAL">[ GENERAL OPS ]</option>
+                        <option value="LEARNING">[ KNOWLEDGE BASE ]</option>
+                        <option value="WORK">[ FIELD WORK ]</option>
                       </Field>
                       <Field type="text" name="mission_log" placeholder="Mission Log / Details (Optional)..." className="flex-1 bg-transparent border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400" />
                     </div>
