@@ -11,23 +11,18 @@ export const useAuthStore = create((set) => ({
   setProfile: (profile) => set({ profile }),
   
   initialize: async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      set({ session });
+    const { data: { session } } = await supabase.auth.getSession();
+    set({ session });
 
-      if (session?.user) {
-        const { data } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        set({ profile: data });
-      }
-    } catch (err) {
-      console.error('[AuthStore] Initialization failed:', err.message);
-    } finally {
-      set({ isInitializing: false });
+    if (session?.user) {
+      const { data } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+      set({ profile: data });
     }
+    set({ isInitializing: false });
   },
 
   logout: async () => {
