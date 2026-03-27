@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Single source of truth untuk semua nama tema yang tersedia
+export const THEMES = ['nexus', 'zenith', 'abyss', 'mars'];
+
 export const THEME_COLORS = [
     { name: 'Magenta', hex: '#FF006E', rgb: '255, 0, 110', class: 'text-[#FF006E]' },
     { name: 'Purple', hex: '#8338EC', rgb: '131, 56, 236', class: 'text-[#8338EC]' },

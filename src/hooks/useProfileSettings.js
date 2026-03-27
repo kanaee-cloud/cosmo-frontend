@@ -110,12 +110,11 @@ export const useProfileSettings = () => {
       const { error } = await supabase.rpc('delete_user');
       if (error) throw new Error("Gagal menginisiasi protokol penghancuran: " + error.message);
       
-      // 2. Bersihkan sesi lokal
-      await supabase.auth.signOut();
+      // 2. Sign out via authStore (handles both signOut + state cleanup)
+      await useAuthStore.getState().logout();
     },
     onSuccess: () => {
       setProfile(null);
-      useAuthStore.getState().logout(); // Paksa state global untuk logout
       success('ACCOUNT TERMINATED', 'Data Kapten telah dihapus permanen dari mainframe.');
       // Catatan: Setelah ini state session menjadi null, dan Navbar/Router akan otomatis melempar Anda ke halaman Login.
     },

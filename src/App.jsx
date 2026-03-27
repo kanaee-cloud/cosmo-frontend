@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/authStore';
-import { useThemeStore } from './store/themeStore'; 
+import { useThemeStore, THEMES } from './store/themeStore'; 
 import { router } from './routes';
 import { useToastStore } from './hooks/useToast';
 import ToastContainer from './components/toast/ToastContainer';
@@ -36,15 +36,14 @@ function App() {
     }
   }, [matrixColor]);
 
-  // PERBAIKAN: EFFECT UNTUK MENGGANTI TEMA DI BODY
   useEffect(() => {
-    // 1. Daftar semua tema yang ada (selain default nexus)
-    const allThemes = ['theme-zenith', 'theme-abyss', 'theme-mars'];
+    // Ambil nama class tema dari THEMES (skip 'nexus' karena itu default)
+    const themeClasses = THEMES.filter(t => t !== 'nexus').map(t => `theme-${t}`);
     
-    // 2. Hapus SEMUA class tema dari body agar tidak menumpuk
-    document.body.classList.remove(...allThemes);
+    // Hapus SEMUA class tema dari body agar tidak menumpuk
+    document.body.classList.remove(...themeClasses);
     
-    // 3. Jika bukan tema default (nexus), tambahkan class-nya
+    // Jika bukan tema default (nexus), tambahkan class-nya
     if (activeTheme && activeTheme !== 'nexus') {
       document.body.classList.add(`theme-${activeTheme}`);
     }

@@ -14,8 +14,8 @@ export const useMissionOperations = (setActiveDirective) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['directives'] });
-    }
-    // Error handling can optionally be added here if needed, or handled in the component
+    },
+    onError: (error) => toast.error("ERROR", `Gagal mengaktifkan direktif. ${error.message}`)
   });
 
   const completeDirective = useMutation({
@@ -82,7 +82,6 @@ export const useMissionOperations = (setActiveDirective) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['directives'] });
-      // Tutup modal karena datanya sudah lenyap dari radar
       setActiveDirective(null); 
     },
     onError: (error) => toast.error("ERROR", `Gagal menghancurkan direktif. ${error.message}`)
@@ -104,7 +103,7 @@ export const useMissionOperations = (setActiveDirective) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(['directives']); 
 
-      console.log("Mendeteksi misi selesai. Menembakkan sinyal ke mesin..."); 
+
       evaluateEvent.mutate({
         eventName: 'MISSION_COMPLETED',
         payload: {

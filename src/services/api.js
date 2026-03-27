@@ -11,8 +11,6 @@ export const api = {
     
     if (!token) {
         console.warn("[API] No active session found. Request will likely fail.");
-    } else {
-        console.log(`[API] Attaching auth token: ${token.substring(0, 10)}...`);
     }
 
     return {
