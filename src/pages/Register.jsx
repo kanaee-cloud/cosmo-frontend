@@ -18,9 +18,9 @@ const Register = () => {
       openModal({
         type: 'success',
         title: 'ENLISTMENT COMPLETE',
-        message: 'Akun Anda berhasil dibuat. Menghubungkan ke mainframe...'
+        message: 'Silakan periksa INBOX email Anda untuk link verifikasi sebelum login.'
       });
-      success('ENLISTMENT COMPLETE', 'Akun Anda berhasil dibuat. Menghubungkan ke mainframe...');
+      success('ENLISTMENT COMPLETE', 'Email verifikasi telah dikirim.');
       // Auto-navigate after success modal closes
       const timer = setTimeout(() => {
         navigate('/login');

@@ -82,9 +82,9 @@ export const CommandConsoleModal = ({ isOpen, onClose, initialTitle = '' }) => {
                     <label className="font-primary text-cyan-400 text-[10px] tracking-widest">ASSIGNMENT SECTOR (CATEGORY)</label>
                     <div className="flex flex-col md:flex-row gap-3">
                       <Field as="select" name="category" className="w-full md:w-1/3 bg-primary border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400 cursor-pointer">
-                        <option value="GENERAL">[ GENERAL OPS ]</option>
-                        <option value="LEARNING">[ KNOWLEDGE BASE ]</option>
-                        <option value="WORK">[ FIELD WORK ]</option>
+                        <option value="GENERAL" title="Send Picture -> Validation">[ GENERAL OPS ]</option>
+                        <option value="LEARNING" title="Summary/Mission Log -> Quiz">[ KNOWLEDGE BASE ]</option>
+                        <option value="WORK" title="Summary/Mission Log -> Quiz">[ FIELD WORK ]</option>
                       </Field>
                       <Field type="text" name="mission_log" placeholder="Mission Log / Details (Optional)..." className="flex-1 bg-transparent border border-cyan-900 text-cyan-300 font-secondary text-[10px] px-3 py-3 outline-none focus:border-cyan-400" />
                     </div>
