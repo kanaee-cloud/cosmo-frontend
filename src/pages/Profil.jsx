@@ -5,6 +5,7 @@ import { Edit3, X, Camera } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 import { useToastStore } from '../hooks/useToast';
+import { supabase } from '../services/supabase';
 
 const AVATAR_OPTIONS = [
   { id: 1, emoji: '👨‍🚀' },
@@ -67,16 +68,28 @@ export default function Profil() {
     setTempName(name);
   }, [profile, session]);
 
-  const handleAvatarChange = (emoji) => {
+  const handleAvatarChange = async (emoji) => {
     setSelectedAvatar(emoji);
     localStorage.setItem('userAvatar', emoji);
     setShowAvatarSelector(false);
+
+    // Simpan ke Supabase
+    const userId = session?.user?.id;
+    if (userId) {
+      await supabase.auth.updateUser({ data: { avatar_url: emoji } });
+      await supabase.from('users').update({ avatar_url: emoji }).eq('id', userId);
+    }
+
     success('AVATAR UPDATED', 'Avatar profil berhasil diubah');
   };
 
-  const handleOutfitColorChange = (color) => {
+  const handleOutfitColorChange = async (color) => {
     setSelectedOutfitColor(color);
     localStorage.setItem('outfitColor', color);
+
+    // Simpan ke Supabase Auth metadata (tidak butuh kolom DB tambahan)
+    await supabase.auth.updateUser({ data: { outfit_color: color } });
+
     success('OUTFIT UPDATED', 'Warna outfit berhasil diubah');
   };
 
@@ -90,14 +103,19 @@ export default function Profil() {
     }
 
     try {
-      const supabase = useAuthStore.getState().supabase;
+      const userId = session?.user?.id;
+
+      // Update di Supabase Auth metadata
       const { error } = await supabase.auth.updateUser({
         data: { user_name: newName },
       });
-
       if (error) throw error;
 
-      // Update profile state dan localStorage
+      // Update di tabel users
+      if (userId) {
+        await supabase.from('users').update({ username: newName }).eq('id', userId);
+      }
+
       setDisplayName(newName);
       setTempName(newName);
       setIsEditingName(false);

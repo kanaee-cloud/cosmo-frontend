@@ -9,7 +9,7 @@ const Navbar = () => {
     const { session, profile, logout } = useAuthStore();
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
+
     const buttonClip = "polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px)";
 
     const handleLogout = async () => {
@@ -18,7 +18,7 @@ const Navbar = () => {
     };
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -27,7 +27,7 @@ const Navbar = () => {
             <div className="w-full max-w-6xl mx-auto relative z-10">
                 {/* PERBAIKAN: px-16 diubah menjadi px-5 md:px-16 agar tidak terjepit di mobile */}
                 <nav className="w-full flex px-5 md:px-16 items-center mx-auto justify-between py-1 bg-secondary/90 backdrop-blur-md rounded-full border border-light/50 shadow-[0_0_20px_rgba(122,64,242,0.4)] relative z-10">
-                    
+
                     <Link to={session ? "/dashboard" : "/"} className="flex items-center gap-2 md:gap-3 cursor-pointer z-10 group shrink-0">
                         <div className="text-accent flex items-center justify-center transform transition-transform group-hover:-translate-y-1">
                             <img src="/cosmo-icon.png" alt="Cosmo Icon" className='w-12 h-13' />                        </div>
@@ -40,8 +40,8 @@ const Navbar = () => {
                         {!session ? (
                             <>
                                 <div className="hidden md:flex items-center gap-6 font-bold text-[11px] tracking-[0.15em] text-white">
-                                    <Link 
-                                        to="/login" 
+                                    <Link
+                                        to="/login"
                                         style={{ clipPath: buttonClip }}
                                         className="bg-accent text-white font-bold text-[12px] tracking-wider py-2.5 px-6 hover:bg-accent/80 transition-all duration-300 outline-none active:scale-95">
                                         LOGIN
@@ -60,7 +60,7 @@ const Navbar = () => {
                         ) : (
                             <div className="relative">
                                 {/* PERBAIKAN: Tombol profil dipadatkan di layar kecil */}
-                                <button 
+                                <button
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                                     className="flex items-center gap-2 md:gap-3 bg-tertiary border border-light/50 hover:bg-secondary transition-colors rounded-full py-1 md:py-1.5 px-1 md:px-2 md:pr-4 shadow-[0_0_10px_rgba(122,64,242,0.3)]"
                                 >
@@ -79,7 +79,7 @@ const Navbar = () => {
 
                                 <AnimatePresence>
                                     {isMenuOpen && (
-                                        <motion.div 
+                                        <motion.div
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 10 }}
@@ -91,26 +91,26 @@ const Navbar = () => {
                                                     LOGGED IN AS
                                                 </p>
                                                 <p className="text-accent text-xs font-bold truncate">
-                                                    {profile?.user_name || session?.user?.user_metadata?.user_name || session?.user?.email?.split('@')[0] || 'Agent'}
+                                                    {profile?.username || session?.user?.user_metadata?.username || session?.user?.email?.split('@')[0] || 'Agent'}
                                                 </p>
                                             </div>
-                                            
-                                            <Link 
-                                                to="/profile" 
+
+                                            <Link
+                                                to="/profile"
                                                 className="px-4 py-3 text-white text-sm hover:bg-[#23153c] transition-colors font-semibold flex items-center gap-2"
                                                 onClick={() => setIsMenuOpen(false)}
                                             >
                                                 <User size={14} />
                                                 Profile
                                             </Link>
-                                            <Link 
-                                                to="/dashboard" 
+                                            <Link
+                                                to="/dashboard"
                                                 className="px-4 py-3 text-text text-sm hover:bg-secondary transition-colors font-semibold"
                                                 onClick={() => setIsMenuOpen(false)}
                                             >
                                                 Dashboard
                                             </Link>
-                                            <button 
+                                            <button
                                                 onClick={handleLogout}
                                                 className="px-4 py-3 text-accent text-sm hover:bg-secondary transition-colors font-semibold flex items-center justify-between"
                                             >

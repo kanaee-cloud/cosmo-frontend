@@ -12,7 +12,6 @@ import Leaderboard from "../pages/Leaderboard";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
-import Profil from "../pages/Profil";
 
 // Import halaman
 import Pomodoro from "../pages/Pomodoro";

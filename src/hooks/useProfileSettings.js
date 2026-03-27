@@ -112,12 +112,17 @@ export const useProfileSettings = () => {
       
       // 2. Bersihkan sesi lokal
       await supabase.auth.signOut();
+      localStorage.clear();
+      sessionStorage.clear();
     },
     onSuccess: () => {
       setProfile(null);
-      useAuthStore.getState().logout(); // Paksa state global untuk logout
       success('ACCOUNT TERMINATED', 'Data Kapten telah dihapus permanen dari mainframe.');
-      // Catatan: Setelah ini state session menjadi null, dan Navbar/Router akan otomatis melempar Anda ke halaman Login.
+      
+      // Beri jeda 2 detik agar toast sempat terlihat sebelum logout & redirect
+      setTimeout(() => {
+        useAuthStore.getState().logout();
+      }, 2000);
     },
     onError: (err) => {
       showError('TERMINATION FAILED', err.message);

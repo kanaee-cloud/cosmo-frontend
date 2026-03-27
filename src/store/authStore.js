@@ -27,6 +27,8 @@ export const useAuthStore = create((set) => ({
 
   logout: async () => {
     await supabase.auth.signOut();
+    localStorage.clear();
+    sessionStorage.clear();
     set({ session: null, profile: null });
     toast.info('Logged Out', 'Session ended successfully');
   },
@@ -64,7 +66,7 @@ export const useAuthStore = create((set) => ({
       email,
       password,
       options: {
-        data: { user_name: username }
+        data: { username: username }
       }
     });
     if (error) {
@@ -78,7 +80,10 @@ export const useAuthStore = create((set) => ({
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/success`
+        redirectTo: `${window.location.origin}/success`,
+        queryParams: {
+          prompt: 'select_account'
+        }
       }
     });
     if (error) {

@@ -37,7 +37,7 @@ const Register = () => {
   }, [registerMutation.isError, error]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
       className="relative flex items-center justify-center px-4 py-10 min-h-[calc(100vh-88px)]"
     >
@@ -84,7 +84,7 @@ const Register = () => {
                   <span>[ SECURE COMMS FREQUENCY ]</span>
                   <ErrorMessage name="email" component="span" className="text-red-400" />
                 </label>
-                <Field type="email" name="email" placeholder="pilot@orbitask.nexus" className="w-full bg-transparent border border-light/80 text-text font-secondary text-[10px] tracking-wider px-4 py-3 outline-none focus:border-light/70 focus:shadow-[0_0_12px_rgba(138,109,252,0.25)] placeholder:text-gray-600 transition-all duration-200 lowercase" />
+                <Field type="email" name="email" placeholder="pilot@gmail.com" className="w-full bg-transparent border border-light/80 text-text font-secondary text-[10px] tracking-wider px-4 py-3 outline-none focus:border-light/70 focus:shadow-[0_0_12px_rgba(138,109,252,0.25)] placeholder:text-gray-600 transition-all duration-200 lowercase" />
               </div>
 
               {/* Field Password */}
